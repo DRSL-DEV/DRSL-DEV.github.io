@@ -1,22 +1,11 @@
 /* global css */
+@import "variables.css";
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
-  font-family: "Arial", sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #f4f4f4;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  overflow: hidden;
 }
 
 h1,
@@ -25,9 +14,50 @@ h3,
 h4,
 h5,
 h6 {
-  margin-bottom: 1.5rem;
+  font-family: var(--font-family-heading);
+  color: #000;
 }
 
-p {
-  margin-bottom: 1rem;
+p,
+span {
+  font-family: var(--font-family-body);
+  color: #000;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  text-align: center;
+  font-weight: 500;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.4px;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 400;
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+}
+
+h4 {
+  font-size: var(--font-size-h4);
+  font-weight: 500;
+}
+
+h5 {
+  font-size: var(--font-size-h5);
+  font-weight: 500;
+}
+
+h6 {
+  font-size: var(--font-size-h6);
+  font-weight: 500;
+}
+
+a {
+  text-decoration: none;
 }
