@@ -1,0 +1,19 @@
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  background-color: var(--primary-color-light-blue);
+  padding: 0 18px;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+img {
+  cursor: pointer;
+}

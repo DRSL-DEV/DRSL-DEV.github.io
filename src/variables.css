@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:wght@300,400,500,600,700,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap");
+
+:root {
+  /* Colors */
+  --primary-color-navy-blue: rgba(15, 83, 124, 1);
+
+  --primary-color-sky-blue: rgba(7, 119, 188, 1);
+  --primary-color-sky-blue-translucent: rgba(7, 119, 188, 0.6);
+
+  --primary-color-light-blue: rgba(150, 198, 216, 1);
+
+  --primary-color-green: rgba(192, 213, 204, 1);
+
+  --primary-color-yellow: rgba(246, 223, 164, 1);
+
+  --secondary-color-light-blue: rgba(202, 232, 250, 1);
+
+  --secondary-color-sky-blue: rgba(107, 190, 240, 1);
+
+  --secondary-color-light-green: rgba(146, 187, 95, 1);
+
+  --secondary-color-dark-green: rgba(78, 138, 112, 1);
+
+  /* Font families */
+  --font-family-heading: "Open Sans", sans-serif;
+  --font-family-body: "Montserrat", sans-serif;
+
+  /* Font sizes */
+  --font-size-h1: 24px;
+  --font-size-h2: 20px;
+  --font-size-h3: 18px;
+  --font-size-h4: 16px;
+  --font-size-h5: 14px;
+  --font-size-h6: 12px;
+  --font-size-body-large: 14px;
+  --font-size-body-small: 12px;
+}
