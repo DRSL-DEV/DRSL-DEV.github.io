@@ -8,6 +8,11 @@ import StoryPage from "./pages/story";
 import ProfilePage from "./pages/profile";
 import AboutPage from "./pages/about";
 import NotFoundPage from "./pages/default";
+import ContactPage from "./pages/contact";
+import PartnershipsPage from "./pages/partnerships";
+import SearchPage from "./pages/search";
+import PrivacyPage from "./pages/privacy";
+import Footer from "./components/Footer";
 import StoryDetailPage from "./pages/storyDetail";
 
 function App() {
@@ -25,12 +30,16 @@ function App() {
             <Route path="/story" element={<StoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/story/story-detail" element={<StoryDetailPage />}/>
-
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/partnerships" element={<PartnershipsPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />{" "}
+            <Route path="/story/story-detail" element={<StoryDetailPage />} />
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
+        <Footer />
       </div>
     </Router>
   );

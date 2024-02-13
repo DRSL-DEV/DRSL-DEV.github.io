@@ -17,10 +17,12 @@
   --secondary-color-light-blue: rgba(202, 232, 250, 1);
 
   --secondary-color-sky-blue: rgba(107, 190, 240, 1);
+  --secondary-color-sky-blue-translucent: rgba(107, 190, 240, 0.36);
 
   --secondary-color-light-green: rgba(146, 187, 95, 1);
 
   --secondary-color-dark-green: rgba(78, 138, 112, 1);
+  --secondary-color-dark-green-translucent: rgba(78, 138, 112, 0.36);
 
   /* Font families */
   --font-family-heading: "Open Sans", sans-serif;
