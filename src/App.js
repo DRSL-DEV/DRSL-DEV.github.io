@@ -8,6 +8,7 @@ import StoryPage from "./pages/story";
 import ProfilePage from "./pages/profile";
 import AboutPage from "./pages/about";
 import NotFoundPage from "./pages/default";
+import StoryDetailPage from "./pages/storyDetail";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,6 +25,7 @@ function App() {
             <Route path="/story" element={<StoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/story/story-detail" element={<StoryDetailPage />}/>
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />

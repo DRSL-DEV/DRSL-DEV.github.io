@@ -1,0 +1,15 @@
+.storyText{
+    padding: 5% 10%;
+    overflow: visible;
+}
+
+.storyPageContainer{
+    padding-top: 5%;
+    height: 100vh;
+}
+
+.headImage{
+    width: 100%;
+    height :100vh;
+    margin: auto;
+}
