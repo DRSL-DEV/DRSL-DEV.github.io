@@ -1,0 +1,90 @@
+.card {
+  display: flex;
+  border-radius: 10px;
+  margin: 20px 0;
+  height: 140px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.card-image {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-image img {
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  margin: 14px 16px;
+  object-fit: cover;
+}
+
+.card.user-story {
+  background: var(--secondary-color-sky-blue-translucent);
+}
+
+.card.lab-story {
+  background: var(--secondary-color-dark-green-translucent);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 16px;
+  flex-grow: 1; 
+}
+
+.card-content h2 {
+  padding-right: 18px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.card-content p {
+  padding-right: 18px;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  margin: 4px 0;
+}
+
+
+.card-footer > div {
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #55565A;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+
+.card-footer > div, .card-footer button {
+  flex-shrink: 0;
+}
+
+
+.card-footer button {
+  padding-right: 20px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
