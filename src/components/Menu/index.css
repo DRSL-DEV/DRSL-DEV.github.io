@@ -9,6 +9,7 @@
   overflow-y: scroll;
   transform: translateX(100%);
   transition: transform 0.4s ease-in-out;
+  z-index: 1000;
 }
 
 @media (prefers-reduced-motion: reduce) {
