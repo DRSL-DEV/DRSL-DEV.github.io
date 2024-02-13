@@ -6,17 +6,15 @@
   height: 145px;
   background-color: var(--primary-color-light-blue);
   padding: 0 20px;
-  position: absolute;
-  bottom: 0;
 }
 
 .links {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  align-items: center; 
-  font-family: Montserrat;
-  font-size: 11px;
+  align-items: center;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-small);
   font-weight: 300;
   color: #000000;
   text-align: center;
@@ -33,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%; 
+  width: 100%;
   padding-top: 20px;
 }
 

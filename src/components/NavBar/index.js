@@ -3,11 +3,14 @@ import menu from "../../assets/icons/menu.svg";
 import search from "../../assets/icons/search.svg";
 import profile from "../../assets/icons/profile.svg";
 import { Link } from "react-router-dom";
+import Menu from "../Menu";
 import "./index.css";
 
-const NavBar = ({ setIsMenuOpen }) => {
+const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
   return (
     <div className="navbar-container">
+      <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+
       <Link to="/">
         <img src={logo_with_text} alt="logo_with_text" />
       </Link>

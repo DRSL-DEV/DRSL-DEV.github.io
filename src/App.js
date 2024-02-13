@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Menu from "./components/Menu";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 import "./App.css";
 import HomePage from "./pages/home";
 import StoryPage from "./pages/story";
@@ -12,7 +12,6 @@ import ContactPage from "./pages/contact";
 import PartnershipsPage from "./pages/partnerships";
 import SearchPage from "./pages/search";
 import PrivacyPage from "./pages/privacy";
-import Footer from "./components/Footer";
 import StoryDetailPage from "./pages/storyDetail";
 
 function App() {
@@ -21,8 +20,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <NavBar setIsMenuOpen={setIsMenuOpen} />
-        <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+        <NavBar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
         <div className="routes-wrapper">
           <Routes>
@@ -33,13 +31,13 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />{" "}
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/story/story-detail" element={<StoryDetailPage />} />
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          <Footer />
         </div>
-        <Footer />
       </div>
     </Router>
   );
