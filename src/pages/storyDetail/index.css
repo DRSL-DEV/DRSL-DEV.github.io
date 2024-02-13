@@ -4,12 +4,22 @@
 }
 
 .storyPageContainer{
-    padding-top: 5%;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* padding: 5% 8%; */
 }
 
-.headImage{
-    width: 100%;
-    height :100vh;
-    margin: auto;
+.img {
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+}
+
+.storyTitle{
+    /* position: absolute; */
+    /* top: 12%;
+    width: 85%;
+    justify-content: center; */
 }

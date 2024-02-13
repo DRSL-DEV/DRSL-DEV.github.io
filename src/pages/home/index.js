@@ -1,12 +1,10 @@
 import React from "react";
-import Footer from "../../components/Footer";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import imgSrc from "../../assets/images/card_img.png";
-import './index.css';
+import "./index.css";
 
 const HomePage = () => {
-
   return (
     <div>
       <main>
@@ -49,7 +47,6 @@ const HomePage = () => {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 };
