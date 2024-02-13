@@ -1,25 +1,32 @@
+.wrapper{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 5% 8% ;
+    /* background-color: tomato; */
+}
 .content{
-    position: absolute;
-    top: 12%;
-    width: 85%;
+    width: 100%;
     /* background-color: tomato; */
 }
 
-.site-header {
+/* .site-header {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-  }
+  } */
   
-  .back-button {
+  /* .back-button {
     position: absolute;
     left: 0;
     border: none;
     background-color: transparent;
-  }
+  } */
   
-  .site-title {
+  /* .site-title {
     text-align: center;
     font-family: Inter;
     font-size: 24px;
@@ -27,7 +34,7 @@
     font-weight: 600;
     line-height: normal;
     letter-spacing: -0.4px;
-  }
+  } */
   
   .site-section {
     display: flex;
