@@ -3,13 +3,26 @@
   overflow: visible;
 }
 
+.storyPageContainer{
+    width: 100%;
+    height: 100%;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* padding: 5% 8%; */
 .storyPageContainer {
   padding-top: 5%;
   /* height: 100vh; */
 }
 
-.headImage {
+.img {
   width: 100%;
   height: 100vh;
   margin: auto;
+}
+
+.storyTitle{
+    /* position: absolute; */
+    /* top: 12%;
+    width: 85%;
+    justify-content: center; */
 }
