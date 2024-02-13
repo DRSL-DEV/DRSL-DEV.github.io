@@ -12,6 +12,11 @@
     margin-left: 5%;
 }
 .infoText p{
-    font-family: Inter;
     font-size: 14px;
+}
+.infoText{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px;
 }

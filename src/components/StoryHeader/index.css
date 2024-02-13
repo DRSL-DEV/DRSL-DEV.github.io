@@ -23,3 +23,10 @@
     margin-bottom: 1.5em;
     display: flex;
 }
+
+.headingContainer{
+    display: flex;
+    width: 60%;
+    justify-content: space-between;
+    align-items: flex-start;
+}
