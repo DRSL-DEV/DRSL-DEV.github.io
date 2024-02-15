@@ -14,6 +14,7 @@ import SearchPage from "./pages/search";
 import PrivacyPage from "./pages/privacy";
 import Footer from "./components/Footer";
 import StoryDetailPage from "./pages/storyDetail";
+import LoginPage from "./pages/login";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,6 +28,7 @@ function App() {
         <div className="routes-wrapper">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/story" element={<StoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
