@@ -58,14 +58,14 @@
 }
 
 
-.card-footer > div {
+.customized-card-footer > div {
   font-family: Montserrat, sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #55565A;
 }
 
-.card-footer {
+.customized-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,12 +73,12 @@
 }
 
 
-.card-footer > div, .card-footer button {
+.customized-card-footer > div, .card-footer button {
   flex-shrink: 0;
 }
 
 
-.card-footer button {
+.customized-card-footer button {
   padding-right: 20px;
   height: 16px;
   display: flex;

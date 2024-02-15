@@ -14,7 +14,7 @@ const Card = ({ title, content, author, imgSrc, type }) => {
       <div className="card-content">
         <h2>{title}</h2>
         <p>{content}</p>
-        <div className="card-footer">
+        <div className="customized-card-footer">
           <div>{author}</div>
           <button>
             <FontAwesomeIcon icon={faLongArrowAltRight} />
