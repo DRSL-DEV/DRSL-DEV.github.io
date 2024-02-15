@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Menu from "./components/Menu";
 import NavBar from "./components/NavBar";
 import "./App.css";
@@ -18,6 +18,13 @@ import LoginPage from "./pages/login";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const FooterWithCondition = () => {
+    const location = useLocation();
+    const isLoginPage = location.pathname === "/login";
+
+    return !isLoginPage ? <Footer /> : null;
+  }
 
   return (
     <Router>
@@ -41,7 +48,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
-        <Footer />
+        <FooterWithCondition />
       </div>
     </Router>
   );
