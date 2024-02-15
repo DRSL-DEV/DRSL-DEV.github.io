@@ -4,9 +4,9 @@
     align-items: center;
     gap: 10px; */
     display: flex;
-    justify-content: flex-start;
-    gap: 30%;
-    margin-left: 5%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%; /* Add padding to give some space on the sides */
   }
 
 .back-button {

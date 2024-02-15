@@ -2,8 +2,8 @@
   display: flex;
   border-radius: 5%;
   margin: 20px 0;
-  height: 140px;
-  width: 140px; /* Make the card a square */
+  height: 110px;
+  width: 110px; /* Make the card a square */
   /* overflow: hidden; */
   background-color: var(--secondary-color-sky-blue-translucent);
   justify-content: center;
@@ -39,7 +39,7 @@
 
 .grid-card-content h2 {
   font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #000;
   margin: 0;

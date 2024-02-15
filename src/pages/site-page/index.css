@@ -4,12 +4,26 @@
     height: 100%;
     display: flex;
     justify-content: center;
-    padding: 10% 2% ;
+    padding: 7% 2% ;
     /* background-color: tomato; */
 }
 .content{
     width: 100%;
     /* background-color: tomato; */
+}
+
+.grid-view {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5%;
 }
 
 /* .site-header {
@@ -43,9 +57,16 @@
     align-items: center;
   }
 
+  h2 {
+    margin-bottom: 5%;
+  }
+
   .user-content{
     margin-top: 3%;
     margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
   }
   
   .stories-count {
@@ -91,4 +112,5 @@ hr {
     width: 70%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 7%;
 }

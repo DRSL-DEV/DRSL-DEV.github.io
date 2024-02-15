@@ -8,6 +8,7 @@ import list_view from "../../assets/icons/list_view.svg";
 import imgSrc from "../../assets/images/card_img.png";
 import Title from "../../components/PageTitle";
 import TextCard from "../../components/TextCard";
+import Button from '../../components/Button';
 
 const SitePage = () => {
   // You can replace 'Site Title' and 'Number of Stories' with your actual data.
@@ -53,16 +54,29 @@ const SitePage = () => {
           </>
           ) : (
           <>
-            <GridCard
-              title={contentTitle}
-              imgSrc={imgSrc}
-            />
-            <GridCard
-              title={contentTitle}
-              imgSrc={imgSrc}
-            />
+            <div className='grid-view'>
+              <GridCard
+                title={contentTitle}
+                imgSrc={imgSrc}
+              />
+              <GridCard
+                title={contentTitle}
+                imgSrc={imgSrc}
+              />
+              <GridCard
+                title={contentTitle}
+                imgSrc={imgSrc}
+              />
+            </div>
           </>
           )}
+        <div className='button-container'>
+          <Button
+            text="View More"
+            to="/site-page"
+          />
+        </div>
+        
           {/* Add more <Card /> or <GridCard /> components as needed */}
         </section>
         <hr />
@@ -74,8 +88,13 @@ const SitePage = () => {
             author="Steven Henry"
             pfpSource={imgSrc}
             date="1/1/2021"
-
           />
+          <div className='button-container'>
+            <Button
+              text="View More"
+              to="/site-page"
+            />
+        </div>
           {/* Add more <Card /> or <GridCard /> components as needed */}
         </section>
       </div>
