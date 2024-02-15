@@ -92,8 +92,8 @@ const LoginPage = () => {
                 <h4>Login with</h4>
                 <div className="social-login-icons">
                     <img src={GoogleIcon} alt="Google Icon" />
-                    <img src={FacebookIcon} alt="Facebook Icon" />
-                    <img src={TwitterIcon} alt="Twitter Icon" />
+                    {/* <img src={FacebookIcon} alt="Facebook Icon" />
+                    <img src={TwitterIcon} alt="Twitter Icon" /> */}
                 </div>
                 <p className="help-text">Contact Support</p>
             </div>
