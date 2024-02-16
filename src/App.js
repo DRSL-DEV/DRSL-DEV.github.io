@@ -14,6 +14,7 @@ import SearchPage from "./pages/search";
 import PrivacyPage from "./pages/privacy";
 import StoryDetailPage from "./pages/storyDetail";
 import SitePage from "./pages/site-page";
+import CreateStory from "./pages/create-story";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,13 +34,15 @@ function App() {
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/story/story-detail" element={<StoryDetailPage />} />            <Route path="/site-page" element={<SitePage />} />
+            <Route path="/story/story-detail" element={<StoryDetailPage />} />
+            <Route path="/site-page" element={<SitePage />} />
+            <Route path="/create-story" element={<CreateStory />} />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-          <Footer />
         </div>
+        <Footer />
       </div>
     </Router>
   );
