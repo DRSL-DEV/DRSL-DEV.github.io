@@ -1,0 +1,149 @@
+.page-container {
+  width: 100%;
+  min-height: calc(100vh - 220px);
+  padding: 5%;
+  position: relative;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #000;
+  background: #fff;
+  margin-bottom: 32px;
+}
+
+.ant-form-item {
+  width: 100%;
+  margin: 0;
+}
+
+#create_story_title {
+  padding-left: 14px;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #000;
+  height: 50px;
+  font-size: var(--font-size-h4);
+  font-family: var(--font-family-heading);
+  color: #000;
+}
+
+#create_story_title::placeholder {
+  color: #000;
+}
+
+#create_story_content {
+  height: 40vh;
+  padding-top: 8px;
+  padding-left: 14px;
+  border: none;
+  border-radius: 0;
+  font-size: var(--font-size-body-small);
+  font-family: var(--font-family-body);
+  line-height: normal;
+  color: #000;
+  overflow-y: scroll;
+}
+
+#create_story_content::placeholder {
+  color: #707070;
+}
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 180px;
+  border: none;
+  cursor: pointer;
+}
+
+.upload-container {
+  border: none;
+  width: 100%;
+}
+
+.ant-upload-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.ant-upload-select {
+  border-top: 1px solid #000;
+}
+
+.ant-upload {
+  display: flex;
+  width: 100%;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.ant-upload-list {
+  height: 40px;
+  display: flex;
+  overflow-x: scroll;
+}
+
+.ant-upload-list-item {
+  height: 100% !important;
+  margin: 0 !important;
+  border: none !important;
+  flex: none;
+}
+
+.ant-upload-list-item-thumbnail {
+  height: 32px !important;
+  width: 32px !important;
+  display: flex;
+}
+
+.ant-upload-list-item-name {
+  display: none;
+}
+
+.ant-upload-list-item-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* .ant-upload-list-picture .ant-upload-list-item {
+  float: left;
+  width: auto;
+  margin-right: 8px;
+}
+
+.ant-upload-list-picture .ant-upload-list-item-info {
+  padding: 0;
+}
+
+.ant-upload-list-picture .ant-upload-list-item-thumbnail img {
+  width: 104px; 
+  height: 104px; 
+}
+
+.ant-upload-list-picture .ant-upload-list-item-name {
+  display: none; 
+}
+
+.ant-upload-list-picture .ant-upload-list-item-card-actions {
+  top: 10px; 
+  right: 10px; 
+}
+
+.upload-container .ant-btn {
+  margin-top: 16px;
+}
+
+.attachment-label {
+  margin-bottom: 8px;
+} */
