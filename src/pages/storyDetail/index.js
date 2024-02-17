@@ -1,14 +1,21 @@
 import React from "react";
 import image_placeholder from "../../assets/images/image_placeholder.png"
-import StoryHeader from "../../components/StoryHeader";
+import StoryHeader from "../../components/PageTitle";
 import StoryInfo from "../../components/SotryInfo";
 import "./index.css"
 
 const StoryDetailPage = () => {
+
+  const siteTitle = 'Site Title';
+
   return(
     <div className="storyPageContainer">
-      <StoryHeader />
-      <img src={image_placeholder} alt="photo of house" />
+      <div className="storyTitle" >
+        <StoryHeader title={siteTitle}/>
+      </div>
+      <div className="imgContainer">
+        <img src={image_placeholder} alt="photo of house" />
+      </div>
       <StoryInfo />
       <h1>TITLE OF STORY</h1>
       <p className="storyText">
