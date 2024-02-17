@@ -2,6 +2,7 @@ import "./index.css";
 import link_icon from "../../assets/icons/link_icon.svg";
 import LikeButton from "../LikeButton";
 import back_arrow from "../../assets/icons/back_arrow.svg";
+import PageTitle from "../../components/PageTitle";
 import { Link } from "react-router-dom";
 
 const StoryHeader = () => {
