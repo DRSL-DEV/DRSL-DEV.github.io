@@ -2,10 +2,12 @@
   background-color: var(--primary-color-sky-blue-translucent);
   background-blend-mode: lighten;
   width: 100%;
+  height: fit-content;
+  max-height: calc(100vh - 60px);
   padding-left: 50px;
   position: absolute;
   top: 60px;
-  bottom: 0;
+  right: 0;
   overflow-y: scroll;
   transform: translateX(100%);
   transition: transform 0.4s ease-in-out;

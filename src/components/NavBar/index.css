@@ -6,6 +6,8 @@
   height: 60px;
   background-color: var(--primary-color-light-blue);
   padding: 0 18px;
+  position: fixed;
+  overflow: visible;
 }
 
 .icons-container {

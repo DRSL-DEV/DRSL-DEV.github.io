@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import submenu_arrow_up from "../../assets/icons/submenu_arrow_up.svg";
@@ -39,6 +39,11 @@ const menuItems = [
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const [activeMenus, setActiveMenus] = useState({}); // Active submenus
   const location = useLocation(); // Get current location (routing location)
+
+  // Close the submenu when the menu is closed
+  useEffect(() => {
+    if (!isMenuOpen) setActiveMenus({});
+  }, [isMenuOpen]);
 
   const handleMenuClick = (item) => {
     // Toggle submenu
@@ -95,11 +100,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
                       to={subItem.link}
                       key={subItem.name}
                       className="sub-menu-item"
-                      onClick={() => {
-                        // Close the menu and reset active submenus
-                        setIsMenuOpen(false);
-                        setActiveMenus({});
-                      }}
+                      onClick={() => setIsMenuOpen(false)} // Close the menu
                     >
                       <h2>{subItem.name}</h2>
                     </Link>
@@ -114,11 +115,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
               className={`menu-item ${
                 isActiveMenuItem(item) ? "active-menu-item" : ""
               }`}
-              onClick={() => {
-                // Close the menu and reset active submenus
-                setIsMenuOpen(false);
-                setActiveMenus({});
-              }}
+              onClick={() => setIsMenuOpen(false)} // Close the menu
             >
               <h1>{item.name}</h1>
             </Link>
