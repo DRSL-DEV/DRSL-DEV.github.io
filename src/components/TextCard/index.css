@@ -1,0 +1,114 @@
+
+
+.storypost-card {
+    background-color: #508b705c;
+    height: 170px;
+    position: relative;
+  
+    display: flex;
+    border-radius: 10px;
+    margin: 20px 0;
+    overflow: hidden;
+    min-width: 0;
+}
+  
+.textpost-content {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    left: 22px;
+    top: 62px;
+    position: relative;
+    width: 90%;
+    height: min-content;
+    /* height: 100px; */
+}
+.storypost-card p {
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000;
+}
+
+.storypost-card h2 {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+}
+
+.storypost-card .user-info {
+    align-items: center;
+    display: inline-flex;
+    gap: 8px;
+    left: 22px;
+    position: absolute;
+    top: 18px;
+}
+
+.storypost-card .profile-pic {
+    height: 37px;
+    width: 37px;
+    object-fit: cover;
+    position: relative;
+    border-radius: 50%;
+}
+
+.storypost-card .post-info {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.storypost-card .usernamae {
+    color: #000000;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.4px;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.storypost-card .post-date {
+    color: #000000;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.4px;
+    line-height: normal;
+    position: relative;
+    width: fit-content;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: right;
+    width: min-content;
+    height: min-content;
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+}
+  
+  
+.card-footer > div, .card-footer button {
+    flex-shrink: 0;
+}
+  
+  
+.card-footer button {
+    padding-right: 0px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}

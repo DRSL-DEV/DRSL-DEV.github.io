@@ -1,0 +1,46 @@
+.grid-card{
+  display: flex;
+  border-radius: 5%;
+  margin: 20px 0;
+  height: 110px;
+  width: 110px; /* Make the card a square */
+  /* overflow: hidden; */
+  background-color: var(--secondary-color-sky-blue-translucent);
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-card-image {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  border-radius: 5%;
+}
+
+.grid-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 3%;
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius: 7%;
+  margin-bottom: 5%;
+}
+
+.grid-card-content h2 {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
