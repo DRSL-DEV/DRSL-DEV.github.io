@@ -1,17 +1,25 @@
 import React from "react";
-import profile from "../../assets/images/profile.png";
 import "./index.css";
 
-const StoryInfo = () => {
+const StoryInfo = ({ title, author, profileImg, date, content, tags}) => {
   return(
     <div className="storyInfoContainer">
-      <div className="profileCropper">
-        <img src={profile} alt="profile image" />
-      </div>
-      <div className="infoText">
-        <p>username</p>
-        <p>02/13/2023</p>
-      </div>
+        <div className="postInfoTop">
+            <div className="userInfo">
+                <img src={profileImg} alt="profile image" />
+                <div className="userInfoText">
+                    <p>{author}</p>
+                    <p>{date}</p>
+                </div>
+            </div>
+            <div className='tagContainer'>
+                {tags.map((tag, index) => (
+                    <p className='storyTag' key={index}>{tag}</p>
+                ))}
+            </div>
+        </div>
+      <h1 className="storyTitle">{title}</h1>
+      <p className="storyText">{content}</p>
     </div>
   );
 };

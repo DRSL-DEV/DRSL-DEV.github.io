@@ -1,6 +1,6 @@
-.storyText{
-    padding: 5% 5%;
-    overflow: visible;
+.shareIcon{
+    margin: 5% 5% 0% 5%;
+    float: right;
 }
 
 .storyPageContainer{
@@ -19,4 +19,7 @@
 
 .carousel{
     z-index: -1;
+}
+.ant-carousel{
+    width: 100%;
 }

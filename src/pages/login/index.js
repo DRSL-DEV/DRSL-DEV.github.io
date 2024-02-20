@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import back from "../../assets/icons/back.svg";
 import { Link } from "react-router-dom";

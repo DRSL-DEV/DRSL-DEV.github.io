@@ -1,32 +1,43 @@
 .storyInfoContainer{
-    display: flex;
     padding-top: 5%;
     padding-bottom: 5%;
     align-items: center;
-    gap: 10px;
 }
-.profileCropper img {
+.postInfoTop{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 5%;
+    margin-right: 5%;
+    align-items: center;
+}
+.userInfo{
+    display: flex;
+    gap: 18px;
+}
+.userInfo img {
     border-radius: 50%;
 }
-.profileCropper{
-    margin-left: 5%;
-}
-.infoText p{
-    font-size: 14px;
-}
-.infoText{
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 3px;
-}
-.iconContainer{
-    padding-right: 5%;
-    padding-top: 5%;
-}
 .storyTitle{
-    padding-bottom: 5%;
+    padding: 3%;
 }
 .storyImageGallery{
     width: 100%;
+}
+.storyText{
+    padding:0% 8%;
+    overflow: visible;
+}
+.tagContainer{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    width: 120px;
+    justify-content: flex-end;
+    row-gap: 2px;
+}
+.storyTag{
+    font-size: 14px;
+    background-color:rgba(202, 232, 250, 1);
+    padding: 0 8px;
+    border-radius: 10px;
 }

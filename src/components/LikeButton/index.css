@@ -6,3 +6,6 @@ button{
     border: 0;
     background-color: #FFF;
 }
+.LikeButton{
+    display: none;
+}

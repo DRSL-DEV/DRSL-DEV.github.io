@@ -1,6 +1,5 @@
 import React from "react";
 import image_placeholder from "../../assets/images/image_placeholder.png"
-import StoryHeader from "../../components/StoryHeader";
 import StoryInfo from "../../components/SotryInfo";
 import { Link } from "react-router-dom";
 import "./index.css"
