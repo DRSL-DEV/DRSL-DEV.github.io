@@ -16,3 +16,7 @@
   height: 100vh;
   margin: auto;
 }
+
+.carousel{
+    z-index: -1;
+}

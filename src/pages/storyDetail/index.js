@@ -6,6 +6,10 @@ import LikeButton from "../../components/LikeButton";
 import link_icon from "../../assets/icons/link_icon.svg";
 import { Carousel } from "antd";
 import "./index.css"
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import firebaseConfig from '../../Secrets';
+
 
 const StoryDetailPage = () => {
 
@@ -30,7 +34,7 @@ const StoryDetailPage = () => {
         <div className="storyTitle" >
             <PageTitle title={siteTitle}/>
         </div>
-        <Carousel autoplay>
+        <Carousel className="carousel" autoplay>
             <div>
                 <img className="storyImageGallery" src={image_placeholder} alt="photo of house" />
             </div>
