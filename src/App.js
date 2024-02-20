@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Menu from "./components/Menu";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -16,6 +21,7 @@ import PrivacyPage from "./pages/privacy";
 import StoryDetailPage from "./pages/storyDetail";
 import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
+import CreateStory from "./pages/create-story";
 import SignUpPage from "./pages/signUp";
 
 function App() {
@@ -26,7 +32,7 @@ function App() {
     const isLoginPage = location.pathname === "/login";
 
     return !isLoginPage ? <Footer /> : null;
-  }
+  };
 
   return (
     <Router>
@@ -45,12 +51,13 @@ function App() {
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/story/story-detail" element={<StoryDetailPage />} />            <Route path="/site-page" element={<SitePage />} />
+            <Route path="/story/story-detail" element={<StoryDetailPage />} />
+            <Route path="/site-page" element={<SitePage />} />
+            <Route path="/create-story" element={<CreateStory />} />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-          <Footer />
         </div>
         <FooterWithCondition />
       </div>

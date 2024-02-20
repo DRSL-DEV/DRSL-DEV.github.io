@@ -1,0 +1,13 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.page-header img {
+  position: absolute;
+  left: 0;
+}
