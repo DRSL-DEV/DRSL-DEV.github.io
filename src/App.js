@@ -16,6 +16,7 @@ import PrivacyPage from "./pages/privacy";
 import StoryDetailPage from "./pages/storyDetail";
 import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
+import SignUpPage from "./pages/signUp";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,6 +37,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="/story" element={<StoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/about" element={<AboutPage />} />

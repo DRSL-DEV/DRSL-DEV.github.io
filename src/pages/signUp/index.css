@@ -1,0 +1,10 @@
+.page-container {
+    margin: 12px 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
