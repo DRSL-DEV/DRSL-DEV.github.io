@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Menu from "./components/Menu";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import "./App.css";
@@ -13,10 +14,18 @@ import PartnershipsPage from "./pages/partnerships";
 import SearchPage from "./pages/search";
 import PrivacyPage from "./pages/privacy";
 import StoryDetailPage from "./pages/storyDetail";
+import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const FooterWithCondition = () => {
+    const location = useLocation();
+    const isLoginPage = location.pathname === "/login";
+
+    return !isLoginPage ? <Footer /> : null;
+  }
 
   return (
     <Router>
@@ -26,6 +35,7 @@ function App() {
         <div className="routes-wrapper">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/story" element={<StoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -40,6 +50,7 @@ function App() {
           </Routes>
           <Footer />
         </div>
+        <FooterWithCondition />
       </div>
     </Router>
   );

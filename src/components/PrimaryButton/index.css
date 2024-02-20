@@ -1,0 +1,19 @@
+.primary-button {
+  border-radius: 30px;
+  background: var(--primary-color-yellow);
+  width: 310px;
+  height: 45px;
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: -0.4px;
+  padding: 0 16px;
+  margin-bottom: 10px;;
+  outline: none;
+}
