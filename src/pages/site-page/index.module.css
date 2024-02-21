@@ -1,0 +1,63 @@
+.content {
+  width: 100%;
+}
+
+.grid-view {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5%;
+}
+
+.site-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5%;
+  align-items: center;
+}
+
+.user-content {
+  margin-top: 3%;
+  margin-bottom: 5%;
+  display: flex;
+  flex-direction: column;
+}
+
+.view-change-button {
+  float: right;
+  position: relative;
+  text-align: center;
+  border: none;
+  background-color: transparent;
+}
+
+.view-change-button img {
+  width: 30%;
+  height: auto;
+  margin-top: 5%;
+}
+
+.view-change-button span {
+  color: #55565a;
+  font-family: var(--font-family-body);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.4px;
+}
+
+hr {
+  border: 1px solid #2c3f08;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 7%;
+}

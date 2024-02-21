@@ -1,11 +1,4 @@
-.page-container {
-  width: 100%;
-  min-height: calc(100vh - 220px);
-  padding: 5%;
-  position: relative;
-}
-
-.form-fields {
+.create-story-form :global(.form-fields) {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,15 +6,15 @@
   border-radius: 10px;
   border: 1px solid #000;
   background: #fff;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
-.ant-form-item {
+.create-story-form :global(.ant-form-item) {
   width: 100%;
   margin: 0;
 }
 
-#create_story_title {
+.create-story-form :global(#create_story_title) {
   padding-left: 14px;
   border: none;
   border-radius: 0;
@@ -32,11 +25,11 @@
   color: #000;
 }
 
-#create_story_title::placeholder {
+.create-story-form :global(#create_story_title::placeholder) {
   color: #000;
 }
 
-#create_story_content {
+.create-story-form :global(#create_story_content) {
   height: 40vh;
   padding-top: 8px;
   padding-left: 14px;
@@ -49,11 +42,11 @@
   overflow-y: scroll;
 }
 
-#create_story_content::placeholder {
+.create-story-form :global(#create_story_content::placeholder) {
   color: #707070;
 }
 
-.file-upload {
+.create-story-form :global(.file-upload) {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,21 +57,21 @@
   cursor: pointer;
 }
 
-.upload-container {
+.create-story-form :global(.upload-container) {
   border: none;
   width: 100%;
 }
 
-.ant-upload-wrapper {
+.create-story-form :global(.ant-upload-wrapper) {
   display: flex;
   flex-direction: column-reverse;
 }
 
-.ant-upload-select {
+.create-story-form :global(.ant-upload-select) {
   border-top: 1px solid #000;
 }
 
-.ant-upload {
+.create-story-form :global(.ant-upload) {
   display: flex;
   width: 100%;
   height: 64px;
@@ -87,33 +80,38 @@
   gap: 16px;
 }
 
-.ant-upload-list {
+.create-story-form :global(.ant-upload-list) {
   height: 40px;
   display: flex;
   overflow-x: scroll;
 }
 
-.ant-upload-list-item {
+.create-story-form :global(.ant-upload-list-item) {
   height: 100% !important;
   margin: 0 !important;
   border: none !important;
   flex: none;
 }
 
-.ant-upload-list-item-thumbnail {
+.create-story-form :global(.ant-upload-list-item-thumbnail) {
   height: 32px !important;
   width: 32px !important;
   display: flex;
 }
 
-.ant-upload-list-item-name {
+.create-story-form :global(.ant-upload-list-item-name) {
   display: none;
 }
 
-.ant-upload-list-item-actions {
+.create-story-form :global(.ant-upload-list-item-actions) {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.create-story-form :global(.ant-form-item-control-input-content) {
+  display: flex;
+  justify-content: center;
 }
 
 /* .ant-upload-list-picture .ant-upload-list-item {

@@ -1,14 +1,11 @@
-import React from "react";
-import './index.css';
+import styles from "./index.module.css";
 
 const GridCard = ({ title, imgSrc, type }) => {
-  // const cardClass = `card ${type}`;
-
   return (
-    <div className='grid-card'>
-      <div className="grid-card-image">
+    <div className={styles["grid-card"]}>
+      <div className={styles["grid-card-image"]}>
         <img src={imgSrc} alt="" />
-        <div className="grid-card-content">
+        <div className={styles["grid-card-content"]}>
           <h2>{title}</h2>
         </div>
       </div>

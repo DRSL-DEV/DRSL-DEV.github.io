@@ -1,20 +1,15 @@
-import React from "react";
-import './index.css';
-import { useNavigate } from "react-router-dom";
+import styles from "./index.module.css";
 
-const Button = ({ text, to }) => {
-  let navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(to);
-  };
-
+const Button = ({ text, handleOnClick, customStyles }) => {
   return (
-    <button className="button" onClick={handleClick}>
+    <button
+      className={styles.button}
+      style={customStyles}
+      onClick={handleOnClick}
+    >
       {text}
     </button>
   );
 };
-
 
 export default Button;

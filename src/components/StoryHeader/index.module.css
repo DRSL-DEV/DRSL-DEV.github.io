@@ -1,0 +1,25 @@
+.story-header-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding-left: 75%;
+}
+
+.story-header-container {
+  display: flex;
+  align-items: center;
+}
+
+.heading-container h1 {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  margin-bottom: 1.5em;
+  display: flex;
+}

@@ -1,7 +1,7 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 const SearchPage = () => {
-  return <div>Search Page</div>;
+  return <div className="page-container">Search Page</div>;
 };
 
 export default SearchPage;

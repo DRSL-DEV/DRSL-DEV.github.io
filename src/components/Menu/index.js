@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-
 import submenu_arrow_up from "../../assets/icons/submenu_arrow_up.svg";
 import submenu_arrow_down from "../../assets/icons/submenu_arrow_down.svg";
-import "./index.css";
+import styles from "./index.module.css";
 
 // Menu items
 const menuItems = [
   { name: "Share Your Story", link: "/create-story" },
-  { name: "Explore Regional Stories", link: "/story" },
+  { name: "Explore Regional Stories", link: "/site-page" },
   { name: "Station Map", link: "/map" },
   {
     name: "Learning Activities",
@@ -68,21 +67,23 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const isSubMenuActive = (itemName) => !!activeMenus[itemName];
 
   return (
-    <div className={`menu-container ${isMenuOpen ? "open" : ""}`}>
+    <div
+      className={`${styles["menu-container"]} ${isMenuOpen ? styles.open : ""}`}
+    >
       {menuItems.map((item) => (
         <div key={item.name}>
           {/* check if the item has a submenu */}
           {item.subMenu ? (
             <>
               <h1
-                className={`menu-item ${
-                  isActiveMenuItem(item) ? "active-menu-item" : ""
+                className={`${styles["menu-item"]} ${
+                  isActiveMenuItem(item) ? styles["active-menu-item"] : ""
                 }`}
                 onClick={() => handleMenuClick(item)}
               >
                 {item.name}
                 <img
-                  className="submenu-arrow"
+                  className={styles["submenu-arrow"]}
                   src={
                     isSubMenuActive(item.name)
                       ? submenu_arrow_up
@@ -94,12 +95,12 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
 
               {/*  If the submenu is active, show the submenu */}
               {isSubMenuActive(item.name) && (
-                <div className="sub-menu">
+                <div className={styles["sub-menu"]}>
                   {item.subMenu.map((subItem) => (
                     <Link
                       to={subItem.link}
                       key={subItem.name}
-                      className="sub-menu-item"
+                      className={styles["sub-menu-item"]}
                       onClick={() => setIsMenuOpen(false)} // Close the menu
                     >
                       <h2>{subItem.name}</h2>
@@ -112,8 +113,8 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
             // If the item does not have a submenu, show the item
             <Link
               to={item.link}
-              className={`menu-item ${
-                isActiveMenuItem(item) ? "active-menu-item" : ""
+              className={`${styles["menu-item"]} ${
+                isActiveMenuItem(item) ? styles["active-menu-item"] : ""
               }`}
               onClick={() => setIsMenuOpen(false)} // Close the menu
             >

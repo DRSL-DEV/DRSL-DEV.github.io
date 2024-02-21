@@ -1,21 +1,17 @@
-.page-container {
-  text-align: center;
-  min-height: calc(100vh - 220px);
-}
-
 .not-found-title {
   font-size: 40px;
   color: var(--primary-color-navy-blue);
+  text-align: center;
+  margin-top: 10vh;
 }
 
 .not-found-message {
-  font-size: var(--font-size-body-large);
-  margin-bottom: 50px;
+  font-size: var(--font-size-body-small);
   line-height: 2;
+  margin-top: 16px;
 }
 
 .not-found-link {
   color: var(--primary-color-sky-blue);
-
   text-decoration: underline;
 }

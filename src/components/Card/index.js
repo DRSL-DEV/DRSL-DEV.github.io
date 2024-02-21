@@ -1,23 +1,22 @@
-import React from "react";
-import './index.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
+import styles from "./index.module.css";
+import arrow_right from "../../assets/icons/arrow_right.svg";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ title, content, author, imgSrc, type }) => {
-  const cardClass = `customized-card ${type}`;
+  const navigate = useNavigate();
 
   return (
-    <div className={cardClass}>
-      <div className="customized-card-image">
+    <div className={`${styles["customized-card"]} ${styles[type]}`}>
+      <div className={styles["customized-card-image"]}>
         <img src={imgSrc} alt="" />
       </div>
-      <div className="customized-card-content">
+      <div className={styles["customized-card-content"]}>
         <h2>{title}</h2>
         <p>{content}</p>
-        <div className="customized-card-footer">
+        <div className={styles["customized-card-footer"]}>
           <div>{author}</div>
-          <button>
-            <FontAwesomeIcon icon={faLongArrowAltRight} />
+          <button onClick={() => navigate("/story/story-detail")}>
+            <img src={arrow_right} alt="right arrow" />
           </button>
         </div>
       </div>

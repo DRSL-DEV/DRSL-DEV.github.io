@@ -1,7 +1,7 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 export const ProfilePage = () => {
-  return <div>Profile Page</div>;
+  return <div className="page-container">Profile Page</div>;
 };
 
 export default ProfilePage;

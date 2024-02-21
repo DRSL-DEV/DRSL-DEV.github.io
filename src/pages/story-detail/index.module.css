@@ -1,0 +1,14 @@
+.story-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.story-text {
+  padding: 5% 10%;
+  overflow: visible;
+}
+
+.img-container img {
+  width: 100%;
+}

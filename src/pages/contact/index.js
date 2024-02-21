@@ -1,7 +1,7 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 const ContactPage = () => {
-  return <div>Contact Page</div>;
+  return <div className="page-container">Contact Page</div>;
 };
 
 export default ContactPage;

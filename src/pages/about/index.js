@@ -1,7 +1,7 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 const AboutPage = () => {
-  return <div>About Page</div>;
+  return <div className="page-container">About Page</div>;
 };
 
 export default AboutPage;

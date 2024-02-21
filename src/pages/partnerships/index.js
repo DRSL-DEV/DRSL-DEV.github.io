@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 const PartnershipsPage = () => {
   return <div>Partnerships Page</div>;

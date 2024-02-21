@@ -5,10 +5,9 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import Menu from "./components/Menu";
+import "./App.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import "./App.css";
 import HomePage from "./pages/home";
 import StoryPage from "./pages/story";
 import ProfilePage from "./pages/profile";
@@ -18,21 +17,17 @@ import ContactPage from "./pages/contact";
 import PartnershipsPage from "./pages/partnerships";
 import SearchPage from "./pages/search";
 import PrivacyPage from "./pages/privacy";
-import StoryDetailPage from "./pages/storyDetail";
+import StoryDetailPage from "./pages/story-detail";
 import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
 import CreateStory from "./pages/create-story";
 import SignUpPage from "./pages/signUp";
 
+const FooterWithCondition = () =>
+  ["/login", "/signup"].includes(useLocation().pathname) ? null : <Footer />;
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const FooterWithCondition = () => {
-    const location = useLocation();
-    const isLoginPage = location.pathname === "/login";
-
-    return !isLoginPage ? <Footer /> : null;
-  };
 
   return (
     <Router>

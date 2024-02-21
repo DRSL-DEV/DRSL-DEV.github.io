@@ -1,0 +1,41 @@
+.signup-other-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.signup-form-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form-section :global(.ant-checkbox-wrapper) {
+  padding: 0 5%;
+}
+
+.signup-form-section :global(.ant-checkbox) {
+  align-self: flex-start;
+  padding-top: 4px;
+}
+
+.signup-form-section :global(.ant-checkbox + span) {
+  max-width: 90%;
+}
+
+.signup-other-section h4 {
+  font-weight: 400;
+}
+
+.social-signup-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+  gap: 24px;
+}
+
+.social-signup-icons img {
+  height: auto;
+}

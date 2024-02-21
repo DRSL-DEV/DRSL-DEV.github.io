@@ -1,0 +1,17 @@
+.story-h2 {
+  margin-bottom: 12px;
+  font-size: var(--font-size-h4);
+  font-weight: 600;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 20px;
+  gap: 16px;
+}
+
+.user-stories section,
+.partnered-stories section {
+  margin-bottom: 12px;
+}

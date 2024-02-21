@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import styles from "./index.module.css";
 import back from "../../assets/icons/back.svg";
 import { Link } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -9,57 +7,60 @@ import FacebookIcon from "../../assets/icons/Facebook icon.svg";
 import TwitterIcon from "../../assets/icons/Twitter icon.svg";
 import PasswordInput from "../../components/PasswordInput";
 import EmailInput from "../../components/EmailInput";
-import { Form } from 'antd';
+import PageHeader from "../../components/PageHeader";
+import { Form } from "antd";
 
 const LoginPage = () => {
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
-    const handleSubmit = (values) => {
-        console.log(values);
-    };
+  const handleSubmit = (values) => {
+    console.log(values);
+  };
 
-    return (
-        <div className="pageWrapper">
-            <div className="titleContainer">
-                <Link to="/">
-                    <img src={back} alt="back" />
-                </Link>
-                <h1 className="pageTitle">Login</h1>
-            </div>
-            <p className="pageDescription">Login or Sign up to continue.</p>
-            <Form form={form} onFinish={handleSubmit}>
-                <Form.Item
-                    name="email"
-                    rules={[
-                        { required: true, message: 'Please input your email' },
-                        { type: 'email', message: 'Please enter a valid email' },
-                    ]}
-                >
-                    <EmailInput placeholder="Email" />
-                </Form.Item>
+  return (
+    <div className="page-container">
+      <section className={styles["login-header-section"]}>
+        <PageHeader title="Login" />
+        <p className={styles["page-description"]}>
+          Login or Sign up to continue.
+        </p>
+      </section>
 
-                <PasswordInput
-                    name="password"
-                    placeholder="Password"
-                />
+      <section className={styles["login-form-section"]}>
+        <Form form={form} onFinish={handleSubmit}>
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Please input your email" },
+              { type: "email", message: "Please enter a valid email" },
+            ]}
+          >
+            <EmailInput placeholder="Email" />
+          </Form.Item>
 
-                <PrimaryButton text="Login" htmlType="submit" />
-            </Form>
-            <p className="help-text">
-                Don't have an account?
-                <Link to="/signup"> Sign up</Link>
-            </p>
-            <div className="other-login">
-                <h4>Login with</h4>
-                <div className="social-login-icons">
-                    <img src={GoogleIcon} alt="Google Icon" />
-                    {/* <img src={FacebookIcon} alt="Facebook Icon" />
-                    <img src={TwitterIcon} alt="Twitter Icon" /> */}
-                </div>
-                <p className="help-text">Contact Support</p>
-            </div>
+          <PasswordInput name="password" placeholder="Password" />
+
+          <PrimaryButton text="Login" htmlType="submit" />
+        </Form>
+      </section>
+
+      <section className={styles["login-other-section"]}>
+        <p className={styles["help-text"]}>
+          Don't have an account? &nbsp;<Link to="/signup">Sign up</Link>
+        </p>
+
+        <div className={styles["other-login"]}>
+          <h4>Login with</h4>
+          <div className={styles["social-login-icons"]}>
+            <img src={GoogleIcon} alt="Google Icon" />
+            {/* <img src={FacebookIcon} alt="Facebook Icon" /> */}
+            {/* <img src={TwitterIcon} alt="Twitter Icon" /> */}
+          </div>
+          <p className={styles["help-text"]}>Contact Support</p>
         </div>
-    )
-}
+      </section>
+    </div>
+  );
+};
 
 export default LoginPage;

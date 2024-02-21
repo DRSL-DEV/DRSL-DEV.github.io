@@ -1,0 +1,59 @@
+.page-description {
+  margin: 32px 0;
+  text-align: center;
+}
+
+.input {
+  width: 310px;
+  height: 46px;
+  margin-top: 16px;
+  border-radius: 30px;
+  stroke-width: 1px;
+  stroke: #000;
+}
+
+.help-text {
+  text-decoration: none;
+  color: #707070;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+}
+
+.other-login {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.other-login h4 {
+  font-weight: 400;
+}
+
+.social-login-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+  gap: 24px;
+}
+
+.social-login-icons img {
+  height: auto;
+}
+
+.login-other-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login-form-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

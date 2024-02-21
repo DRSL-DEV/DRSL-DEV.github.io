@@ -1,19 +1,19 @@
 import { Form, Input, Upload, message } from "antd";
-import StoryHeader from "../../components/PageHeader";
+import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
 import upload_icon from "../../assets/icons/upload_icon.svg";
-import "./index.css";
+import styles from "./index.module.css";
 
 const allowedFileTypes = [
-  'image/jpeg',
-  'image/png',
-  'image/gif',
-  'video/mp4',
-  'video/webm',
-  'video/ogg',
-  'audio/mpeg',
-  'audio/ogg',
-  'audio/wav',
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "video/mp4",
+  "video/webm",
+  "video/ogg",
+  "audio/mpeg",
+  "audio/ogg",
+  "audio/wav",
 ];
 
 const CreateStory = () => {
@@ -22,13 +22,13 @@ const CreateStory = () => {
   };
 
   const onFileChange = (info) => {
-    console.log('file status change', info);
-  
+    console.log("file status change", info);
+
     // Log details if the file is successfully read
-    if (info.file.status === 'done') {
+    if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
       // Here: any callback to trigger after successful upload
-    } else if (info.file.status === 'error') {
+    } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
   };
@@ -41,9 +41,8 @@ const CreateStory = () => {
           type: file.type,
           size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
         });
-      } 
-      else {
-        message.error('You can only upload image, video, or audio files!');
+      } else {
+        message.error("You can only upload image, video, or audio files!");
         return Upload.LIST_IGNORE;
       }
       return false;
@@ -51,14 +50,16 @@ const CreateStory = () => {
     onChange: onFileChange,
   };
 
+  const handleSubmission = (values) => {};
+
   return (
     <div className="page-container">
-      <StoryHeader title="Create Story" />
+      <PageHeader title="Create Story" />
       <Form
         name="create_story"
         onFinish={onFinish}
         layout="vertical"
-        className="create-story-form"
+        className={styles["create-story-form"]}
       >
         <div className="form-fields">
           <Form.Item
@@ -104,10 +105,16 @@ const CreateStory = () => {
         </div>
 
         <Form.Item>
-          <Button text="Submit" />
-          {/* <Button type="primary" htmlType="submit">
-            Submit
-          </Button> */}
+          <Button
+            text="Submit"
+            handleOnClick={() => handleSubmission()}
+            customStyles={{
+              width: "310px",
+              height: "45px",
+              borderRadius: "30px",
+              fontSize: "16px",
+            }}
+          />
         </Form.Item>
       </Form>
     </div>

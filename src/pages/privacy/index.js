@@ -1,7 +1,7 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 const PrivacyPage = () => {
-  return <div>Privacy Page</div>;
+  return <div className="page-container">Privacy Page</div>;
 };
 
 export default PrivacyPage;

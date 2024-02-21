@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import "./index.css";
+import { useState } from "react";
+import styles from "./index.module.css";
 import Card from "../../components/Card";
 import GridCard from "../../components/GridCard";
 import grid_view from "../../assets/icons/grid_view.svg";
 import list_view from "../../assets/icons/list_view.svg";
-// import arrow_left from "../../assets/icons/arrow_left.svg";
 import imgSrc from "../../assets/images/card_img.png";
 import TextCard from "../../components/TextCard";
 import Button from "../../components/Button";
 import Title from "../../components/PageHeader";
+import { useNavigate } from "react-router-dom";
 
 const SitePage = () => {
-  // You can replace 'Site Title' and 'Number of Stories' with your actual data.
   const siteTitle = "Site Title";
   const numberOfStories = 10;
   const contentTitle = "Support + Industry";
+  const navigate = useNavigate();
 
   const [isGridView, setIsGridView] = useState(true);
 
@@ -23,17 +23,20 @@ const SitePage = () => {
   };
 
   return (
-    <div className="wrapper">
+    <div className="page-container">
       <div className="content">
         <Title title={siteTitle} />
-        <section className="site-section">
-          <div className="stories-count">{numberOfStories} stories</div>
-          <button className="view-change-button" onClick={handleViewChange}>
+        <section className={styles["site-section"]}>
+          <h5>{numberOfStories} Stories</h5>
+          <button
+            className={styles["view-change-button"]}
+            onClick={handleViewChange}
+          >
             <span>Change View</span>
             <img src={isGridView ? grid_view : list_view} alt="Change View" />
           </button>
         </section>
-        <section className="user-content">
+        <section className={styles["user-content"]}>
           <h2>Posts and Photos</h2>
           {isGridView ? (
             <>
@@ -54,21 +57,22 @@ const SitePage = () => {
             </>
           ) : (
             <>
-              <div className="grid-view">
+              <div className={styles["grid-view"]}>
                 <GridCard title={contentTitle} imgSrc={imgSrc} />
                 <GridCard title={contentTitle} imgSrc={imgSrc} />
                 <GridCard title={contentTitle} imgSrc={imgSrc} />
               </div>
             </>
           )}
-          <div className="button-container">
-            <Button text="View More" to="/site-page" />
+          <div className={styles["button-container"]}>
+            <Button
+              text="View More"
+              handleOnClick={() => navigate("/site-page")}
+            />
           </div>
-
-          {/* Add more <Card /> or <GridCard /> components as needed */}
         </section>
         <hr />
-        <section className="user-content">
+        <section className={styles["user-content"]}>
           <h2>Posts</h2>
           <TextCard
             title={contentTitle}
@@ -77,10 +81,12 @@ const SitePage = () => {
             pfpSource={imgSrc}
             date="1/1/2021"
           />
-          <div className="button-container">
-            <Button text="View More" to="/site-page" />
+          <div className={styles["button-container"]}>
+            <Button
+              text="View More"
+              handleOnClick={() => navigate("/site-page")}
+            />
           </div>
-          {/* Add more <Card /> or <GridCard /> components as needed */}
         </section>
       </div>
     </div>

@@ -1,0 +1,17 @@
+.story-info-container {
+  display: flex;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+.profile-cropper img {
+  border-radius: 50%;
+}
+.profile-cropper {
+  margin-left: 5%;
+}
+.info-text h6 {
+  font-size: 14px;
+}

@@ -4,17 +4,17 @@ import search from "../../assets/icons/search.svg";
 import profile from "../../assets/icons/profile.svg";
 import { Link } from "react-router-dom";
 import Menu from "../Menu";
-import "./index.css";
+import styles from "./index.module.css";
 
 const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
   return (
-    <div className="navbar-container">
+    <div className={styles["navbar-container"]}>
       <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
       <Link to="/">
         <img src={logo_with_text} alt="logo_with_text" />
       </Link>
-      <div className="icons-container">
+      <div className={styles["icons-container"]}>
         <img src={search} alt="search" />
 
         <Link to="/profile">

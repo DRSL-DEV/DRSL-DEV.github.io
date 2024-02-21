@@ -1,7 +1,6 @@
 .customized-card {
   display: flex;
   border-radius: 10px;
-  /* margin-top: 5%; */
   margin-bottom: 5%;
   height: 140px;
   overflow: hidden;
@@ -42,7 +41,7 @@
 
 .customized-card-content h2 {
   padding-right: 18px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #000;
@@ -58,12 +57,11 @@
   margin: 4px 0;
 }
 
-
 .customized-card-footer > div {
   font-family: Montserrat, sans-serif;
   font-size: 12px;
   font-weight: 400;
-  color: #55565A;
+  color: #55565a;
 }
 
 .customized-card-footer {
@@ -73,14 +71,13 @@
   width: 100%;
 }
 
-
-.customized-card-footer > div, .card-footer button {
+.customized-card-footer > div,
+.card-footer button {
   flex-shrink: 0;
 }
 
-
 .customized-card-footer button {
-  padding-right: 20px;
+  margin-right: 20px;
   height: 16px;
   display: flex;
   justify-content: center;

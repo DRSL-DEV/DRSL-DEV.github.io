@@ -8,6 +8,7 @@
   padding: 0 18px;
   position: fixed;
   overflow: visible;
+  z-index: 100;
 }
 
 .icons-container {
