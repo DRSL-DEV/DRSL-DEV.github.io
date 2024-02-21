@@ -1,17 +1,45 @@
 .story-info-container {
-  display: flex;
   padding-top: 5%;
   padding-bottom: 5%;
   align-items: center;
-  gap: 15px;
-  width: 100%;
 }
-.profile-cropper img {
+.post-info-top {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 5%;
+  margin-right: 5%;
+  align-items: center;
+}
+.user-info {
+  display: flex;
+  gap: 12px;
+}
+.user-info img {
   border-radius: 50%;
 }
-.profile-cropper {
-  margin-left: 5%;
+.story-title {
+  padding: 3% 0;
+  text-align: center;
+  text-transform: uppercase;
 }
-.info-text h6 {
+.story-image-gallery {
+  width: 100%;
+}
+.story-text {
+  padding: 0% 8%;
+  overflow: visible;
+}
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  width: 120px;
+  justify-content: flex-end;
+  row-gap: 2px;
+}
+.story-tag {
   font-size: 14px;
+  background-color: rgba(202, 232, 250, 1);
+  padding: 0 8px;
+  border-radius: 10px;
 }
