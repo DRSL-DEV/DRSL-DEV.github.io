@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import back from "../../assets/icons/back.svg";
 import { Link } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
