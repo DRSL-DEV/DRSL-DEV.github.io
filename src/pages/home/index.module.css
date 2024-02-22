@@ -1,3 +1,7 @@
+.homepage-container {
+  padding: 0;
+}
+
 .story-h2 {
   margin-bottom: 12px;
   font-size: var(--font-size-h4);
@@ -11,7 +15,58 @@
   gap: 16px;
 }
 
-.user-stories section,
-.partnered-stories section {
-  margin-bottom: 12px;
+.user-stories-section,
+.partnered-stories-section {
+  padding: 20px 5%;
+  margin-bottom: 10px;
+}
+
+.ant-carousel {
+  width: 100%;
+}
+
+.story-image-gallery {
+  width: 100%;
+}
+
+.img {
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+}
+
+.carousel-item {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  text-align: left;
+  z-index: 10;
+}
+
+.carousel-title {
+  font-family: 'Homemade Apple', cursive;
+  font-size: var(--font-size-h1);
+  font-weight: 400;
+  letter-spacing: -0.4px;
+  margin-bottom: -8px;
+}
+
+.carousel-sub-title {
+  font-family: 'Jaldi', sans-serif;
+  font-size: var(--font-size-h4);
+  font-weight: 400;
+  letter-spacing: -0.4px;
+}
+
+.carousel-link {
+  color: var(--link-color-blue);
+  font-size: var(--font-size-h6);
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.4px;
+  text-decoration-line: underline;
 }

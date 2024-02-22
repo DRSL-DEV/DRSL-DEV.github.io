@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Jaldi:wght@400;700&display=swap");
 
 :root {
   /* Colors */
@@ -23,6 +25,8 @@
 
   --secondary-color-dark-green: rgba(78, 138, 112, 1);
   --secondary-color-dark-green-translucent: rgba(78, 138, 112, 0.36);
+
+  --link-color-blue: rgba(46, 124, 246, 1);
 
   /* Font families */
   --font-family-heading: "Open Sans", sans-serif;
