@@ -70,6 +70,7 @@ a {
 
 .ant-form-item {
   /* TODO: change accordingly */
+  width: 310px;
   margin-bottom: auto;
 }
 

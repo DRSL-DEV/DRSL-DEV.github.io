@@ -9,6 +9,7 @@
   font-size: var(--font-size-body-small);
   line-height: 2;
   margin-top: 16px;
+  text-align: center;
 }
 
 .not-found-link {
