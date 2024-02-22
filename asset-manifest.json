@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/SC-DetroitRiver/static/css/main.28a078b3.css",
+    "main.js": "/SC-DetroitRiver/static/js/main.971003d4.js",
+    "static/js/592.f78d9da5.chunk.js": "/SC-DetroitRiver/static/js/592.f78d9da5.chunk.js",
+    "static/media/image_placeholder.png": "/SC-DetroitRiver/static/media/image_placeholder.478371334d47a1bd82e7.png",
+    "static/media/card_img.png": "/SC-DetroitRiver/static/media/card_img.178adec35f63a34faefe.png",
+    "static/media/home_gallery.png": "/SC-DetroitRiver/static/media/home_gallery.96df6d04eaf9943446fc.png",
+    "static/media/logo_with_text.svg": "/SC-DetroitRiver/static/media/logo_with_text.9e881c2c640bc4f085a55d00ed8fb9fd.svg",
+    "static/media/Twitter icon.svg": "/SC-DetroitRiver/static/media/Twitter icon.af8e9e9acca79fddebbb6d420b3c8e73.svg",
+    "static/media/grid_view.svg": "/SC-DetroitRiver/static/media/grid_view.cc477a9a26b872b24cc4fe1c873fc874.svg",
+    "static/media/link_icon.svg": "/SC-DetroitRiver/static/media/link_icon.e66c16f0ac38bc42c0866a83235bac23.svg",
+    "static/media/upload_icon.svg": "/SC-DetroitRiver/static/media/upload_icon.971b0d4f17c84d497509b516055b20bf.svg",
+    "static/media/Google icon.svg": "/SC-DetroitRiver/static/media/Google icon.0ed397d5212005ddc649306c7130f818.svg",
+    "static/media/profile.svg": "/SC-DetroitRiver/static/media/profile.853e4552ca3db2b07266f44bb04f6bcb.svg",
+    "static/media/list_view.svg": "/SC-DetroitRiver/static/media/list_view.5b37f0cd1dfd55561610d490a42b67cb.svg",
+    "index.html": "/SC-DetroitRiver/index.html",
+    "static/media/search.svg": "/SC-DetroitRiver/static/media/search.f2fab53cede754526f94aec8185acdbb.svg",
+    "static/media/Facebook icon.svg": "/SC-DetroitRiver/static/media/Facebook icon.e5837ccde412e3aa3959c2492de54c4b.svg",
+    "static/media/like_filled.svg": "/SC-DetroitRiver/static/media/like_filled.bee84a7d43fde8a0a806d3257269d4ae.svg",
+    "static/media/like_unfilled.svg": "/SC-DetroitRiver/static/media/like_unfilled.4dfd321af8cd6575d04c5fefb7e513eb.svg",
+    "static/media/submenu_arrow_up.svg": "/SC-DetroitRiver/static/media/submenu_arrow_up.e9d18e9a33d89c11a9532bb4b4b84752.svg",
+    "static/media/arrow_left.svg": "/SC-DetroitRiver/static/media/arrow_left.eab9630d23e9d9eaba2ee5af0a47d679.svg",
+    "static/media/submenu_arrow_down.svg": "/SC-DetroitRiver/static/media/submenu_arrow_down.280ba8ec353ed86428ed65cb13373772.svg",
+    "static/media/menu.svg": "/SC-DetroitRiver/static/media/menu.4d4c9f3bbd84c6c0845d7dea025d96c4.svg",
+    "static/media/back_arrow.svg": "/SC-DetroitRiver/static/media/back_arrow.d172a3452c46512294375ad0eae27008.svg",
+    "static/media/arrow_right.svg": "/SC-DetroitRiver/static/media/arrow_right.a01bf4cff06fcedffa1327fc97bfc7d3.svg",
+    "main.28a078b3.css.map": "/SC-DetroitRiver/static/css/main.28a078b3.css.map",
+    "main.971003d4.js.map": "/SC-DetroitRiver/static/js/main.971003d4.js.map",
+    "592.f78d9da5.chunk.js.map": "/SC-DetroitRiver/static/js/592.f78d9da5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.28a078b3.css",
+    "static/js/main.971003d4.js"
+  ]
+}
