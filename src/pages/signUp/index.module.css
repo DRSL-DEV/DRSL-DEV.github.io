@@ -16,9 +16,9 @@
 }
 
 .signup-form-section :global(.ant-checkbox) {
-  padding: 0 12px;
   align-self: flex-start;
-  padding-top: 4px;
+  margin-top: 4px;
+  min-width: 16px;
 }
 
 .signup-other-section h4 {

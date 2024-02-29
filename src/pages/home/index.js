@@ -9,7 +9,11 @@ import { Carousel } from "antd";
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const mediaUrls = [gallery_placeholder, gallery_placeholder, gallery_placeholder];
+  const mediaUrls = [
+    gallery_placeholder,
+    gallery_placeholder,
+    gallery_placeholder,
+  ];
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
@@ -23,9 +27,19 @@ const HomePage = () => {
                 alt="home gallery"
               />
               <div className={styles.overlay}>
-                <p className={styles["carousel-title"]}>Historical Collective</p>
-                <p className={styles["carousel-sub-title"]}>Reflective Perspectives from Detroit Natives</p>
-                <a href="/story" onClick={() => navigate("/story")} className={styles["carousel-link"]}>Learn More</a>
+                <p className={styles["carousel-title"]}>
+                  Historical Collective
+                </p>
+                <p className={styles["carousel-sub-title"]}>
+                  Reflective Perspectives from Detroit Natives
+                </p>
+                <a
+                  href="/story"
+                  onClick={() => navigate("/story")}
+                  className={styles["carousel-link"]}
+                >
+                  Learn More
+                </a>
               </div>
             </div>
           ))}
@@ -52,7 +66,7 @@ const HomePage = () => {
                 text="Share Your Story"
                 handleOnClick={() => navigate("/create-story")}
               />
-              <Button text="View More" handleOnClick={() => { }} />
+              <Button text="View More" handleOnClick={() => {}} />
             </div>
           </div>
         </section>
@@ -68,10 +82,7 @@ const HomePage = () => {
             />
           </div>
           <div className={styles["button-container"]}>
-            <Button
-              text="View More"
-              handleOnClick={() => navigate("/create-story")}
-            />
+            <Button text="View More" handleOnClick={() => {}} />
           </div>
         </section>
       </main>
