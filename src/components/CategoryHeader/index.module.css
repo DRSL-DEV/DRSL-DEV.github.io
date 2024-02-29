@@ -1,0 +1,14 @@
+.category-header-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5%;
+    margin-bottom: 10px;
+    background-color: var(--secondary-color-sky-blue-dark);
+
+}
+
+.title{
+    font-size: var(--font-size-h1);
+    color: white;
+}

@@ -21,6 +21,7 @@ import StoryDetailPage from "./pages/story-detail";
 import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
 import CreateStory from "./pages/create-story";
+import ExploreStory from "./pages/explore-story";
 import SignUpPage from "./pages/signUp";
 
 const FooterWithCondition = () =>
@@ -49,6 +50,7 @@ function App() {
             <Route path="/story/story-detail" element={<StoryDetailPage />} />
             <Route path="/site-page" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
+            <Route path="/explore-story" element={<ExploreStory />} />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
