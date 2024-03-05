@@ -5,9 +5,26 @@ import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "antd";
+import { useEffect } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { fetchStoryList } from "../../data/features/storyListSlice";
 
 const HomePage = () => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const storyList = useSelector((state) => state.storyList.storyList);
+  const status = useSelector((state) => state.storyList.status);
+
+  console.log("storyList", storyList);
+  console.log("status", status);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchStoryList());
+    }
+  }, [status, dispatch]);
 
   const mediaUrls = [
     gallery_placeholder,
