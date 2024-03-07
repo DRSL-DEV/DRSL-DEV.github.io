@@ -8,11 +8,13 @@ import filter from "../../assets/icons/filter.svg";
 import location_pin from "../../assets/icons/location_pin.svg";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "antd";
+import { Accordion } from "react-bootstrap";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const mediaUrls = [gallery_placeholder, gallery_placeholder, gallery_placeholder];
+
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
@@ -49,49 +51,61 @@ const HomePage = () => {
             <p>Explore Sites</p>
           </div>
         </section>
-        <section className={styles["user-stories-section"]}>
-          <CategoryHeader title="Communities & Livelihood" />
-          <div className={styles["cards-container"]}>
-            <Card
-              title="Support + Industry"
-              content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-              author="Steven Henry"
-              type="user-story"
-              imgSrc={imgSrc}
-            />
-            <Card
-              title="Support + Industry"
-              content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-              author="Steven Henry"
-              type="user-story"
-              imgSrc={imgSrc}
-            />
-            <div className={styles["button-container"]}>
-              <Button text="View More" handleOnClick={() => { }} />
-            </div>
-          </div>
-        </section>
-        <section className={styles["user-stories-section"]}>
-          <CategoryHeader title="Indigenous History" />
-          <div className={styles["cards-container"]}>
-            <Card
-              title="River Resistance"
-              content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
-              author="Imani Jackson"
-              type="user-story"
-              imgSrc={imgSrc}
-            />
-            <Card
-              title="Support + Industry"
-              content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-              author="Steven Henry"
-              type="user-story"
-              imgSrc={imgSrc}
-            />
-            <div className={styles["button-container"]}>
-              <Button text="View More" handleOnClick={() => { }} />
-            </div>
-          </div>
+        <section>
+          <Accordion>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>
+                <CategoryHeader title="Community & Livelihood" />
+              </Accordion.Header>
+              <Accordion.Body>
+                <div className={styles["cards-container"]}>
+                  <Card
+                    title="Support + Industry"
+                    content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+                    author="Steven Henry"
+                    type="user-story"
+                    imgSrc={imgSrc}
+                  />
+                  <Card
+                    title="Support + Industry"
+                    content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+                    author="Steven Henry"
+                    type="user-story"
+                    imgSrc={imgSrc}
+                  />
+                  <div className={styles["button-container"]}>
+                    <Button text="View More" handleOnClick={() => { }} />
+                  </div>
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>
+                <CategoryHeader title="Indigenous History" />
+              </Accordion.Header>
+              <Accordion.Body>
+                <div className={styles["cards-container"]}>
+                  <Card
+                    title="River Resistance"
+                    content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
+                    author="Imani Jackson"
+                    type="user-story"
+                    imgSrc={imgSrc}
+                  />
+                  <Card
+                    title="Support + Industry"
+                    content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+                    author="Steven Henry"
+                    type="user-story"
+                    imgSrc={imgSrc}
+                  />
+                  <div className={styles["button-container"]}>
+                    <Button text="View More" handleOnClick={() => { }} />
+                  </div>
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
         </section>
       </main>
     </div>
