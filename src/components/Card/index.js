@@ -2,8 +2,15 @@ import styles from "./index.module.css";
 import arrow_right from "../../assets/icons/arrow_right.svg";
 import { useNavigate } from "react-router-dom";
 
-const Card = ({ title, content, author, imgSrc, type }) => {
+const Card = ({ title, content, userId, type, imgSrc }) => {
   const navigate = useNavigate();
+
+  // Fetch the user's name from another collection using userId
+  // This is just a placeholder. Replace it with actual code.
+  // const author = fetchUserName(userId);
+
+  // Use the first item in the media array as the image source
+  // const imgSrc = media[0];
 
   return (
     <div className={`${styles["customized-card"]} ${styles[type]}`}>
@@ -14,7 +21,7 @@ const Card = ({ title, content, author, imgSrc, type }) => {
         <h2>{title}</h2>
         <p>{content}</p>
         <div className={styles["customized-card-footer"]}>
-          <div>{author}</div>
+          <div>{userId}</div>
           <button onClick={() => navigate("/story/story-detail")}>
             <img src={arrow_right} alt="right arrow" />
           </button>
@@ -23,5 +30,6 @@ const Card = ({ title, content, author, imgSrc, type }) => {
     </div>
   );
 };
+
 
 export default Card;
