@@ -1,0 +1,50 @@
+.profile-banner{
+    width: 100%;
+    height: 96px;
+    align-items: center;
+    object-fit: cover
+}
+
+.user-name{
+    font-size: 14px;
+    width: 100px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.profile-img{
+    border-radius: 50%;
+    width: 108px;
+    height: 108px;
+    left: 38vw;
+    position: absolute;
+    z-index: 1;
+    margin-top: -55px;
+}
+
+.profile-top{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 5%;
+}
+
+.profile-name{
+    text-align: center;
+    padding-top: 25px;
+}
+
+.user-bio, .topic-container{
+    text-align: center;
+    padding: 5px 5%;
+}
+
+.topic-title{
+    color: gray;
+    text-decoration: underline;
+}
+
+.user-topic{
+    color: gray;
+    padding-top: 5px;
+}
+

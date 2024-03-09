@@ -1,0 +1,27 @@
+.profile-page-container {
+    padding: 0;
+}
+
+.Card {
+  padding: 3% 5%;
+}
+
+.profile-tab-container{
+  border-top: solid;
+  border-width: 0.001px;
+  color: lightgray;
+  margin-top: 5%;
+}
+
+.tab-title {
+  padding: 10px 10px !important;
+  border-radius: 200px !important;
+  margin: 0;
+  &:hover{
+    background-color: rgba(202, 232, 250, 1) !important;
+  }
+}
+
+.card-container{
+  margin: 2% 5%;
+}
