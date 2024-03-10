@@ -23,3 +23,9 @@
 .card-container{
   margin: 2% 5%;
 }
+
+.add-post-button{
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+}

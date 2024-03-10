@@ -4,6 +4,8 @@ import profile_bg from "../../assets/images/profile_bg.png";
 import profile from "../../assets/images/profile.png";
 import { Tabs } from 'antd';
 import Card from "../../components/Card";
+import addButton from "../../assets/icons/add_post_icon.svg";
+import { Link } from "react-router-dom";
 
 
 export const ProfilePage = () => {
@@ -62,6 +64,12 @@ export const ProfilePage = () => {
             </div>
           </TabPane>
       </Tabs>
+
+      <div>
+        <Link to="/create-story">
+          <img className={styles["add-post-button"]} src={addButton} alt="create a new post" />
+        </Link>
+      </div>
     </div>
   </div>;
 };
