@@ -5,11 +5,32 @@ import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "antd";
+import { useEffect } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { fetchStoryList } from "../../data/features/storyListSlice";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const mediaUrls = [gallery_placeholder, gallery_placeholder, gallery_placeholder];
+  const dispatch = useDispatch();
+  const storyList = useSelector((state) => state.storyList.storyList);
+  const status = useSelector((state) => state.storyList.status);
+
+  console.log("storyList", storyList);
+  console.log("status", status);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchStoryList());
+    }
+  }, [status, dispatch]);
+
+  const mediaUrls = [
+    gallery_placeholder,
+    gallery_placeholder,
+    gallery_placeholder,
+  ];
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
@@ -23,9 +44,19 @@ const HomePage = () => {
                 alt="home gallery"
               />
               <div className={styles.overlay}>
-                <p className={styles["carousel-title"]}>Historical Collective</p>
-                <p className={styles["carousel-sub-title"]}>Reflective Perspectives from Detroit Natives</p>
-                <a href="/story" onClick={() => navigate("/story")} className={styles["carousel-link"]}>Learn More</a>
+                <p className={styles["carousel-title"]}>
+                  Historical Collective
+                </p>
+                <p className={styles["carousel-sub-title"]}>
+                  Reflective Perspectives from Detroit Natives
+                </p>
+                <a
+                  href="/story"
+                  onClick={() => navigate("/story")}
+                  className={styles["carousel-link"]}
+                >
+                  Learn More
+                </a>
               </div>
             </div>
           ))}
@@ -52,7 +83,7 @@ const HomePage = () => {
                 text="Share Your Story"
                 handleOnClick={() => navigate("/create-story")}
               />
-              <Button text="View More" handleOnClick={() => { }} />
+              <Button text="View More" handleOnClick={() => {}} />
             </div>
           </div>
         </section>
