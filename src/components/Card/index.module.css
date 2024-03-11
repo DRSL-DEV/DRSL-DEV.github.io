@@ -31,6 +31,10 @@
   background: var(--secondary-color-dark-green-translucent);
 }
 
+.customized-card.user-profile {
+  background: rgba(246, 223, 164, 0.36);
+}
+
 .customized-card-content {
   display: flex;
   flex-direction: column;

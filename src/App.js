@@ -22,6 +22,7 @@ import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
 import CreateStory from "./pages/create-story";
 import SignUpPage from "./pages/signUp";
+import EditProfilePage from "./pages/edit-profile";
 
 const FooterWithCondition = () =>
   ["/login", "/signup"].includes(useLocation().pathname) ? null : <Footer />;
@@ -49,6 +50,7 @@ function App() {
             <Route path="/story/story-detail" element={<StoryDetailPage />} />
             <Route path="/site-page" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
+            <Route path="/profile/profile-edit" element={<EditProfilePage />} />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />

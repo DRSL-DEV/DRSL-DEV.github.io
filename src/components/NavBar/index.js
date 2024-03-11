@@ -17,7 +17,7 @@ const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
       <div className={styles["icons-container"]}>
         <img src={search} alt="search" />
 
-        <Link to="/login">
+        <Link to="/profile">
           <img src={profile} alt="login" />
         </Link>
 
