@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form } from "antd";
 import PasswordInput from "../../components/PasswordInput";
 import EmailInput from "../../components/EmailInput";
@@ -10,10 +10,23 @@ import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
 import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../data/features/userInfoSlice';
+import { db } from "../../firebase";
+import { addDoc, collection } from 'firebase/firestore';
 
 const SignUpPage = () => {
+  const [form] = Form.useForm();
   const [userCredentials, setUserCredentials] = useState({});
   const [error, setError] = useState('');
+
+  const user = useSelector((state) => state.userInfo.user);
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const redirect = location.state?.from || '/';
 
   const handleCredentials = (changedValues, allValues) => {
     setUserCredentials(allValues);
@@ -22,10 +35,31 @@ const SignUpPage = () => {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     setError('');
-    const { email, password } = values;
+    const { email, password, username, anonymousSubmissionCheck } = values;
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
+        const { user } = userCredential;
+        console.log('0000000', userCredentials);
+        console.log('9999999', userCredential);
+        console.log('1111111', user);
+
+        addDoc(collection(db, "users"), {
+          uid: user.uid,
+          username: username,
+          email: email,
+          anonymousSubmissionCheck: anonymousSubmissionCheck,
+        }).then(() => {
+          console.log("Document successfully written!");
+        }).catch((error) => {
+          console.error("Error writing document: ", error);
+        });
+
+        const userInfo = { uid: user.uid, username, email, anonymousSubmissionCheck };
+        console.log('userInfo', userInfo);
+        dispatch(setUser(userInfo));
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        navigate(redirect);
 
       })
       .catch((error) => {
@@ -44,7 +78,17 @@ const SignUpPage = () => {
         <PageHeader title="Create an Account" />
 
         <section className={styles["signup-form-section"]}>
-          <Form name="signup" onFinish={onFinish} onValuesChange={handleCredentials} layout="vertical">
+          <Form
+            name="signup"
+            onFinish={onFinish}
+            onValuesChange={handleCredentials}
+            layout="vertical"
+            initialValues={{
+              username: user?.username,
+              email: user?.email,
+              anonymousSubmissionCheck: user?.anonymousSubmissionCheck,
+            }}
+          >
             <Form.Item
               name="username"
               rules={[
