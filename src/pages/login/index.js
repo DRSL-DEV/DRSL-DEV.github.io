@@ -8,9 +8,11 @@ import PasswordInput from "../../components/PasswordInput";
 import EmailInput from "../../components/EmailInput";
 import PageHeader from "../../components/PageHeader";
 import { Form } from "antd";
+import { auth } from "../../firebase";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
+  console.log(auth);
 
   const handleSubmit = (values) => {
     console.log(values);
@@ -37,7 +39,15 @@ const LoginPage = () => {
             <EmailInput placeholder="Email" />
           </Form.Item>
 
-          <PasswordInput name="password" placeholder="Password" />
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: "Password cannot be empty" },
+              { min: 6, message: "Password must be at least 6 characters" }
+            ]}
+          >
+            <PasswordInput placeholder="Password" />
+          </Form.Item>
 
           <PrimaryButton text="Login" htmlType="submit" />
         </Form>
