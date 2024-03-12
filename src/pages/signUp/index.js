@@ -20,7 +20,7 @@ const SignUpPage = () => {
   }
 
   const onFinish = (values) => {
-    // console.log("Received values of form: ", values);
+    console.log("Received values of form: ", values);
     setError('');
     const { email, password } = values;
     createUserWithEmailAndPassword(auth, email, password)
@@ -57,7 +57,7 @@ const SignUpPage = () => {
               <TextInput placeholder="Username" permittedLength={20} />
             </Form.Item>
 
-            <Form.Item name="anonymousSubmissionCheck">
+            <Form.Item name="anonymousSubmissionCheck" valuePropName="checked" getValueFromEvent={(e) => e.target.checked}>
               <CheckBox checkboxText="Optional: Display account as anonymous. This can be changed at any time." />
             </Form.Item>
 
@@ -103,7 +103,16 @@ const SignUpPage = () => {
               <PasswordInput placeholder="Confirm Password" />
             </Form.Item>
 
-            <Form.Item name="tAndcCheck">
+            <Form.Item
+              name="tAndcCheck"
+              valuePropName="checked"
+              rules={[
+                {
+                  required: true,
+                  message: "You must agree to the privacy policy, terms of service, and community guidelines to sign up.",
+                },
+              ]}
+            >
               <CheckBox checkboxText="I read and agree to the privacy policy, terms of service, and community guidelines." />
             </Form.Item>
             <Form.Item>
