@@ -8,7 +8,7 @@
   justify-content: space-between;
   margin-left: 5%;
   margin-right: 5%;
-  align-items: center;
+  align-items: top;
 }
 .user-info {
   display: flex;
@@ -33,12 +33,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
-  width: 120px;
+  width: 220px;
   justify-content: flex-end;
   row-gap: 2px;
+  margin-bottom: 3%;
 }
 .story-tag {
-  font-size: 14px;
+  font-size: 13px;
   background-color: rgba(202, 232, 250, 1);
   padding: 0 8px;
   border-radius: 10px;

@@ -12,7 +12,7 @@ const StoryInfo = ({ title, author, profileImg, date, content, tags }) => {
           </div>
         </div>
         <div className={styles["tag-container"]}>
-          {tags.map((tag, index) => (
+          {tags && tags.map((tag, index) => (
             <p className={styles["story-tag"]} key={index}>
               {tag}
             </p>
