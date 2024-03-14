@@ -3,7 +3,7 @@ import { db } from "../../firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 
 const initialState = {
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: JSON.parse(localStorage.getItem("userInfo")) || null,
     status: "idle",
     error: null,
 };
@@ -14,11 +14,10 @@ const userInfoSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload;
-            localStorage.setItem("user", JSON.stringify(action.payload));
         },
         clearUser: (state) => {
             state.user = null;
-            localStorage.removeItem("user");
+            localStorage.removeItem("userInfo");
         },
     },
 });
