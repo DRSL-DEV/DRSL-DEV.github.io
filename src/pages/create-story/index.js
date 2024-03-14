@@ -1,8 +1,16 @@
-import { Form, Input, Upload, message } from "antd";
+import styles from "./index.module.css";
+import { useState } from "react";
+import { Form, Input, Upload, Modal, message } from "antd";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
 import upload_icon from "../../assets/icons/upload_icon.svg";
-import styles from "./index.module.css";
+import location_red from "../../assets/icons/location_red.svg";
+import profile_green from "../../assets/icons/profile_green.svg";
+import tag_blue from "../../assets/icons/tag_blue.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewStory } from "../../data/features/storyListSlice";
+import { uploadFile } from "../../data/features/fileUploadSlice";
+import { type } from "@testing-library/user-event/dist/type";
 
 const allowedFileTypes = [
   "image/jpeg",
@@ -17,23 +25,77 @@ const allowedFileTypes = [
 ];
 
 const CreateStory = () => {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [site, setSite] = useState("");
+  const [tags, setTags] = useState([]);
+  const [modalType, setModalType] = useState("");
+
+  const dispatch = useDispatch();
+  const fileUploadStatus = useSelector(
+    (state) => state.fileUpload.uploadStatus
+  );
+
+  const showModal = (type) => {
+    setIsModalOpen(true);
+    setModalType(type);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
-  const onFileChange = (info) => {
-    console.log("file status change", info);
-
-    // Log details if the file is successfully read
-    if (info.file.status === "done") {
-      message.success(`${info.file.name} file uploaded successfully`);
-      // Here: any callback to trigger after successful upload
-    } else if (info.file.status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
+  const getModalContent = () => {
+    switch (modalType) {
+      case "site":
+        return (
+          <ul>
+            {new Array(10).fill(0).map((_, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  setSite(`Site ${index + 1}`);
+                  handleCancel();
+                }}
+              >
+                Site {index + 1}
+              </li>
+            ))}
+          </ul>
+        );
+      case "tag":
+        return (
+          <ul>
+            {[
+              "Communities & Livelihoods",
+              "Indigenous History",
+              "Underground Railroad",
+              "Civil Right & Freedom",
+              "Cultural Identities",
+              "River Environment & Ecology",
+              "Modern-Day Detroit",
+            ].map((tag) => (
+              <li
+                key={tag}
+                onClick={() => {
+                  setTags(tag);
+                  handleCancel();
+                }}
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+        );
+      default:
+        return null;
     }
   };
 
-  const uploadProps = {
+  const fileUploadProps = {
     beforeUpload: (file) => {
       if (allowedFileTypes.includes(file.type)) {
         console.log("File details:", {
@@ -47,17 +109,62 @@ const CreateStory = () => {
       }
       return false;
     },
-    onChange: onFileChange,
+    onChange: (info) => {
+      console.log("file status change", info);
+      setFileList(info.fileList);
+      // Log details if the file is successfully read
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+        // Here: any callback to trigger after successful upload
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
   };
 
-  const handleSubmission = (values) => {};
+  const handleSubmission = async (values) => {
+    console.log("Received values of form: ", values);
+    console.log("Uploaded files: ", fileList);
+
+    const uploadPromises = fileList.map((fileInfo) =>
+      dispatch(
+        uploadFile({
+          file: fileInfo.originFileObj,
+          folderPath: `post/${fileInfo.type.split("/")[0]}`,
+        })
+      ).unwrap()
+    );
+
+    try {
+      const fileURLs = await Promise.all(uploadPromises);
+
+      dispatch(
+        addNewStory({
+          title: values.title,
+          content: values.content,
+          media: fileURLs, // Pass the array of URLs
+          postType: "user",
+          status: "pending",
+          submitTime: new Date().toISOString(),
+          site: site,
+          tags: tags,
+        })
+      ).unwrap();
+      form.resetFields();
+      setFileList([]);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      message.error("Failed to upload files and create story.");
+    }
+  };
 
   return (
     <div className="page-container">
       <PageHeader title="Create Story" />
       <Form
+        form={form}
         name="create_story"
-        onFinish={onFinish}
+        onFinish={handleSubmission}
         layout="vertical"
         className={styles["create-story-form"]}
       >
@@ -71,30 +178,40 @@ const CreateStory = () => {
               },
             ]}
           >
-            <Input placeholder="Title" />
-          </Form.Item>
-
-          <Form.Item
-            name="content"
-            rules={[{ required: true, message: "Please write your story!" }]}
-          >
-            <Input.TextArea rows={4} placeholder="Write your story here..." />
-          </Form.Item>
-
-          <Form.Item
-            name="upload"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => {
-              if (Array.isArray(e)) {
-                return e;
+            <Input
+              placeholder="Title"
+              suffix={
+                <img
+                  src={location_red}
+                  alt="location"
+                  onClick={() => showModal("site")}
+                />
               }
-              return e && e.fileList;
-            }}
-          >
+            />
+          </Form.Item>
+
+          <div className={styles["content-container"]}>
+            <Form.Item
+              name="content"
+              rules={[{ required: true, message: "Please write your story!" }]}
+            >
+              <Input.TextArea rows={4} placeholder="Write your story here..." />
+            </Form.Item>
+            <div className={styles["option-icons-container"]}>
+              <img src={tag_blue} alt="tag" onClick={() => showModal("tag")} />
+              <img
+                src={profile_green}
+                alt="profile"
+                onClick={() => showModal()}
+              />
+            </div>
+          </div>
+          <Form.Item valuePropName="fileList">
             <div className="upload-container">
               <Upload
-                {...uploadProps}
+                {...fileUploadProps}
                 listType="picture"
+                fileList={fileList}
                 className="upload-list-inline"
               >
                 <img src={upload_icon} alt="upload" />
@@ -107,7 +224,6 @@ const CreateStory = () => {
         <Form.Item>
           <Button
             text="Submit"
-            handleOnClick={() => handleSubmission()}
             customStyles={{
               width: "310px",
               height: "45px",
@@ -117,6 +233,15 @@ const CreateStory = () => {
           />
         </Form.Item>
       </Form>
+      <Modal
+        title={modalType === "site" ? "Select Site" : "Select Tags"}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {getModalContent()}
+      </Modal>
     </div>
   );
 };
