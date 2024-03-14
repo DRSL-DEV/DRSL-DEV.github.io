@@ -33,16 +33,13 @@ const SignUpPage = () => {
   }
 
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    // console.log("Received values of form: ", values);
     setError('');
     const { email, password, username, anonymousSubmissionCheck } = values;
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { user } = userCredential;
-        console.log('0000000', userCredentials);
-        console.log('9999999', userCredential);
-        console.log('1111111', user);
 
         addDoc(collection(db, "users"), {
           uid: user.uid,
@@ -56,7 +53,6 @@ const SignUpPage = () => {
         });
 
         const userInfo = { uid: user.uid, username, email, anonymousSubmissionCheck };
-        console.log('userInfo', userInfo);
         dispatch(setUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
         navigate(redirect);
