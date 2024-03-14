@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../data/features/userInfoSlice';
 import { db } from "../../firebase";
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 
 const SignUpPage = () => {
   const [form] = Form.useForm();
@@ -41,8 +41,7 @@ const SignUpPage = () => {
       .then((userCredential) => {
         const { user } = userCredential;
 
-        addDoc(collection(db, "users"), {
-          uid: user.uid,
+        setDoc(doc(db, "users", user.uid), {
           username: username,
           email: email,
           anonymousSubmissionCheck: anonymousSubmissionCheck,
