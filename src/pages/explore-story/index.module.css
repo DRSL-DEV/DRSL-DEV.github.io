@@ -93,4 +93,16 @@
   .filter-container img, .location-container img {
     margin-right: 7px; /* adjust as needed */
   }
+
+  .custom-collapse :global(.ant-collapse-expand-icon) {
+    margin: auto !important;
+  }
+
+  .custom-collapse :global(.ant-collapse-item:last-child) {
+    border-radius: 0;
+  }
+
+  .custom-collapse{
+    border-radius: 0;
+  }
   

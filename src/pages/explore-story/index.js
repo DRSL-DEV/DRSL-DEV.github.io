@@ -7,14 +7,114 @@ import gallery_placeholder from "../../assets/images/home_gallery.png";
 import filter from "../../assets/icons/filter.svg";
 import location_pin from "../../assets/icons/location_pin.svg";
 import { useNavigate } from "react-router-dom";
-import { Carousel } from "antd";
-import { Accordion } from "react-bootstrap";
+import { RightOutlined } from '@ant-design/icons';
+import { Carousel, Collapse } from "antd";
+const { Panel } = Collapse;
+
+
+const items = (panelStyle) =>[
+  {
+    key: '1',
+    label: <CategoryHeader title="Community & Livelihood" style={panelStyle} />,
+    children: (
+      <div className={styles["cards-container"]}>
+        <Card
+          title="Support + Industry"
+          content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+          author="Steven Henry"
+          type="user-story"
+          imgSrc={imgSrc}
+        />
+        <div className={styles["button-container"]}>
+          <Button text="View More" handleOnClick={() => { }} />
+        </div>
+      </div>
+    ),
+    style: panelStyle,
+  },
+  {
+    key: '2',
+    label: <CategoryHeader title="Indigenous History" />,
+    children: (
+      <div className={styles["cards-container"]}>
+        <Card
+          title="River Resistance"
+          content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
+          author="Imani Jackson"
+          type="user-story"
+          imgSrc={imgSrc}
+        />
+        <Card
+          title="Support + Industry"
+          content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+          author="Steven Henry"
+          type="user-story"
+          imgSrc={imgSrc}
+        />
+        <div className={styles["button-container"]}>
+          <Button text="View More" handleOnClick={() => { }} />
+        </div>
+      </div>
+    ),
+    style: panelStyle,
+  },
+  {
+    key: '3',
+    label: <CategoryHeader title="Underground Railroad" />,
+    children: (
+      <div className={styles["cards-container"]}>
+        <Card
+          title="River Resistance"
+          content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
+          author="Imani Jackson"
+          type="user-story"
+          imgSrc={imgSrc}
+        />
+        <Card
+          title="Support + Industry"
+          content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+          author="Steven Henry"
+          type="user-story"
+          imgSrc={imgSrc}
+        />
+        <div className={styles["button-container"]}>
+          <Button text="View More" handleOnClick={() => { }} />
+        </div>
+      </div>
+    ),
+    style: panelStyle,
+  },
+];
+
+const CustomCollapse = ({ items }) => (
+  <Collapse
+    accordion
+    expandIcon={({ isActive }) => <RightOutlined rotate={isActive ? 90 : 0} style={{ color: 'white', fontSize: '1.5em' }} />}
+    expandIconPosition='end'
+    className={styles["custom-collapse"]}
+  >
+    {items.map(item => (
+      <Panel header={item.label} key={item.key}
+      style={ 
+        item.style
+      }>
+        {item.children}
+      </Panel>
+    ))}
+  </Collapse>
+);
+
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const mediaUrls = [gallery_placeholder, gallery_placeholder, gallery_placeholder];
 
+  const panelStyle = {
+    marginBottom: '1%',
+    border: 'none',
+    backgroundColor: 'var(--secondary-color-sky-blue-dark)',
+  };
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
@@ -52,60 +152,9 @@ const HomePage = () => {
           </div>
         </section>
         <section>
-          <Accordion>
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>
-                <CategoryHeader title="Community & Livelihood" />
-              </Accordion.Header>
-              <Accordion.Body>
-                <div className={styles["cards-container"]}>
-                  <Card
-                    title="Support + Industry"
-                    content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-                    author="Steven Henry"
-                    type="user-story"
-                    imgSrc={imgSrc}
-                  />
-                  <Card
-                    title="Support + Industry"
-                    content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-                    author="Steven Henry"
-                    type="user-story"
-                    imgSrc={imgSrc}
-                  />
-                  <div className={styles["button-container"]}>
-                    <Button text="View More" handleOnClick={() => { }} />
-                  </div>
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-            <Accordion.Item eventKey="1">
-              <Accordion.Header>
-                <CategoryHeader title="Indigenous History" />
-              </Accordion.Header>
-              <Accordion.Body>
-                <div className={styles["cards-container"]}>
-                  <Card
-                    title="River Resistance"
-                    content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
-                    author="Imani Jackson"
-                    type="user-story"
-                    imgSrc={imgSrc}
-                  />
-                  <Card
-                    title="Support + Industry"
-                    content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-                    author="Steven Henry"
-                    type="user-story"
-                    imgSrc={imgSrc}
-                  />
-                  <div className={styles["button-container"]}>
-                    <Button text="View More" handleOnClick={() => { }} />
-                  </div>
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
+          <CustomCollapse 
+            items={items(panelStyle)}
+            />
         </section>
       </main>
     </div>
