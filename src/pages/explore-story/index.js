@@ -10,6 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { RightOutlined } from '@ant-design/icons';
 import { Carousel, Collapse } from "antd";
 const { Panel } = Collapse;
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchStoryList } from '../../data/features/storyListSlice';
+import { useEffect } from "react";
 
 
 const items = (panelStyle) =>[
@@ -115,6 +119,13 @@ const HomePage = () => {
     border: 'none',
     backgroundColor: 'var(--secondary-color-sky-blue-dark)',
   };
+
+  const dispatch = useDispatch();
+  const storyList = useSelector((state) => state.storyList.storyList);
+
+  useEffect(() => {
+    dispatch(fetchStoryList());
+  }, [dispatch]);
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
