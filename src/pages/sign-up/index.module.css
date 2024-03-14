@@ -17,8 +17,12 @@
 
 .signup-form-section :global(.ant-checkbox) {
   align-self: flex-start;
-  margin-top: 4px;
+  padding-top: 4px;
   min-width: 16px;
+}
+
+.signup-form-section :global(.ant-checkbox-inner::after) {
+  top: 56%;
 }
 
 .signup-other-section h4 {
@@ -35,4 +39,12 @@
 
 .social-signup-icons img {
   height: auto;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  margin: 8px;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-h5);
 }
