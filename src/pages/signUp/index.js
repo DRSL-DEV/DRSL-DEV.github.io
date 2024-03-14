@@ -7,15 +7,35 @@ import CheckBox from "../../components/Checkbox";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
 import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
+import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
+import { useEffect } from "react";
 
 const SignUpPage = () => {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     //Code here for Firebase Authentication
   };
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  useEffect(() => {
+    getRedirectResult(auth)
+        .then((result) => {
+            if (result.credential) {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const token = result.credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                console.log(token, user);
+                // You can now store the user info in your Firestore database
+            }
+        }).catch((error) => {
+            // Handle Errors here.
+            console.error(error);
+        });
+}, []); // Empty array means this effect runs once on component mount
 
   const handleGoogleSignUp = () => {
-    //Code here for Google Sign Up
+    signInWithRedirect(auth, provider);
   };
 
   return (
