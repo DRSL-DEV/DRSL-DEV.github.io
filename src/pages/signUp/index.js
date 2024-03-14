@@ -7,8 +7,12 @@ import CheckBox from "../../components/Checkbox";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
 import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
-import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
-import { useEffect } from "react";
+import {
+  getAuth,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 const SignUpPage = () => {
   const onFinish = (values) => {
@@ -17,22 +21,26 @@ const SignUpPage = () => {
   };
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-  useEffect(() => {
-    getRedirectResult(auth)
-        .then((result) => {
-            if (result.credential) {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const token = result.credential.accessToken;
-                // The signed-in user info.
-                const user = result.user;
-                console.log(token, user);
-                // You can now store the user info in your Firestore database
-            }
-        }).catch((error) => {
-            // Handle Errors here.
-            console.error(error);
-        });
-}, []); // Empty array means this effect runs once on component mount
+
+  getRedirectResult(auth)
+    .then((result) => {
+      console.log("result", result);
+      if (result) {
+        result.credential;
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log(token, user);
+        // @TODO: You can now store the user info in your Firestore database
+        // @TODO: redirect to home page
+      }
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      console.error(error);
+    });
 
   const handleGoogleSignUp = () => {
     signInWithRedirect(auth, provider);
