@@ -26,7 +26,6 @@ const SignUpPage = () => {
     .then((result) => {
       console.log("result", result);
       if (result) {
-        result.credential;
         const credential = GoogleAuthProvider.credentialFromResult(result);
         // This gives you a Google Access Token. You can use it to access the Google API.
         const token = credential.accessToken;
