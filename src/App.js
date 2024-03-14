@@ -21,7 +21,7 @@ import StoryDetailPage from "./pages/story-detail";
 import LoginPage from "./pages/login";
 import SitePage from "./pages/site-page";
 import CreateStory from "./pages/create-story";
-import SignUpPage from "./pages/signUp";
+import SignUpPage from "./pages/sign-up";
 import EditProfilePage from "./pages/edit-profile";
 
 const FooterWithCondition = () =>
