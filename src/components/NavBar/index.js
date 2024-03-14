@@ -3,10 +3,15 @@ import menu from "../../assets/icons/menu.svg";
 import search from "../../assets/icons/search.svg";
 import profile from "../../assets/icons/profile.svg";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Menu from "../Menu";
 import styles from "./index.module.css";
 
 const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
+
+  const user = useSelector((state) => state.userInfo.user);
+  const loginLink = user ? "/profile" : "/login";
+
   return (
     <div className={styles["navbar-container"]}>
       <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
@@ -17,7 +22,7 @@ const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
       <div className={styles["icons-container"]}>
         <img src={search} alt="search" />
 
-        <Link to="/profile">
+        <Link to={loginLink}>
           <img src={profile} alt="login" />
         </Link>
 
