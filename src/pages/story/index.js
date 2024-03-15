@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 const StoryPage = () => {
   return (
     <div className="page-container">
-      <Link to="/story/story-detail">
+      <Link to="/story/cardDetail1">
         <p>Story With Image</p>
       </Link>
     </div>
