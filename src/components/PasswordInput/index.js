@@ -1,6 +1,6 @@
 import { Form, Input } from "antd";
 
-const PasswordInput = ({ name, placeholder, value, onChange }) => {
+const PasswordInput = ({ placeholder, value, onChange }) => {
   const inputStyle = {
     width: "100%",
     height: "46px",
@@ -10,12 +10,16 @@ const PasswordInput = ({ name, placeholder, value, onChange }) => {
 
   const defaultRules = [
     { required: true, message: "Password cannot be empty" },
+    { min: 6, message: "Password must be at least 6 characters" }
   ];
 
   return (
-    <Form.Item name={name} rules={defaultRules}>
-      <Input.Password placeholder={placeholder} style={inputStyle} />
-    </Form.Item>
+    <Input.Password
+      placeholder={placeholder}
+      style={inputStyle}
+      onChange={onChange}
+      value={value}
+    />
   );
 };
 
