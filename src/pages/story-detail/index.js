@@ -11,6 +11,7 @@ import "firebase/firestore";
 import { fetchStoryById } from "../../data/features/storyListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
+import { useParams } from 'react-router-dom';
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
