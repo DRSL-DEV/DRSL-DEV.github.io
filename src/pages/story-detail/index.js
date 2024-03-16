@@ -60,10 +60,9 @@ const StoryDetailPage = () => {
         {selectedPost && (
         <Carousel className={styles.carousel} autoplay>
           {selectedPost.media.map((mediaUrl, index) => (
-            <div>
+            <div key={index}>
               <img
                 className={styles["story-image-gallery"]}
-                key={index}
                 src={mediaUrl}
                 alt="post media"
               />
@@ -78,7 +77,7 @@ const StoryDetailPage = () => {
             title={selectedPost.title}
             author={selectedPost.author}
             profileImg={selectedPost.profileImg}
-            date={selectedPost.submitTime}
+            date={selectedPost.submitTime.slice(0, 10)}
             content={selectedPost.content}
             tags={selectedPost.tags}
           />

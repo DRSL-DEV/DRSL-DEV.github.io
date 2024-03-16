@@ -35,12 +35,12 @@
   gap: 3px;
   width: 220px;
   justify-content: flex-end;
-  row-gap: 2px;
+  row-gap: 3px;
   margin-bottom: 3%;
 }
 .story-tag {
-  font-size: 13px;
+  font-size: 12px;
   background-color: rgba(202, 232, 250, 1);
-  padding: 0 8px;
+  padding: 2px 8px;
   border-radius: 10px;
 }
