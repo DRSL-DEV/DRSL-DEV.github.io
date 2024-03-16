@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import imgSrc from "../../assets/images/card_img.png";
+// import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "antd";
@@ -18,9 +18,9 @@ const HomePage = () => {
   const status = useSelector((state) => state.storyList.status);
 
   // console.log("status", status);
-  const approvedUserStoryList = storyList.filter((story) => story.status == "approved");
-  const filteredUserStoryList = approvedUserStoryList.filter((story) => story.postType == "user");
-  const filteredLabStoryList = storyList.filter((story) => story.postType == "partner");
+  const approvedUserStoryList = storyList.filter((story) => story.status === "approved");
+  const filteredUserStoryList = approvedUserStoryList.filter((story) => story.postType === "user");
+  const filteredLabStoryList = storyList.filter((story) => story.postType === "partner");
 
   useEffect(() => {
     if (status === "idle") {
@@ -73,8 +73,7 @@ const HomePage = () => {
                 content={story.content}
                 author={story.userId}
                 type="user-story"
-                // imgSrc={story.imgSrc}
-                imgSrc={imgSrc}
+                imgSrc={story.media[0]}
               />
             ))} 
             <div className={styles["button-container"]}>
@@ -96,8 +95,8 @@ const HomePage = () => {
                 content={story.content}
                 author={story.userId}
                 type="lab-story"
-                // imgSrc={story.imgSrc}
-                imgSrc={imgSrc}
+                // imgSrc={imgSrc}
+                imgSrc={story.media[0]}
               />
             ))} 
           </div>
