@@ -11,7 +11,7 @@
   margin-left: 5%;
   margin-right: 5%;
   align-items: center;
-  width: 70%;;
+  width: 70%;
 }
 .user-info {
   display: flex;
@@ -37,11 +37,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
-  width: 120px;
+  /* width: 120px; */
   justify-content: flex-end;
   row-gap: 2px;
 }
 .story-tag {
+  width: auto;
   font-size: 14px;
   background-color: rgba(202, 232, 250, 1);
   padding: 0 8px;

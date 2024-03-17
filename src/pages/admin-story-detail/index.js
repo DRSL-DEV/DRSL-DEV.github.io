@@ -50,21 +50,23 @@ const AdminStoryDetailPage = () => {
           alt="share"
         />
       </div>
+
       <div className={styles["story-title"]}>
         <PageHeader title={siteTitle} />
       </div>
+
       <Carousel className={styles.carousel} autoplay>
         {mediaUrls.map((mediaUrl, index) => (
-          <div>
+          <div key={index}>
             <img
               className={styles["story-image-gallery"]}
-              key={index}
               src={mediaUrl}
               alt="post media"
             />
           </div>
         ))}
       </Carousel>
+
       <AdminStoryInfo
         title={contentTitle}
         content={storyContent}
@@ -73,22 +75,32 @@ const AdminStoryDetailPage = () => {
         date={date}
         tags={tags}
         className={styles["story-info-resize"]}
-        status = {storyStatus}
-        approvalTime = {approvalDate}
+        status={storyStatus}
+        approvalTime={approvalDate}
       />
 
       <div className={styles["button-container"]}>
         {storyStatus === "Rejected" && (
-          <div className={styles["rejection-comment-container"]} >
-            <div className={styles["rejection-comment-container-outer-border"]} />
-            <div className={styles["rejection-comment-container-top-divider"]} />
-            <div className={styles["rejection-comment-title-text"]} >Admin Comment on 14:23pm, 3/23/2023</div>
-            <div className={styles["rejection-comment-content-text"]} >attis molestie a iaculis at erat pellentesque adipiscing. Non odio euismod lacinia at quis risus sed. Ultrices vitae auctor eu augue ut lectus arcu. Viverra suspendisse potenti nullam ac tortor.  odio euismod lacinia at quis risus sed. Ultrices vita  odio euismod lacinia at quis risus sed. Ultrices vita</div>
+          <div className={styles["rejection-comment-container"]}>
+            <div
+              className={styles["rejection-comment-container-outer-border"]}
+            />
+            <div
+              className={styles["rejection-comment-container-top-divider"]}
+            />
+            <div className={styles["rejection-comment-title-text"]}>
+              Admin Comment on 14:23pm, 3/23/2023
+            </div>
+            <div className={styles["rejection-comment-content-text"]}>
+              attis molestie a iaculis at erat pellentesque adipiscing. Non odio
+              euismod lacinia at quis risus sed. Ultrices vitae auctor eu augue
+              ut lectus arcu. Viverra suspendisse potenti nullam ac tortor. odio
+              euismod lacinia at quis risus sed. Ultrices vita odio euismod
+              lacinia at quis risus sed. Ultrices vita
+            </div>
           </div>
         )}
       </div>
-
-      
 
       <div className={styles["button-container"]}>
         {/* conditional rendering of buttons - display reject and approve if pending;
@@ -104,9 +116,9 @@ const AdminStoryDetailPage = () => {
               }}
               className={styles["reject-button"]}
             />
-            <Button 
-              text="Approve" 
-              handleOnClick={() => navigate("/admin-page/admin-approve-action")} 
+            <Button
+              text="Approve"
+              handleOnClick={() => navigate("/admin-page/admin-approve-action")}
               customStyles={{
                 backgroundColor: "rgba(146, 187, 95, 0.75)",
               }}
@@ -125,22 +137,20 @@ const AdminStoryDetailPage = () => {
         )}
         {storyStatus === "Rejected" && (
           <>
-            <Button 
-            text="Edit Comment" 
-            handleOnClick={() => navigate("/admin-page")} 
+            <Button
+              text="Edit Comment"
+              handleOnClick={() => navigate("/admin-page")}
             />
-            <Button 
-            text="Approve" 
-            handleOnClick={() => navigate("/admin-page")} 
-            customStyles={{
-              backgroundColor: "rgba(146, 187, 95, 0.75)",
-            }}
+            <Button
+              text="Approve"
+              handleOnClick={() => navigate("/admin-page")}
+              customStyles={{
+                backgroundColor: "rgba(146, 187, 95, 0.75)",
+              }}
             />
           </>
         )}
-        </div>
-      
-      
+      </div>
     </div>
   );
 };
