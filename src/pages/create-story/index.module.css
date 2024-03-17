@@ -1,9 +1,5 @@
 @import "../../variables.css";
 
-.create-story-form img {
-  cursor: pointer;
-}
-
 .content-container {
   width: 100%;
   height: 100%;
@@ -36,18 +32,11 @@
   margin: 0;
 }
 
-.create-story-form :global(.ant-input-affix-wrapper) {
-  border: none !important;
-  border-radius: 0;
-  border-bottom: 1px solid #000 !important;
-  padding: 0;
-  padding-right: 12px;
-}
-
 .create-story-form :global(#create_story_title) {
   padding-left: 14px;
   border: none;
   border-radius: 0;
+  border-bottom: 1px solid #000 !important;
   height: 50px;
   font-size: var(--font-size-h4);
   font-family: var(--font-family-heading);
@@ -56,6 +45,27 @@
 
 .create-story-form :global(#create_story_title::placeholder) {
   color: #000;
+}
+
+.create-story-form :global(.ant-select-in-form-item) {
+  min-height: 50px;
+}
+
+.create-story-form :global(.ant-select-multiple .ant-select-selector) {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.create-story-form :global(.ant-select .ant-select-arrow) {
+  top: 0;
+  height: 100%;
+  margin-top: 0;
+}
+
+.create-story-form :global(.ant-select-selector) {
+  border: none !important;
+  border-radius: 0;
+  border-bottom: 1px solid #000 !important;
 }
 
 .create-story-form :global(#create_story_content) {
@@ -112,7 +122,6 @@
 
 .create-story-form :global(.ant-upload-list) {
   height: 40px;
-  width: calc(100% - 84px);
   display: flex;
   overflow-x: scroll;
 }

@@ -1,16 +1,14 @@
 import styles from "./index.module.css";
 import { useState } from "react";
-import { Form, Input, Upload, Modal, message } from "antd";
+import { Form, Input, Upload, Select, message } from "antd";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
 import upload_icon from "../../assets/icons/upload_icon.svg";
 import location_red from "../../assets/icons/location_red.svg";
-import profile_green from "../../assets/icons/profile_green.svg";
 import tag_blue from "../../assets/icons/tag_blue.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewStory } from "../../data/features/storyListSlice";
 import { uploadFile } from "../../data/features/fileUploadSlice";
-import { type } from "@testing-library/user-event/dist/type";
 
 const allowedFileTypes = [
   "image/jpeg",
@@ -24,76 +22,90 @@ const allowedFileTypes = [
   "audio/wav",
 ];
 
+const SiteLocationList = [
+  {
+    value: "Site 1",
+    label: "Site 1",
+  },
+  {
+    value: "Site 2",
+    label: "Site 2",
+  },
+  {
+    value: "Site 3",
+    label: "Site 3",
+  },
+  {
+    value: "Site 4",
+    label: "Site 4",
+  },
+  {
+    value: "Site 5",
+    label: "Site 5",
+  },
+  {
+    value: "Site 6",
+    label: "Site 6",
+  },
+  {
+    value: "Site 7",
+    label: "Site 7",
+  },
+  {
+    value: "Site 8",
+    label: "Site 8",
+  },
+  {
+    value: "Site 9",
+    label: "Site 9",
+  },
+  {
+    value: "Site 10",
+    label: "Site 10",
+  },
+];
+const TagList = [
+  {
+    value: "Communities & Livelihoods",
+    label: "Communities & Livelihoods",
+  },
+  {
+    value: "Indigenous History",
+    label: "Indigenous History",
+  },
+  {
+    value: "Underground Railroad",
+    label: "Underground Railroad",
+  },
+  {
+    value: "Civil_right & Freedom",
+    label: "Civil Right & Freedom",
+  },
+  {
+    value: "Cultural Identities",
+    label: "Cultural Identities",
+  },
+  {
+    value: "River Environment & Ecology",
+    label: "River Environment & Ecology",
+  },
+  {
+    value: "Modern-Day Detroit",
+    label: "Modern-Day Detroit",
+  },
+];
+
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [site, setSite] = useState("");
-  const [tags, setTags] = useState([]);
-  const [modalType, setModalType] = useState("");
 
   const dispatch = useDispatch();
   const fileUploadStatus = useSelector(
     (state) => state.fileUpload.uploadStatus
   );
 
-  const showModal = (type) => {
-    setIsModalOpen(true);
-    setModalType(type);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const getModalContent = () => {
-    switch (modalType) {
-      case "site":
-        return (
-          <ul>
-            {new Array(10).fill(0).map((_, index) => (
-              <li
-                key={index}
-                onClick={() => {
-                  setSite(`Site ${index + 1}`);
-                  handleCancel();
-                }}
-              >
-                Site {index + 1}
-              </li>
-            ))}
-          </ul>
-        );
-      case "tag":
-        return (
-          <ul>
-            {[
-              "Communities & Livelihoods",
-              "Indigenous History",
-              "Underground Railroad",
-              "Civil Right & Freedom",
-              "Cultural Identities",
-              "River Environment & Ecology",
-              "Modern-Day Detroit",
-            ].map((tag) => (
-              <li
-                key={tag}
-                onClick={() => {
-                  setTags(tag);
-                  handleCancel();
-                }}
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-        );
-      default:
-        return null;
-    }
-  };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const fileUploadProps = {
     beforeUpload: (file) => {
@@ -142,12 +154,12 @@ const CreateStory = () => {
         addNewStory({
           title: values.title,
           content: values.content,
+          site: values.site,
+          tags: values.tags,
           media: fileURLs, // Pass the array of URLs
           postType: "user",
           status: "pending",
           submitTime: new Date().toISOString(),
-          site: site,
-          tags: tags,
         })
       ).unwrap();
       form.resetFields();
@@ -178,34 +190,55 @@ const CreateStory = () => {
               },
             ]}
           >
-            <Input
-              placeholder="Title"
-              suffix={
-                <img
-                  src={location_red}
-                  alt="location"
-                  onClick={() => showModal("site")}
-                />
-              }
+            <Input placeholder="Title" />
+          </Form.Item>
+
+          <Form.Item
+            name="site"
+            rules={[
+              {
+                required: true,
+                message: "Please select the Site Location of your story!",
+              },
+            ]}
+          >
+            <Select
+              showSearch
+              placeholder="Select or Search a Site Location"
+              optionFilterProp="children"
+              filterOption={filterOption}
+              suffixIcon={<img src={location_red} alt="location" />}
+              options={SiteLocationList}
             />
           </Form.Item>
 
-          <div className={styles["content-container"]}>
-            <Form.Item
-              name="content"
-              rules={[{ required: true, message: "Please write your story!" }]}
-            >
-              <Input.TextArea rows={4} placeholder="Write your story here..." />
-            </Form.Item>
-            <div className={styles["option-icons-container"]}>
-              <img src={tag_blue} alt="tag" onClick={() => showModal("tag")} />
-              <img
-                src={profile_green}
-                alt="profile"
-                onClick={() => showModal()}
-              />
-            </div>
-          </div>
+          <Form.Item
+            name="tags"
+            rules={[
+              {
+                required: true,
+                message: "Please select the Site Location of your story!",
+              },
+            ]}
+          >
+            <Select
+              mode="tags"
+              showSearch
+              placeholder="Select or Search Tags"
+              optionFilterProp="children"
+              filterOption={filterOption}
+              suffixIcon={<img src={tag_blue} alt="tags" />}
+              options={TagList}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="content"
+            rules={[{ required: true, message: "Please write your story!" }]}
+          >
+            <Input.TextArea rows={4} placeholder="Write your story here..." />
+          </Form.Item>
+
           <Form.Item valuePropName="fileList">
             <div className="upload-container">
               <Upload
@@ -233,15 +266,6 @@ const CreateStory = () => {
           />
         </Form.Item>
       </Form>
-      <Modal
-        title={modalType === "site" ? "Select Site" : "Select Tags"}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        {getModalContent()}
-      </Modal>
     </div>
   );
 };
