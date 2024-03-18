@@ -40,7 +40,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 16px;
+  padding-left: 4px;
+  padding-top: 12px;
+  padding-bottom: 5px;
   flex-grow: 1;
 }
 
@@ -59,7 +61,7 @@
   font-size: 12px;
   font-weight: 400;
   color: #000;
-  margin: 4px 0;
+  margin: 0;
 }
 
 .customized-card-footer > div {

@@ -26,7 +26,8 @@
   }
 
   .cards-container{
-    padding: 20px 5%;
+    padding: 1% 5%;
+
   }
 
   .ant-carousel {
@@ -102,7 +103,10 @@
     border-radius: 0;
   }
 
+  /* .custom-collapse :global(.ant-collapse-content-box) {
+    padding: 0;
+  } */
+
   .custom-collapse{
     border-radius: 0;
   }
-  

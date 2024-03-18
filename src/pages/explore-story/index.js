@@ -52,20 +52,22 @@ const ExploreStory = () => {
   }, [dispatch]);
 
   const stories = useSelector((state) => state.storyList.storyList);
+  //add selection of stories based on status and user type 
+  const approvedUserStoryList = stories.filter((story) => story.status === "approved");
 
   const items = (panelStyle) => categories.map((category, index) => ({
     key: index,
     label: <CategoryHeader title={category} style={panelStyle} />,
     children: (
       <div className={styles["cards-container"]}>
-      {stories.filter(story => Array.isArray(story.tags) && story.tags.includes(category)).map(story => (
+      {approvedUserStoryList.filter(story => Array.isArray(story.tags) && story.tags.includes(category)).map(story => (
           <Card
             key={story.id}
             title={story.title}
-            content={story.content}
+            content={story.content.substring(0, 65) + "..."}
             author={story.userId}
-            type="user-story"
-            imgSrc={imgSrc} // replace with the actual image field
+            type={story.postType === "user" ? "user-story" : "lab-story"}
+            imgSrc={story.media[0]} 
           />
         ))}
         <div className={styles["button-container"]}>

@@ -2,10 +2,9 @@
     /* display: flex;
     justify-content: space-between; */
     align-items: center;
-    padding: 5%;
+    padding: 3% 4.5%;
     /* margin-bottom: 10px; */
     background-color: var(--secondary-color-sky-blue-dark);
-
 }
 
 .title{
