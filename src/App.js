@@ -51,6 +51,7 @@ function App() {
             <Route path="/story/story-detail" element={<StoryDetailPage />} />
             <Route path="/site-page" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
+            <Route path="/explore-story" element={<ExploreStory />} />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />

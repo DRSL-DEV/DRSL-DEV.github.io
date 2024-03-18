@@ -1,3 +1,6 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchStoryList } from '../../data/features/storyListSlice';
+import { useEffect } from "react";
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -10,85 +13,82 @@ import { useNavigate } from "react-router-dom";
 import { RightOutlined } from '@ant-design/icons';
 import { Carousel, Collapse } from "antd";
 const { Panel } = Collapse;
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchStoryList } from '../../data/features/storyListSlice';
-import { useEffect } from "react";
 
 
-const items = (panelStyle) =>[
-  {
-    key: '1',
-    label: <CategoryHeader title="Community & Livelihood" style={panelStyle} />,
-    children: (
-      <div className={styles["cards-container"]}>
-        <Card
-          title="Support + Industry"
-          content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-          author="Steven Henry"
-          type="user-story"
-          imgSrc={imgSrc}
-        />
-        <div className={styles["button-container"]}>
-          <Button text="View More" handleOnClick={() => { }} />
-        </div>
-      </div>
-    ),
-    style: panelStyle,
-  },
-  {
-    key: '2',
-    label: <CategoryHeader title="Indigenous History" />,
-    children: (
-      <div className={styles["cards-container"]}>
-        <Card
-          title="River Resistance"
-          content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
-          author="Imani Jackson"
-          type="user-story"
-          imgSrc={imgSrc}
-        />
-        <Card
-          title="Support + Industry"
-          content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-          author="Steven Henry"
-          type="user-story"
-          imgSrc={imgSrc}
-        />
-        <div className={styles["button-container"]}>
-          <Button text="View More" handleOnClick={() => { }} />
-        </div>
-      </div>
-    ),
-    style: panelStyle,
-  },
-  {
-    key: '3',
-    label: <CategoryHeader title="Underground Railroad" />,
-    children: (
-      <div className={styles["cards-container"]}>
-        <Card
-          title="River Resistance"
-          content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
-          author="Imani Jackson"
-          type="user-story"
-          imgSrc={imgSrc}
-        />
-        <Card
-          title="Support + Industry"
-          content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-          author="Steven Henry"
-          type="user-story"
-          imgSrc={imgSrc}
-        />
-        <div className={styles["button-container"]}>
-          <Button text="View More" handleOnClick={() => { }} />
-        </div>
-      </div>
-    ),
-    style: panelStyle,
-  },
-];
+// const items = (panelStyle) =>[
+//   {
+//     key: '1',
+//     label: <CategoryHeader title="Community & Livelihood" style={panelStyle} />,
+//     children: (
+//       <div className={styles["cards-container"]}>
+//         <Card
+//           key={story.id}
+//           title={story.title}
+//           content={story.content}
+//           author={story.userId}
+//           type="user-story"
+//           imgSrc={imgSrc}
+//         />
+//         <div className={styles["button-container"]}>
+//           <Button text="View More" handleOnClick={() => { }} />
+//         </div>
+//       </div>
+//     ),
+//     style: panelStyle,
+//   },
+//   {
+//     key: '2',
+//     label: <CategoryHeader title="Indigenous History" />,
+//     children: (
+//       <div className={styles["cards-container"]}>
+//         <Card
+//           title="River Resistance"
+//           content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
+//           author="Imani Jackson"
+//           type="user-story"
+//           imgSrc={imgSrc}
+//         />
+//         <Card
+//           title="Support + Industry"
+//           content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+//           author="Steven Henry"
+//           type="user-story"
+//           imgSrc={imgSrc}
+//         />
+//         <div className={styles["button-container"]}>
+//           <Button text="View More" handleOnClick={() => { }} />
+//         </div>
+//       </div>
+//     ),
+//     style: panelStyle,
+//   },
+//   {
+//     key: '3',
+//     label: <CategoryHeader title="Underground Railroad" />,
+//     children: (
+//       <div className={styles["cards-container"]}>
+//         <Card
+//           title="River Resistance"
+//           content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
+//           author="Imani Jackson"
+//           type="user-story"
+//           imgSrc={imgSrc}
+//         />
+//         <Card
+//           title="Support + Industry"
+//           content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
+//           author="Steven Henry"
+//           type="user-story"
+//           imgSrc={imgSrc}
+//         />
+//         <div className={styles["button-container"]}>
+//           <Button text="View More" handleOnClick={() => { }} />
+//         </div>
+//       </div>
+//     ),
+//     style: panelStyle,
+//   },
+// ];
 
 const CustomCollapse = ({ items }) => (
   <Collapse
@@ -109,9 +109,12 @@ const CustomCollapse = ({ items }) => (
 );
 
 
-const HomePage = () => {
+const ExploreStory = () => {
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
+  const categories = ["Communities & Livelihood", "Indigenous History", "Cultural Identities"];
   const mediaUrls = [gallery_placeholder, gallery_placeholder, gallery_placeholder];
 
   const panelStyle = {
@@ -120,12 +123,34 @@ const HomePage = () => {
     backgroundColor: 'var(--secondary-color-sky-blue-dark)',
   };
 
-  const dispatch = useDispatch();
-  const storyList = useSelector((state) => state.storyList.storyList);
-
   useEffect(() => {
     dispatch(fetchStoryList());
   }, [dispatch]);
+
+  const stories = useSelector((state) => state.storyList.storyList);
+
+  const items = (panelStyle) => categories.map((category, index) => ({
+    key: index,
+    label: <CategoryHeader title={category} style={panelStyle} />,
+    children: (
+      <div className={styles["cards-container"]}>
+      {stories.filter(story => Array.isArray(story.tags) && story.tags.includes(category)).map(story => (
+          <Card
+            key={story.id}
+            title={story.title}
+            content={story.content}
+            author={story.userId}
+            type="user-story"
+            imgSrc={imgSrc} // replace with the actual image field
+          />
+        ))}
+        <div className={styles["button-container"]}>
+          <Button text="View More" handleOnClick={() => { }} />
+        </div>
+      </div>
+    ),
+    style: panelStyle,
+  }));
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
@@ -172,4 +197,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ExploreStory;
