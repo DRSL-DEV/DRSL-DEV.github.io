@@ -14,82 +14,6 @@ import { RightOutlined } from '@ant-design/icons';
 import { Carousel, Collapse } from "antd";
 const { Panel } = Collapse;
 
-
-// const items = (panelStyle) =>[
-//   {
-//     key: '1',
-//     label: <CategoryHeader title="Community & Livelihood" style={panelStyle} />,
-//     children: (
-//       <div className={styles["cards-container"]}>
-//         <Card
-//           key={story.id}
-//           title={story.title}
-//           content={story.content}
-//           author={story.userId}
-//           type="user-story"
-//           imgSrc={imgSrc}
-//         />
-//         <div className={styles["button-container"]}>
-//           <Button text="View More" handleOnClick={() => { }} />
-//         </div>
-//       </div>
-//     ),
-//     style: panelStyle,
-//   },
-//   {
-//     key: '2',
-//     label: <CategoryHeader title="Indigenous History" />,
-//     children: (
-//       <div className={styles["cards-container"]}>
-//         <Card
-//           title="River Resistance"
-//           content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
-//           author="Imani Jackson"
-//           type="user-story"
-//           imgSrc={imgSrc}
-//         />
-//         <Card
-//           title="Support + Industry"
-//           content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-//           author="Steven Henry"
-//           type="user-story"
-//           imgSrc={imgSrc}
-//         />
-//         <div className={styles["button-container"]}>
-//           <Button text="View More" handleOnClick={() => { }} />
-//         </div>
-//       </div>
-//     ),
-//     style: panelStyle,
-//   },
-//   {
-//     key: '3',
-//     label: <CategoryHeader title="Underground Railroad" />,
-//     children: (
-//       <div className={styles["cards-container"]}>
-//         <Card
-//           title="River Resistance"
-//           content="Elevated by one another, enriched by our shared understanding. Our history details our existence..."
-//           author="Imani Jackson"
-//           type="user-story"
-//           imgSrc={imgSrc}
-//         />
-//         <Card
-//           title="Support + Industry"
-//           content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-//           author="Steven Henry"
-//           type="user-story"
-//           imgSrc={imgSrc}
-//         />
-//         <div className={styles["button-container"]}>
-//           <Button text="View More" handleOnClick={() => { }} />
-//         </div>
-//       </div>
-//     ),
-//     style: panelStyle,
-//   },
-// ];
-
 const CustomCollapse = ({ items }) => (
   <Collapse
     accordion
@@ -188,7 +112,7 @@ const ExploreStory = () => {
           </div>
         </section>
         <section>
-          <CustomCollapse 
+          <CustomCollapse
             items={items(panelStyle)}
             />
         </section>
