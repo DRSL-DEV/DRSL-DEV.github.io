@@ -1,3 +1,21 @@
+@import "../../variables.css";
+
+.content-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+.option-icons-container {
+  position: absolute;
+  right: 10px;
+  bottom: -32px;
+  display: flex;
+  gap: 16px;
+  z-index: 100;
+}
+
 .create-story-form :global(.form-fields) {
   display: flex;
   flex-direction: column;
@@ -18,7 +36,7 @@
   padding-left: 14px;
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #000 !important;
   height: 50px;
   font-size: var(--font-size-h4);
   font-family: var(--font-family-heading);
@@ -27,6 +45,27 @@
 
 .create-story-form :global(#create_story_title::placeholder) {
   color: #000;
+}
+
+.create-story-form :global(.ant-select-in-form-item) {
+  min-height: 50px;
+}
+
+.create-story-form :global(.ant-select-multiple .ant-select-selector) {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.create-story-form :global(.ant-select .ant-select-arrow) {
+  top: 0;
+  height: 100%;
+  margin-top: 0;
+}
+
+.create-story-form :global(.ant-select-selector) {
+  border: none !important;
+  border-radius: 0;
+  border-bottom: 1px solid #000 !important;
 }
 
 .create-story-form :global(#create_story_content) {
@@ -78,6 +117,7 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
+  cursor: pointer;
 }
 
 .create-story-form :global(.ant-upload-list) {
@@ -86,11 +126,20 @@
   overflow-x: scroll;
 }
 
+.create-story-form :global(.ant-upload-list-item-container) {
+  flex-shrink: 0;
+}
+
 .create-story-form :global(.ant-upload-list-item) {
   height: 100% !important;
   margin: 0 !important;
   border: none !important;
+  border-radius: 0 !important;
   flex: none;
+}
+
+.create-story-form :global(.ant-upload-list-item .anticon-delete svg) {
+  color: var(--primary-warning-color-red);
 }
 
 .create-story-form :global(.ant-upload-list-item-thumbnail) {
@@ -113,35 +162,3 @@
   display: flex;
   justify-content: center;
 }
-
-/* .ant-upload-list-picture .ant-upload-list-item {
-  float: left;
-  width: auto;
-  margin-right: 8px;
-}
-
-.ant-upload-list-picture .ant-upload-list-item-info {
-  padding: 0;
-}
-
-.ant-upload-list-picture .ant-upload-list-item-thumbnail img {
-  width: 104px; 
-  height: 104px; 
-}
-
-.ant-upload-list-picture .ant-upload-list-item-name {
-  display: none; 
-}
-
-.ant-upload-list-picture .ant-upload-list-item-card-actions {
-  top: 10px; 
-  right: 10px; 
-}
-
-.upload-container .ant-btn {
-  margin-top: 16px;
-}
-
-.attachment-label {
-  margin-bottom: 8px;
-} */

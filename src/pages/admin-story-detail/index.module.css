@@ -1,5 +1,6 @@
 .story-detail-page-container {
   padding: 0;
+  padding-top: 4%;
 }
 
 .story-detail-page-container header img {
@@ -9,6 +10,7 @@
 .share-icon {
   margin: 16px 5% 0% 5%;
   float: right;
+  display: none;
 }
 
 .img {
@@ -98,11 +100,54 @@
   padding-bottom: 5%;
 }
 
-/* <div className={styles["rejection-comment-container"]} >
+.rejection-container {
+  width: 70%;
+  height: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+  border: 1px solid black;
+  border-radius: 10px;
+}
 
-className={styles["rejection-comment-content-text"]} 
+.rejection-header-container {
+  width: 100%;
+  padding-top: 13px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: 1px solid black;
+  align-items: center;
+  display: inline-flex;
+}
 
- <div style={{width: 600, height: 49, left: 0, top: 0, position: 'absolute', background: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, border: '1px black solid'}} />
-<div style={{width: 570, left: 15, top: 13, position: 'absolute', color: 'black', fontSize: 16, fontFamily: 'Open Sans', fontWeight: '400', wordWrap: 'break-word'}}>Admin Comment on 14:23pm, 3/23/2023</div>
-<div style={{width: 570, left: 15, top: 62, position: 'absolute', color: '#707070', fontSize: 16, fontFamily: 'Montserrat', fontWeight: '400', wordWrap: 'break-word'}}>attis molestie a iaculis at erat pellentesque adipiscing. Non odio euismod lacinia at quis risus sed. Ultrices vitae auctor eu augue ut lectus arcu. Viverra suspendisse potenti nullam ac tortor.  odio euismod lacinia at quis risus sed. Ultrices vita  odio euismod lacinia at quis risus sed. Ultrices vita</div>
-</div> */
+.rejection-header-text {
+  width: 95%;
+  color: black;
+  font-family: "Open Sans", sans-serif;
+  word-wrap: break-word;
+}
+
+.rejection-content-container {
+  width: 100%;
+  height: auto;
+  padding-top: 17px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content: left;
+  align-items: center;
+  display: inline-flex;
+}
+
+.rejection-content-text {
+  width: 95%;
+  color: #707070;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+}

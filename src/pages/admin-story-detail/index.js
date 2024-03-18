@@ -77,7 +77,7 @@ const AdminStoryDetailPage = () => {
         tags={tags}
         className={styles["story-info-resize"]}
         status={storyStatus}
-        approvalTime={approvalDate}
+        adminUpdateTime={approvalDate}
       />
 
       <div className={styles["button-container"]}>
@@ -99,10 +99,26 @@ const AdminStoryDetailPage = () => {
               euismod lacinia at quis risus sed. Ultrices vita odio euismod
               lacinia at quis risus sed. Ultrices vita
             </div>
+        <div className={styles["rejection-container"]}>
+          <div className={styles["rejection-header-container"]}>
+            <div className={styles["rejection-header-text"]}>Admin Comment on 14:23pm, 3/23/2023</div>
           </div>
-        )}
+          <div className={styles["rejection-content-container"]}>
+            <div className={styles["rejection-content-text"]}>
+              attis molestie a iaculis at erat pellentesque adipiscing. Non odio euismod lacinia 
+              at quis risus sed. Ultrices vitae auctor eu augue ut lectus arcu. Viverra suspendiss
+              e potenti nullam ac tortor. odio euismod lacinia at quis risus sed. Ultrices vitae odio 
+              euismod lacinia at quis risus sed. Ultrices vita.
+              attis molestie a iaculis at erat pellentesque adipiscing. Non odio euismod lacinia 
+              at quis risus sed. Ultrices vitae auctor eu augue ut lectus arcu. Viverra suspendiss
+              e potenti nullam ac tortor. odio euismod lacinia at quis risus sed. Ultrices vitae odio 
+              euismod lacinia at quis risus sed. Ultrices vita.
+            </div>
+          </div>
+        </div>
       </div>
 
+      
       <div className={styles["button-container"]}>
         {/* conditional rendering of buttons - display reject and approve if pending;
         display reject if Approved
@@ -152,7 +168,6 @@ const AdminStoryDetailPage = () => {
           </>
         )}
       </div>
-    </div>
   );
 };
 

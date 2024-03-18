@@ -28,6 +28,8 @@
 
   --link-color-blue: rgba(46, 124, 246, 1);
 
+  --primary-warning-color-red: rgba(251, 23, 23, 1);
+
   /* Font families */
   --font-family-heading: "Open Sans", sans-serif;
   --font-family-body: "Montserrat", sans-serif;
