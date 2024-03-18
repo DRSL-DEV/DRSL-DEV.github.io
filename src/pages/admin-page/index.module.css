@@ -46,22 +46,26 @@
   justify-content: center;
 }
 
+.profile-tab-container :global(.ant-tabs) {
+  width: 100%;
+  justify-content: center;
+}
+
 .profile-tab-container :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
   background-color: rgba(202, 232, 250, 1);
-  /* padding: 0 40px; this padding has an offset*/
   border-radius: 100px;
   font-weight: 400;
-  /* border-bottom: 2px ;
-    z-index: 2; */
 }
 .profile-tab-container :global(.ant-tabs .ant-tabs-tab-btn) {
   padding: 5px 30px;
 }
 
-/* ant-tabs-tab ant-tabs-tab-active */
-
 .card-container {
-  margin: 2% 5%;
+  padding: 2% 5%;
+  margin: auto;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 800px;
 }
 
 .add-post-button {
