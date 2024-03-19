@@ -18,8 +18,10 @@ const Card = ({ title, content, userId, type, imgSrc }) => {
         <img src={imgSrc} alt="" />
       </div>
       <div className={styles["customized-card-content"]}>
-        <h2>{title}</h2>
-        <p>{content}</p>
+        <div className={styles["text-content"]}>
+          <h2>{title}</h2>
+          <p>{content.substring(0, 75) + "..."}</p>
+        </div>
         <div className={styles["customized-card-footer"]}>
           <div>{userId}</div>
           <button onClick={() => navigate("/story/story-detail")}>
