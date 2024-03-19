@@ -55,8 +55,14 @@ function App() {
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />
             <Route path="/admin-page" element={<AdminPage />} />
-            <Route path="/admin-page/admin-story-detail" element={<AdminStoryDetailPage />} />
-            <Route path="/admin-page/admin-reject-form" element={<AdminRejectForm />} />
+            <Route
+              path="/admin-page/admin-story-detail/:title"
+              element={<AdminStoryDetailPage />}
+            />
+            <Route
+              path="/admin-page/admin-reject-form/:title"
+              element={<AdminRejectForm />}
+            />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
