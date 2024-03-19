@@ -18,10 +18,17 @@ const HomePage = () => {
   const status = useSelector((state) => state.storyList.status);
 
   // console.log("status", status);
-  const approvedUserStoryList = storyList.filter((story) => story.status === "approved");
-  const filteredUserStoryList = approvedUserStoryList.filter((story) => story.postType === "user");
-  const filteredLabStoryList = storyList.filter((story) => story.postType === "partner");
+  const approvedUserStoryList = storyList.filter(
+    (story) => story.status === "approved"
+  );
+  const filteredUserStoryList = approvedUserStoryList.filter(
+    (story) => story.postType === "user"
+  );
+  const filteredLabStoryList = storyList.filter(
+    (story) => story.postType === "partner"
+  );
 
+  console.log("filteredUserStoryList", filteredUserStoryList);
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchStoryList());
@@ -75,7 +82,7 @@ const HomePage = () => {
                 type="user-story"
                 imgSrc={story.media[0]}
               />
-            ))} 
+            ))}
             <div className={styles["button-container"]}>
               <Button
                 text="Share Your Story"
@@ -98,7 +105,7 @@ const HomePage = () => {
                 // imgSrc={imgSrc}
                 imgSrc={story.media[0]}
               />
-            ))} 
+            ))}
           </div>
           <div className={styles["button-container"]}>
             <Button text="View More" handleOnClick={() => {}} />

@@ -4,18 +4,23 @@
   display: none;
 }
 
-.img {
-  width: 100%;
-  height: 100vh;
-  margin: auto;
-}
-
 .button-container {
   display: flex;
   justify-content: center;
   margin: 12px 20px;
   margin-bottom: 40px;
   gap: 16px;
+}
+
+.media {
+  height: 400px;
+}
+
+.media img,
+.media video {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
 }
 
 .ant-carousel {
@@ -144,3 +149,12 @@
   justify-content: center;
   margin: 12px 20px;
 }
+
+/* :global(.ant-carousel .slick-dots li button) {
+  background-color: #000;
+}
+
+:global(.ant-carousel .slick-dots li.slick-active button) {
+  background-color: #fff; 
+  border: 1px solid #000; 
+} */
