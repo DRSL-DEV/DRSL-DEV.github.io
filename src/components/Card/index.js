@@ -1,8 +1,9 @@
 import styles from "./index.module.css";
 import arrow_right from "../../assets/icons/arrow_right.svg";
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-const Card = ({ title, content, userId, type, imgSrc }) => {
+const Card = ({ title, content, userId, type, imgSrc, postId }) => {
   const navigate = useNavigate();
 
   // Fetch the user's name from another collection using userId
@@ -13,21 +14,23 @@ const Card = ({ title, content, userId, type, imgSrc }) => {
   // const imgSrc = media[0];
 
   return (
-    <div className={`${styles["customized-card"]} ${styles[type]}`}>
-      <div className={styles["customized-card-image"]}>
-        <img src={imgSrc} alt="" />
-      </div>
-      <div className={styles["customized-card-content"]}>
-        <h2>{title}</h2>
-        <p>{content}</p>
-        <div className={styles["customized-card-footer"]}>
-          <div>{userId}</div>
-          <button onClick={() => navigate("/story/story-detail")}>
-            <img src={arrow_right} alt="right arrow" />
-          </button>
+    <Link to={`/story/${postId}`}>
+      <div className={`${styles["customized-card"]} ${styles[type]}`}>
+        <div className={styles["customized-card-image"]}>
+          <img src={imgSrc} alt="" />
+        </div>
+        <div className={styles["customized-card-content"]}>
+          <h2>{title}</h2>
+          <p>{content}</p>
+          <div className={styles["customized-card-footer"]}>
+            <div>{userId}</div>
+            <button onClick={() => navigate("/story/story-detail")}>
+              <img src={arrow_right} alt="right arrow" />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

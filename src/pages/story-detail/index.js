@@ -6,7 +6,6 @@ import link_icon from "../../assets/icons/link_icon.svg";
 import profile from "../../assets/images/profile.png";
 import { Carousel } from "antd";
 import styles from "./index.module.css";
-import firebase from "firebase/app";
 import "firebase/firestore";
 import { fetchStoryById } from "../../data/features/storyListSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,20 +16,26 @@ const StoryDetailPage = () => {
   const siteTitle = "Story Page";
   
   const dispatch = useDispatch();
-  const postId = "j3WlOU2YEXLvahgY59hx";
+  const { postId } = useParams();
   const { status, selectedPost, error } = useSelector((state) => state.storyList);
+  console.log('postId',postId)
 
   useEffect(() => {
-    if (status === "idle") {
+    if (!selectedPost || selectedPost.id !== postId) {
       dispatch(fetchStoryById(postId));
     }
-  }, [status, dispatch]);
+  }, [dispatch, postId, selectedPost]);
+
   if (status === "loading") {
     return <div>Loading...</div>;
   }
+
   if (status === "failed") {
     return <div>Error: {error}</div>;
-  };
+  }
+
+  console.log("selectedPost", selectedPost);
+  console.log("status", status);
 
   const handleShare = () => {
     const currentUrl = window.location.href;
@@ -78,7 +83,7 @@ const StoryDetailPage = () => {
             title={selectedPost.title}
             author={selectedPost.author}
             profileImg={selectedPost.profileImg}
-            date={selectedPost.submitTime.slice(0, 10)}
+            date={selectedPost.submitTime}
             content={selectedPost.content}
             tags={selectedPost.tags}
           />
