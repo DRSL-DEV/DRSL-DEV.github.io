@@ -101,10 +101,7 @@ const HomePage = () => {
             ))} 
           </div>
           <div className={styles["button-container"]}>
-            <Button
-              text="View More"
-              handleOnClick={() => navigate("/create-story")}
-            />
+            <Button text="View More" handleOnClick={() => {}} />
           </div>
         </section>
       </main>
