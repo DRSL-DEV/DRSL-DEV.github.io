@@ -1,0 +1,146 @@
+.share-icon {
+  margin: 16px 5% 0% 5%;
+  float: right;
+  display: none;
+}
+
+.img {
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 20px;
+  margin-bottom: 40px;
+  gap: 16px;
+}
+
+.ant-carousel {
+  width: 100%;
+}
+
+.story-image-gallery {
+  width: 60%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.storyinfo .story-text {
+  width: 60%;
+}
+
+.story-info-resize {
+  width: 60%;
+}
+
+.rejection-comment-container {
+  width: 100%;
+  max-width: 600px;
+  height: 163px;
+  position: relative;
+}
+
+.rejection-comment-container-outer-border {
+  width: 100%;
+  height: 163px;
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+  border: 1px black solid;
+}
+
+.rejection-comment-container-top-divider {
+  width: 100%;
+  height: 30%;
+  position: absolute;
+  background: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: 1px black solid;
+}
+
+.rejection-comment-title-text {
+  width: 95%;
+  left: 2.5%;
+  top: 8%;
+  position: relative;
+  color: black;
+  font-size: 16px;
+  font-family: Open Sans;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.rejection-comment-content-text {
+  width: 95%;
+  left: 2.5%;
+  top: 62px;
+  position: absolute;
+  color: #707070;
+  font-size: 16px;
+  font-family: Montserrat;
+  font-weight: 400;
+  word-wrap: break-word;
+  padding-bottom: 5%;
+}
+
+.rejection-container {
+  width: 70%;
+  height: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: inline-flex;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.rejection-header-container {
+  width: 100%;
+  padding-top: 13px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: 1px solid black;
+  align-items: center;
+  display: inline-flex;
+}
+
+.rejection-header-text {
+  width: 95%;
+  color: black;
+  font-family: "Open Sans", sans-serif;
+  word-wrap: break-word;
+}
+
+.rejection-content-container {
+  width: 100%;
+  height: auto;
+  padding-top: 17px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content: left;
+  align-items: center;
+  display: inline-flex;
+}
+
+.rejection-content-text {
+  width: 95%;
+  color: #707070;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.admin-update-time-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 20px;
+}

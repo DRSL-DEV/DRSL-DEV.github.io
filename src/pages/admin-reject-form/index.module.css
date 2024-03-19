@@ -1,0 +1,49 @@
+.reject_story-form :global {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reject_story-form :global(.form-fields) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  border-radius: 10px;
+  border: 1px solid #000;
+  background: #fff;
+  margin-bottom: 24px;
+}
+
+
+.reject_story-form :global(.ant-form-item) {
+  width: 100%;
+  margin: 0;
+}
+ 
+.reject_story-form :global(#reject_story_content) {
+  height: 40vh;
+  padding-top: 8px;
+  padding-left: 14px;
+  border: none;
+  border-radius: 0;
+  font-size: var(--font-size-body-small);
+  font-family: var(--font-family-body);
+  line-height: normal;
+  color: #000;
+  overflow-y: scroll;
+}
+
+.reject_story-form :global(#reject_story_content::placeholder) {
+  color: #707070;
+}
+
+.reject_story-form :global(.ant-form-item-control-input-content) {
+  display: flex;
+  justify-content: center;
+}
+
+.reject_story-form :global(.ant-form-item-control-input) {
+  width: 100%;
+  margin: 0;
+}
