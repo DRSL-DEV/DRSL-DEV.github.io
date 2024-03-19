@@ -41,7 +41,7 @@ const SignUpPage = () => {
       .then((userCredential) => {
         const { user } = userCredential;
 
-        setDoc(doc(db, "users", user.uid), {
+        setDoc(doc(db, "user", user.uid), {
           username: username,
           email: email,
           anonymousSubmissionCheck: anonymousSubmissionCheck,
@@ -81,7 +81,7 @@ const SignUpPage = () => {
             initialValues={{
               username: user?.username,
               email: user?.email,
-              anonymousSubmissionCheck: user?.anonymousSubmissionCheck,
+              anonymousSubmissionCheck: !!user?.anonymousSubmissionCheck,
             }}
           >
             <Form.Item

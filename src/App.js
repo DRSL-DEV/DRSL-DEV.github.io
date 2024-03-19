@@ -46,6 +46,7 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/story" element={<StoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/profile-edit" element={<EditProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/partnerships" element={<PartnershipsPage />} />
