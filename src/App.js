@@ -60,7 +60,7 @@ function App() {
               element={<AdminStoryDetailPage />}
             />
             <Route
-              path="/admin-page/admin-reject-form"
+              path="/admin-page/admin-reject-form/:title"
               element={<AdminRejectForm />}
             />
 

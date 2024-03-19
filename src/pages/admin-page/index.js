@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Tabs } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchStoryList } from "../../data/features/storyListSlice";
+import { subscribeToStoryList } from "../../data/features/storyListSlice";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -19,10 +19,13 @@ const AdminPage = () => {
   const { TabPane } = Tabs;
 
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchStoryList());
-    }
-  }, [status, dispatch]);
+    const unsubscribe = dispatch(subscribeToStoryList());
+
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
+
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
       <main>

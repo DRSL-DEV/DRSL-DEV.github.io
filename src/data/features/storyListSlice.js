@@ -1,11 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "../../firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, onSnapshot } from "firebase/firestore";
 
 const initialState = {
   storyList: [],
   status: "idle",
   error: null,
+};
+
+// Subscribe to story list
+export const subscribeToStoryList = () => (dispatch) => {
+  const unsubscribe = onSnapshot(collection(db, "post"), (snapshot) => {
+    const stories = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    dispatch(storyListSlice.actions.updateStoryList(stories));
+  });
+
+  return unsubscribe;
 };
 
 // Fetch story list
@@ -27,10 +37,15 @@ export const addNewStory = createAsyncThunk(
   }
 );
 
-const storyListSlice = createSlice({
+export const storyListSlice = createSlice({
   name: "storyList",
   initialState,
-  reducers: {},
+  reducers: {
+    updateStoryList: (state, action) => {
+      state.status = "succeeded";
+      state.storyList = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchStoryList.pending, (state) => {
