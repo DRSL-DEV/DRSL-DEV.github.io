@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
 import arrow_right from "../../assets/icons/arrow_right.svg";
 import { useNavigate } from "react-router-dom";
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Card = ({ title, content, userId, type, imgSrc, postId }) => {
   const navigate = useNavigate();
@@ -13,17 +13,12 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
   // Use the first item in the media array as the image source
   // const imgSrc = media[0];
 
-
-
   return (
-dev-fetch-story-info-firebase
     <Link to={`/story/${title
       .toLowerCase()
       .replace(/ /g, "-")
       .replace(/[^\w-]+/g, "")}`}
-      state = {{postId:postId}}
-
->
+      state = {{postId:postId}}>
       <div className={`${styles["customized-card"]} ${styles[type]}`}>
         <div className={styles["customized-card-image"]}>
           <img src={imgSrc} alt="" />
@@ -36,6 +31,7 @@ dev-fetch-story-info-firebase
             <button>
               <img src={arrow_right} alt="right arrow" />
             </button>
+          </div>
           </div>
       </div>
     </Link>
