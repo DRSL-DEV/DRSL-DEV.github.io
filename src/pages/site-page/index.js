@@ -84,8 +84,7 @@ const SitePage = () => {
                 content={story.content}
                 author={story.userId}
                 type="user-story"
-                // imgSrc={story.imgSrc}
-                imgSrc={imgSrc}
+                imgSrc={story.media[0]}
               />
             ))
           ) : (
