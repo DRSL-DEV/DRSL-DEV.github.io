@@ -8,11 +8,11 @@ const StoryInfo = ({ title, author, profileImg, date, content, tags }) => {
           <img src={profileImg} alt="profile image" />
           <div className={styles["user-info-text"]}>
             <h6>{author}</h6>
-            <h6>{date}</h6>
+            <h6>{date.slice(0,10).replace(/-/g, "/")}</h6>
           </div>
         </div>
         <div className={styles["tag-container"]}>
-          {tags.map((tag, index) => (
+          {tags && tags.map((tag, index) => (
             <p className={styles["story-tag"]} key={index}>
               {tag}
             </p>

@@ -76,6 +76,7 @@ const HomePage = () => {
             {filteredUserStoryList.map((story) => (
               <Card
                 key={story.id}
+                postId = {story.id}
                 title={story.title}
                 content={story.content}
                 author={story.userId}

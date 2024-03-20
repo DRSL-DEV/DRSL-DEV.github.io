@@ -45,6 +45,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/story" element={<StoryPage />} />
+            <Route path="/story/:title" element={<StoryDetailPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -52,7 +53,6 @@ function App() {
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/story/story-detail" element={<StoryDetailPage />} />
             <Route path="/site-page" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
