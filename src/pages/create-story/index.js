@@ -48,7 +48,7 @@ const CreateStory = () => {
           content: "You can only upload image, video, or audio files!",
           duration: 2,
         });
-        console.log("File type not allowed:", file.type);
+        // console.log("File type not allowed:", file.type);
         return Upload.LIST_IGNORE;
       }
       return false;

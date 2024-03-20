@@ -12,7 +12,6 @@ const AdminRejectForm = () => {
   const location = useLocation();
 
   const { postId, comment } = location.state;
-  console.log(postId, comment);
 
   const handleSubmission = (values) => {
     const newComment = {

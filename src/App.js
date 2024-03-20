@@ -9,7 +9,6 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/home";
-import StoryPage from "./pages/story";
 import ProfilePage from "./pages/profile";
 import AboutPage from "./pages/about";
 import NotFoundPage from "./pages/default";
@@ -44,7 +43,6 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/story" element={<StoryPage />} />
             <Route path="/story/:title" element={<StoryDetailPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />

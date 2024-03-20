@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { Form } from "antd";
 import PasswordInput from "../../components/PasswordInput";
 import EmailInput from "../../components/EmailInput";
@@ -11,30 +11,30 @@ import styles from "./index.module.css";
 import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../../data/features/userInfoSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../data/features/userInfoSlice";
 import { db } from "../../firebase";
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 const SignUpPage = () => {
   const [form] = Form.useForm();
   const [userCredentials, setUserCredentials] = useState({});
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const user = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const redirect = location.state?.from || '/';
+  const redirect = location.state?.from || "/";
 
   const handleCredentials = (changedValues, allValues) => {
     setUserCredentials(allValues);
-  }
+  };
 
   const onFinish = (values) => {
     // console.log("Received values of form: ", values);
-    setError('');
+    setError("");
     const { email, password, username, anonymousSubmissionCheck } = values;
 
     createUserWithEmailAndPassword(auth, email, password)
@@ -45,17 +45,23 @@ const SignUpPage = () => {
           username: username,
           email: email,
           anonymousSubmissionCheck: anonymousSubmissionCheck,
-        }).then(() => {
-          console.log("Document successfully written!");
-        }).catch((error) => {
-          console.error("Error writing document: ", error);
-        });
+        })
+          .then(() => {
+            // console.log("Document successfully written!");
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+          });
 
-        const userInfo = { uid: user.uid, username, email, anonymousSubmissionCheck };
+        const userInfo = {
+          uid: user.uid,
+          username,
+          email,
+          anonymousSubmissionCheck,
+        };
         dispatch(setUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
         navigate(redirect);
-
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -96,7 +102,11 @@ const SignUpPage = () => {
               <TextInput placeholder="Username" permittedLength={20} />
             </Form.Item>
 
-            <Form.Item name="anonymousSubmissionCheck" valuePropName="checked" getValueFromEvent={(e) => e.target.checked}>
+            <Form.Item
+              name="anonymousSubmissionCheck"
+              valuePropName="checked"
+              getValueFromEvent={(e) => e.target.checked}
+            >
               <CheckBox checkboxText="Optional: Display account as anonymous. This can be changed at any time." />
             </Form.Item>
 
@@ -114,12 +124,11 @@ const SignUpPage = () => {
               name="password"
               rules={[
                 { required: true, message: "Password cannot be empty" },
-                { min: 6, message: "Password must be at least 6 characters" }
+                { min: 6, message: "Password must be at least 6 characters" },
               ]}
             >
               <PasswordInput placeholder="Password" />
             </Form.Item>
-
 
             <Form.Item
               name="ConfirmPassword"
@@ -134,7 +143,11 @@ const SignUpPage = () => {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                    return Promise.reject(
+                      new Error(
+                        "The two passwords that you entered do not match!"
+                      )
+                    );
                   },
                 }),
               ]}
@@ -148,7 +161,8 @@ const SignUpPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "You must agree to the privacy policy, terms of service, and community guidelines to sign up.",
+                  message:
+                    "You must agree to the privacy policy, terms of service, and community guidelines to sign up.",
                 },
               ]}
             >
@@ -160,9 +174,7 @@ const SignUpPage = () => {
           </Form>
         </section>
 
-        {
-          error && <div className={styles.error}>{error}</div>
-        }
+        {error && <div className={styles.error}>{error}</div>}
 
         <section className={styles["signup-other-section"]}>
           <h4>Sign Up with</h4>

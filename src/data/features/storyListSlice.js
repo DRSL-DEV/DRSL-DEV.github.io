@@ -40,7 +40,6 @@ export const addNewStory = createAsyncThunk(
   "storyList/addNewStory",
   async (newStory) => {
     const response = await addDoc(collection(db, "post"), newStory);
-    console.log("response", response.id);
     return { id: response.id, ...newStory };
   }
 );
