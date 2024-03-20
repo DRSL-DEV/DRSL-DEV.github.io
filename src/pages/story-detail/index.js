@@ -24,17 +24,22 @@ const StoryDetailPage = () => {
 
   useEffect(() => {
       dispatch(fetchStoryById(postId));
-  }, [dispatch, postId]);
+  }, [dispatch]);
   
   useEffect(() => {
-    if (selectedPost && selectedPost.userId ) {
-      dispatch(fetchStoryAuthor(selectedPost.userId));
+    if (selectedPost && selectedPost.userId !== null){
+      dispatch(fetchStoryAuthor(selectedPost.userId));}
+    else {
+      dispatch({
+        type: "storyAuthor/fetchStoryAuthor/fulfilled",
+        payload: { uid: null, username: "anonymous", profileImage: "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057" }
+      });
     }
-  }, [dispatch, selectedPost]);
-  
+  }, [dispatch]);
+
   console.log('postId',postId)
   console.log("selectedPost", selectedPost);
-  console.log("userId", selectedPost.userId)
+  //console.log("userId", selectedPost.userId)
   console.log("username", authorInfo.username)
 
   const handleShare = () => {
