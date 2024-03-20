@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
 import arrow_right from "../../assets/icons/arrow_right.svg";
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Card = ({ title, content, userId, type, imgSrc, postId }) => {
   const navigate = useNavigate();
@@ -13,8 +13,16 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
   // Use the first item in the media array as the image source
   // const imgSrc = media[0];
 
+
+
   return (
-    <Link to={`/story/${postId}`}>
+    <Link to={`/story/${title
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "")}`}
+      state = {{postId:postId}}
+
+>
       <div className={`${styles["customized-card"]} ${styles[type]}`}>
         <div className={styles["customized-card-image"]}>
           <img src={imgSrc} alt="" />
@@ -24,7 +32,7 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
           <p>{content}</p>
           <div className={styles["customized-card-footer"]}>
             <div>{userId}</div>
-            <button onClick={() => navigate("/story/story-detail")}>
+            <button>
               <img src={arrow_right} alt="right arrow" />
             </button>
           </div>
