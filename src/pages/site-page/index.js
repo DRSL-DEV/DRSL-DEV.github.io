@@ -9,8 +9,8 @@ import TextCard from "../../components/TextCard";
 import Button from "../../components/Button";
 import Title from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchStoryList } from '../../data/features/storyListSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { subscribeToStoryList } from "../../data/features/storyListSlice";
 import { useEffect } from "react";
 
 const SitePage = () => {
@@ -22,7 +22,11 @@ const SitePage = () => {
   const storyList = useSelector((state) => state.storyList.storyList);
 
   useEffect(() => {
-    dispatch(fetchStoryList());
+    const unsubscribe = dispatch(subscribeToStoryList());
+
+    return () => {
+      unsubscribe();
+    };
   }, [dispatch]);
 
   const [isGridView, setIsGridView] = useState(true);
@@ -79,7 +83,7 @@ const SitePage = () => {
             storyList.map((story) => (
               <Card
                 key={story.id}
-                postId = {story.id}
+                postId={story.id}
                 title={story.title}
                 content={story.content}
                 author={story.userId}
@@ -90,7 +94,11 @@ const SitePage = () => {
           ) : (
             <div className={styles["grid-view"]}>
               {storyList.map((story) => (
-                <GridCard key={story.id} title={story.title} imgSrc={story.imgSrc} />
+                <GridCard
+                  key={story.id}
+                  title={story.title}
+                  imgSrc={story.imgSrc}
+                />
               ))}
             </div>
           )}

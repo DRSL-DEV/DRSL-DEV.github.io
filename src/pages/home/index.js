@@ -8,7 +8,7 @@ import { Carousel } from "antd";
 import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchStoryList } from "../../data/features/storyListSlice";
+import { subscribeToStoryList } from "../../data/features/storyListSlice";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -17,7 +17,6 @@ const HomePage = () => {
   const storyList = useSelector((state) => state.storyList.storyList);
   const status = useSelector((state) => state.storyList.status);
 
-  // console.log("status", status);
   const approvedUserStoryList = storyList.filter(
     (story) => story.status === "approved"
   );
@@ -28,12 +27,13 @@ const HomePage = () => {
     (story) => story.postType === "partner"
   );
 
-  console.log("filteredUserStoryList", filteredUserStoryList);
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchStoryList());
-    }
-  }, [status, dispatch]);
+    const unsubscribe = dispatch(subscribeToStoryList());
+
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
   const mediaUrls = [
     gallery_placeholder,
@@ -76,7 +76,7 @@ const HomePage = () => {
             {filteredUserStoryList.map((story) => (
               <Card
                 key={story.id}
-                postId = {story.id}
+                postId={story.id}
                 title={story.title}
                 content={story.content}
                 author={story.userId}
@@ -103,7 +103,6 @@ const HomePage = () => {
                 content={story.content}
                 author={story.userId}
                 type="lab-story"
-                // imgSrc={imgSrc}
                 imgSrc={story.media[0]}
               />
             ))}

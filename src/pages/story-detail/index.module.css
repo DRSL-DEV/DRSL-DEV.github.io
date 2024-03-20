@@ -11,9 +11,12 @@
   float: right;
 }
 
-.carousel img {
+.carousel img,
+.carousel video {
   height: 25vh;
   object-fit: contain;
+  display: flex;
+  margin: auto;
 }
 
 .story-image-gallery {

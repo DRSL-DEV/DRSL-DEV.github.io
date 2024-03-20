@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import profile from "../../assets/images/profile.png";
 import { useEffect } from "react";
 import { message } from "antd";
 import PageHeader from "../../components/PageHeader";
@@ -9,6 +10,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { approvePost } from "../../data/features/adminCommentSlice";
+import {
+  convertTimeFormatMDY,
+  convertTimeFormatHMDY,
+} from "../../utils/dateFormat";
 
 const AdminStoryDetailPage = () => {
   const siteTitle = "Admin View";
@@ -28,38 +33,13 @@ const AdminStoryDetailPage = () => {
     latestReviewTime,
     adminComment,
   } = storyInfo;
-  const { profileImage, username } = authorInfo;
+  const { profileImage, username, anonymousSubmissionCheck } = authorInfo;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchStoryAuthor(userId));
   }, [dispatch, userId]);
-
-  const convertTimeFormatMDY = (raw) => {
-    if (!raw) return "";
-    const date = new Date(raw);
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${month}/${day}/${year}`;
-  };
-
-  const convertTimeFormatHMDY = (raw) => {
-    if (!raw) return "";
-    const date = new Date(raw);
-
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const ampm = hours >= 12 ? "pm" : "am";
-    const formattedHours = hours % 12 || 12;
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${formattedHours}:${minutes}${ampm}, ${month}/${day}/${year}`;
-  };
 
   return (
     <div className="page-container">
@@ -90,6 +70,8 @@ const AdminStoryDetailPage = () => {
         submitTime={convertTimeFormatMDY(submitTime)}
         tags={tags}
         status={status}
+        profileImg={profileImage || profile}
+        anonymous={anonymousSubmissionCheck}
       />
 
       <div className={styles["button-container"]}>

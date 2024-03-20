@@ -1,7 +1,5 @@
-import image_placeholder from "../../assets/images/image_placeholder.png";
 import PageHeader from "../../components/PageHeader";
 import StoryInfo from "../../components/StoryInfo";
-import LikeButton from "../../components/LikeButton";
 import link_icon from "../../assets/icons/link_icon.svg";
 import profile from "../../assets/images/profile.png";
 import { Carousel } from "antd";
@@ -12,7 +10,7 @@ import { fetchStoryById } from "../../data/features/storyListSlice";
 import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
@@ -23,24 +21,10 @@ const StoryDetailPage = () => {
   const { authorInfo } = useSelector((state) => state.storyAuthor);
 
   useEffect(() => {
-      dispatch(fetchStoryById(postId));
+    dispatch(fetchStoryById(postId)).then((result) => {
+      dispatch(fetchStoryAuthor(result.payload.userId));
+    });
   }, [dispatch]);
-  
-  useEffect(() => {
-    if (selectedPost && selectedPost.userId !== null){
-      dispatch(fetchStoryAuthor(selectedPost.userId));}
-    else {
-      dispatch({
-        type: "storyAuthor/fetchStoryAuthor/fulfilled",
-        payload: { uid: null, username: "anonymous", profileImage: "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057" }
-      });
-    }
-  }, [dispatch]);
-
-  console.log('postId',postId)
-  console.log("selectedPost", selectedPost);
-  //console.log("userId", selectedPost.userId)
-  console.log("username", authorInfo.username)
 
   const handleShare = () => {
     const currentUrl = window.location.href;
@@ -69,17 +53,25 @@ const StoryDetailPage = () => {
       </div>
       <div>
         {selectedPost && (
-        <Carousel className={styles.carousel} autoplay>
-          {selectedPost.media.map((mediaUrl, index) => (
-            <div key={index}>
-              <img
-                className={styles["story-image-gallery"]}
-                src={mediaUrl}
-                alt="post media"
-              />
-            </div>
-          ))}
-        </Carousel>
+          <Carousel className={styles.carousel} autoplay>
+            {/* TODO: Modify function to distinguish between video and image */}
+            {selectedPost.media.map((mediaUrl, index) => (
+              <div key={index}>
+                {mediaUrl.includes("video") ? (
+                  <video controls>
+                    <source src={mediaUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img
+                    className={styles["story-image-gallery"]}
+                    src={mediaUrl}
+                    alt="post media"
+                  />
+                )}
+              </div>
+            ))}
+          </Carousel>
         )}
       </div>
       <div className={styles["main-content"]}>
@@ -87,7 +79,8 @@ const StoryDetailPage = () => {
           <StoryInfo
             title={selectedPost.title}
             author={authorInfo.username}
-            profileImg={authorInfo.profileImage}
+            profileImg={authorInfo.profileImage || profile}
+            anonymous={authorInfo.anonymousSubmissionCheck}
             date={selectedPost.submitTime}
             content={selectedPost.content}
             tags={selectedPost.tags}
