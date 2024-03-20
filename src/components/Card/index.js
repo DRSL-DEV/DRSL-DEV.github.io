@@ -16,6 +16,7 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
 
 
   return (
+dev-fetch-story-info-firebase
     <Link to={`/story/${title
       .toLowerCase()
       .replace(/ /g, "-")
@@ -36,7 +37,6 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
               <img src={arrow_right} alt="right arrow" />
             </button>
           </div>
-        </div>
       </div>
     </Link>
   );

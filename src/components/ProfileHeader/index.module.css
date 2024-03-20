@@ -48,3 +48,11 @@
     padding-top: 5px;
 }
 
+.log-out{
+    color: red;
+    cursor: pointer;
+    padding: 10px;
+    text-decoration: none;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-h4);
+}

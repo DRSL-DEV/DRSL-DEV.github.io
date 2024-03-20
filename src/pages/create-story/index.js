@@ -9,95 +9,15 @@ import tag_blue from "../../assets/icons/tag_blue.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewStory } from "../../data/features/storyListSlice";
 import { uploadFile } from "../../data/features/fileUploadSlice";
-
-const allowedFileTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/gif",
-  "video/mp4",
-  "video/webm",
-  "video/ogg",
-  "audio/mpeg",
-  "audio/ogg",
-  "audio/wav",
-];
-
-const SiteLocationList = [
-  {
-    value: "Site 1",
-    label: "Site 1",
-  },
-  {
-    value: "Site 2",
-    label: "Site 2",
-  },
-  {
-    value: "Site 3",
-    label: "Site 3",
-  },
-  {
-    value: "Site 4",
-    label: "Site 4",
-  },
-  {
-    value: "Site 5",
-    label: "Site 5",
-  },
-  {
-    value: "Site 6",
-    label: "Site 6",
-  },
-  {
-    value: "Site 7",
-    label: "Site 7",
-  },
-  {
-    value: "Site 8",
-    label: "Site 8",
-  },
-  {
-    value: "Site 9",
-    label: "Site 9",
-  },
-  {
-    value: "Site 10",
-    label: "Site 10",
-  },
-];
-const TagList = [
-  {
-    value: "Communities & Livelihoods",
-    label: "Communities & Livelihoods",
-  },
-  {
-    value: "Indigenous History",
-    label: "Indigenous History",
-  },
-  {
-    value: "Underground Railroad",
-    label: "Underground Railroad",
-  },
-  {
-    value: "Civil_right & Freedom",
-    label: "Civil Right & Freedom",
-  },
-  {
-    value: "Cultural Identities",
-    label: "Cultural Identities",
-  },
-  {
-    value: "River Environment & Ecology",
-    label: "River Environment & Ecology",
-  },
-  {
-    value: "Modern-Day Detroit",
-    label: "Modern-Day Detroit",
-  },
-];
+import { siteLocationList, tagList } from "../../constants/constants";
+import { useNavigate } from "react-router-dom";
+import { allowedFileTypes } from "../../constants/constants";
 
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const fileUploadStatus = useSelector(
@@ -110,33 +30,43 @@ const CreateStory = () => {
   const fileUploadProps = {
     beforeUpload: (file) => {
       if (allowedFileTypes.includes(file.type)) {
-        console.log("File details:", {
-          name: file.name,
-          type: file.type,
-          size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-        });
+        // console.log("File details:", {
+        //   name: file.name,
+        //   type: file.type,
+        //   size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+        // });
       } else {
-        message.error("You can only upload image, video, or audio files!");
+        message.error({
+          content: "You can only upload image, video, or audio files!",
+          duration: 2,
+        });
+        console.log("File type not allowed:", file.type);
         return Upload.LIST_IGNORE;
       }
       return false;
     },
     onChange: (info) => {
-      console.log("file status change", info);
+      // console.log("file status change", info);
       setFileList(info.fileList);
       // Log details if the file is successfully read
       if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
+        message.success({
+          content: `${info.file.name} file uploaded successfully`,
+          duration: 2,
+        });
         // Here: any callback to trigger after successful upload
       } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
+        message.error({
+          content: `${info.file.name} file upload failed.`,
+          duration: 2,
+        });
       }
     },
   };
 
   const handleSubmission = async (values) => {
-    console.log("Received values of form: ", values);
-    console.log("Uploaded files: ", fileList);
+    // console.log("Received values of form: ", values);
+    // console.log("Uploaded files: ", fileList);
 
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
@@ -164,9 +94,19 @@ const CreateStory = () => {
       ).unwrap();
       form.resetFields();
       setFileList([]);
+      message.success({
+        content:
+          "Story submitted successfully! You will be redirected back to the previous page shortly",
+        duration: 2,
+      });
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     } catch (error) {
-      console.error("Error uploading files:", error);
-      message.error("Failed to upload files and create story.");
+      message.error({
+        content: "Failed to upload files and create story.",
+        duration: 2,
+      });
     }
   };
 
@@ -208,7 +148,7 @@ const CreateStory = () => {
               optionFilterProp="children"
               filterOption={filterOption}
               suffixIcon={<img src={location_red} alt="location" />}
-              options={SiteLocationList}
+              options={siteLocationList}
             />
           </Form.Item>
 
@@ -228,7 +168,18 @@ const CreateStory = () => {
               optionFilterProp="children"
               filterOption={filterOption}
               suffixIcon={<img src={tag_blue} alt="tags" />}
-              options={TagList}
+              options={tagList}
+              onSelect={() => {
+                if (form.getFieldValue("tags").length > 3) {
+                  message.warning({
+                    content: `You can only select up to 3 tags.`,
+                    duration: 2,
+                  });
+                }
+                form.setFieldsValue({
+                  tags: form.getFieldValue("tags").slice(0, 3),
+                });
+              }}
             />
           </Form.Item>
 

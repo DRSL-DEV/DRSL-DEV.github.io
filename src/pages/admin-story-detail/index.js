@@ -66,13 +66,17 @@ const AdminStoryDetailPage = () => {
       <PageHeader title={siteTitle} />
 
       <Carousel className={styles.carousel} autoplay>
+        {/* TODO: Modify function to distinguish between video and image */}
         {media.map((mediaUrl, index) => (
-          <div key={index}>
-            <img
-              className={styles["story-image-gallery"]}
-              src={mediaUrl}
-              alt="post media"
-            />
+          <div key={index} className={styles.media}>
+            {mediaUrl.includes("video") ? (
+              <video controls>
+                <source src={mediaUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img src={mediaUrl} alt="post media" />
+            )}
           </div>
         ))}
       </Carousel>
