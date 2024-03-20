@@ -1,21 +1,53 @@
+import { useState } from "react";
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../data/features/userInfoSlice';
 import styles from "./index.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
-import FacebookIcon from "../../assets/icons/Facebook icon.svg";
-import TwitterIcon from "../../assets/icons/Twitter icon.svg";
 import PasswordInput from "../../components/PasswordInput";
 import EmailInput from "../../components/EmailInput";
 import PageHeader from "../../components/PageHeader";
 import { Form } from "antd";
-import { auth } from "../../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
-  console.log(auth);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (values) => {
-    console.log(values);
+  const redirect = location.state?.from || '/';
+
+  const handleSubmit = async (values) => {
+    const { email, password } = values;
+    setError('');
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const { user } = userCredential;
+
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userInfo = {
+          uid: user.uid,
+          email: user.email,
+          ...userDoc.data()
+        };
+        dispatch(setUser(userInfo));
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        navigate(redirect);
+      } else {
+        setError("User not found");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -62,10 +94,8 @@ const LoginPage = () => {
           <h4>Login with</h4>
           <div className={styles["social-login-icons"]}>
             <img src={GoogleIcon} alt="Google Icon" />
-            {/* <img src={FacebookIcon} alt="Facebook Icon" /> */}
-            {/* <img src={TwitterIcon} alt="Twitter Icon" /> */}
           </div>
-          <p className={styles["help-text"]}>Contact Support</p>
+          {/* <p className={styles["help-text"]}>Contact Support</p> */}
         </div>
       </section>
     </div>

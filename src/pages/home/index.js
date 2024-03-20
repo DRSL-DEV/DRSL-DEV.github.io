@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import imgSrc from "../../assets/images/card_img.png";
+// import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "antd";
@@ -17,8 +17,10 @@ const HomePage = () => {
   const storyList = useSelector((state) => state.storyList.storyList);
   const status = useSelector((state) => state.storyList.status);
 
-  console.log("storyList", storyList);
-  console.log("status", status);
+  // console.log("status", status);
+  const approvedUserStoryList = storyList.filter((story) => story.status === "approved");
+  const filteredUserStoryList = approvedUserStoryList.filter((story) => story.postType === "user");
+  const filteredLabStoryList = storyList.filter((story) => story.postType === "partner");
 
   useEffect(() => {
     if (status === "idle") {
@@ -62,22 +64,18 @@ const HomePage = () => {
           ))}
         </Carousel>
         <section className={styles["user-stories-section"]}>
-          <h2 className={styles["story-h2"]}>Site 3: User Stories</h2>
+          <h2 className={styles["story-h2"]}> User Stories</h2>
           <div className={styles["cards-container"]}>
-            <Card
-              title="Support + Industry"
-              content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-              author="Steven Henry"
-              type="user-story"
-              imgSrc={imgSrc}
-            />
-            <Card
-              title="Support + Industry"
-              content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-              author="Steven Henry"
-              type="user-story"
-              imgSrc={imgSrc}
-            />
+            {filteredUserStoryList.map((story) => (
+              <Card
+                key={story.id}
+                title={story.title}
+                content={story.content}
+                author={story.userId}
+                type="user-story"
+                imgSrc={story.media[0]}
+              />
+            ))} 
             <div className={styles["button-container"]}>
               <Button
                 text="Share Your Story"
@@ -88,21 +86,22 @@ const HomePage = () => {
           </div>
         </section>
         <section className={styles["partnered-stories-section"]}>
-          <h2 className={styles["story-h2"]}>Site 3: Partnered Stories</h2>
+          <h2 className={styles["story-h2"]}>Partnered Stories</h2>
           <div className={styles["cards-container"]}>
-            <Card
-              title="Neighborhood Lives"
-              content="Local stories and memories of historic riverside neighborhoods like Black Bottom, Corktown, and Delray."
-              author="Detroit Historical Society"
-              type="lab-story"
-              imgSrc={imgSrc}
-            />
+            {filteredLabStoryList.map((story) => (
+              <Card
+                key={story.id}
+                title={story.title}
+                content={story.content}
+                author={story.userId}
+                type="lab-story"
+                // imgSrc={imgSrc}
+                imgSrc={story.media[0]}
+              />
+            ))} 
           </div>
           <div className={styles["button-container"]}>
-            <Button
-              text="View More"
-              handleOnClick={() => navigate("/create-story")}
-            />
+            <Button text="View More" handleOnClick={() => {}} />
           </div>
         </section>
       </main>
