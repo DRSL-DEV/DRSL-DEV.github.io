@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, Upload, Select, message } from "antd";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
@@ -23,6 +23,14 @@ const CreateStory = () => {
   const fileUploadStatus = useSelector(
     (state) => state.fileUpload.uploadStatus
   );
+
+  const user = useSelector((state) => state.userInfo.user);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, []);
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
@@ -82,6 +90,7 @@ const CreateStory = () => {
 
       dispatch(
         addNewStory({
+          userId: user.uid,
           title: values.title,
           content: values.content,
           site: values.site,
