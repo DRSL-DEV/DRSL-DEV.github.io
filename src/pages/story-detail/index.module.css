@@ -11,8 +11,9 @@
   float: right;
 }
 
-.carousel img{
+.carousel img {
   height: 25vh;
+  object-fit: contain;
 }
 
 .story-image-gallery {

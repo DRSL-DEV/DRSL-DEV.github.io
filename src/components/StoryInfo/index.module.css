@@ -39,10 +39,12 @@
   justify-content: flex-end;
   row-gap: 3px;
   margin-bottom: 3%;
+  flex: 1;
 }
 .story-tag {
   font-size: 12px;
   background-color: rgba(202, 232, 250, 1);
   padding: 2px 8px;
   border-radius: 10px;
+  height: fit-content;
 }

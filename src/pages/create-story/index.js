@@ -130,7 +130,7 @@ const CreateStory = () => {
               },
             ]}
           >
-            <Input placeholder="Title" />
+            <Input placeholder="Title" maxLength={40} />
           </Form.Item>
 
           <Form.Item

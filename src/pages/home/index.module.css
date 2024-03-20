@@ -3,7 +3,6 @@
 }
 
 .story-h2 {
-  margin-bottom: 12px;
   font-size: var(--font-size-h4);
   font-weight: 600;
 }
@@ -48,7 +47,7 @@
 }
 
 .carousel-title {
-  font-family: 'Homemade Apple', cursive;
+  font-family: "Homemade Apple", cursive;
   font-size: var(--font-size-h1);
   font-weight: 400;
   letter-spacing: -0.4px;
@@ -56,7 +55,7 @@
 }
 
 .carousel-sub-title {
-  font-family: 'Jaldi', sans-serif;
+  font-family: "Jaldi", sans-serif;
   font-size: var(--font-size-h4);
   font-weight: 400;
   letter-spacing: -0.4px;
