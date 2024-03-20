@@ -18,11 +18,9 @@ const StoryDetailPage = () => {
   const siteTitle = "Story Page";
   const dispatch = useDispatch();
   const location = useLocation();
-  console.log("location",location)
   const postId = location.state?.postId;
-  const { status, selectedPost, error } = useSelector((state) => state.storyList);
+  const { selectedPost } = useSelector((state) => state.storyList);
   const { authorInfo } = useSelector((state) => state.storyAuthor);
-  console.log('postId',postId)
 
   useEffect(() => {
       dispatch(fetchStoryById(postId));
@@ -34,14 +32,7 @@ const StoryDetailPage = () => {
     }
   }, [dispatch, selectedPost]);
   
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-  if (status === "failed") {
-    return <div>Error: {error}</div>;
-  }
-
-
+  console.log('postId',postId)
   console.log("selectedPost", selectedPost);
   console.log("userId", selectedPost.userId)
   console.log("username", authorInfo.username)
