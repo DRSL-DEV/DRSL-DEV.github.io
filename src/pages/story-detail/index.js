@@ -24,7 +24,7 @@ const StoryDetailPage = () => {
     dispatch(fetchStoryById(postId)).then((result) => {
       dispatch(fetchStoryAuthor(result.payload.userId));
     });
-  }, [dispatch]);
+  }, [dispatch, postId]);
 
   const handleShare = () => {
     const currentUrl = window.location.href;
