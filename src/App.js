@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   useLocation,
+  RouterProvider,
 } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
@@ -26,9 +27,12 @@ import AdminPage from "./pages/admin-page";
 import AdminStoryDetailPage from "./pages/admin-story-detail";
 import AdminRejectForm from "./pages/admin-reject-form";
 import ExploreStory from "./pages/explore-story";
+import MapPage from "./pages/map";
 
 const FooterWithCondition = () =>
-  ["/login", "/signup"].includes(useLocation().pathname) ? null : <Footer />;
+  ["/login", "/signup", "/map"].includes(useLocation().pathname) ? null : (
+    <Footer />
+  );
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,6 +59,7 @@ function App() {
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
             <Route path="/admin-page" element={<AdminPage />} />
+            <Route path="/map" element={<MapPage />} />
             <Route
               path="/admin-page/admin-story-detail/:title"
               element={<AdminStoryDetailPage />}
