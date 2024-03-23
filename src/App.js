@@ -26,6 +26,8 @@ import AdminPage from "./pages/admin-page";
 import AdminStoryDetailPage from "./pages/admin-story-detail";
 import AdminRejectForm from "./pages/admin-reject-form";
 import ExploreStory from "./pages/explore-story";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UnauthorizedPage from "./pages/unauthorized";
 
 const FooterWithCondition = () =>
   ["/login", "/signup"].includes(useLocation().pathname) ? null : <Footer />;
@@ -54,18 +56,19 @@ function App() {
             <Route path="/site-page" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
-            <Route path="/admin-page" element={<AdminPage />} />
+            <Route path="/admin-page" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
             <Route
               path="/admin-page/admin-story-detail/:title"
-              element={<AdminStoryDetailPage />}
+              element={<ProtectedRoute><AdminStoryDetailPage /></ProtectedRoute>}
             />
             <Route
               path="/admin-page/admin-reject-form/:title"
-              element={<AdminRejectForm />}
+              element={<ProtectedRoute><AdminRejectForm /></ProtectedRoute>}
             />
 
             {/* 404 or default page */}
             <Route path="*" element={<NotFoundPage />} />
+            <Route path="/403" element={<UnauthorizedPage />} />
           </Routes>
         </div>
         <FooterWithCondition />
