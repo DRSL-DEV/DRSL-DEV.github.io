@@ -9,12 +9,25 @@ import TextCard from "../../components/TextCard";
 import Button from "../../components/Button";
 import Title from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { subscribeToStoryList } from "../../data/features/storyListSlice";
+import { useEffect } from "react";
 
 const SitePage = () => {
   const siteTitle = "Site Title";
   const numberOfStories = 10;
   const contentTitle = "Support + Industry";
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const storyList = useSelector((state) => state.storyList.storyList);
+
+  useEffect(() => {
+    const unsubscribe = dispatch(subscribeToStoryList());
+
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
   const [isGridView, setIsGridView] = useState(true);
 
@@ -38,7 +51,8 @@ const SitePage = () => {
         </section>
         <section className={styles["user-content"]}>
           <h2>Posts and Photos</h2>
-          {isGridView ? (
+
+          {/* {isGridView ? (
             <>
               <Card
                 title={contentTitle}
@@ -63,6 +77,30 @@ const SitePage = () => {
                 <GridCard title={contentTitle} imgSrc={imgSrc} />
               </div>
             </>
+          )} */}
+
+          {isGridView ? (
+            storyList.map((story) => (
+              <Card
+                key={story.id}
+                postId={story.id}
+                title={story.title}
+                content={story.content}
+                author={story.userId}
+                type="user-story"
+                imgSrc={story.media[0]}
+              />
+            ))
+          ) : (
+            <div className={styles["grid-view"]}>
+              {storyList.map((story) => (
+                <GridCard
+                  key={story.id}
+                  title={story.title}
+                  imgSrc={story.imgSrc}
+                />
+              ))}
+            </div>
           )}
           <div className={styles["button-container"]}>
             <Button

@@ -1,0 +1,112 @@
+.homepage-container {
+    padding: 0;
+  }
+
+  .story-h2 {
+    margin-bottom: 12px;
+    font-size: var(--font-size-h4);
+    font-weight: 600;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 12px 20px;
+    gap: 16px;
+  }
+
+  .page-header{
+    margin: 5%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .user-stories-section {
+    margin-bottom: 10px;
+  }
+
+  .cards-container{
+    padding: 1% 5%;
+
+  }
+
+  .ant-carousel {
+    width: 100%;
+  }
+
+  .story-image-gallery {
+    width: 100%;
+  }
+
+  .img {
+    width: 100%;
+    height: 100vh;
+    margin: auto;
+  }
+
+  .carousel-item {
+    position: relative;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    text-align: left;
+    z-index: 10;
+  }
+
+  .carousel-title {
+    font-family: 'Homemade Apple', cursive;
+    font-size: var(--font-size-h1);
+    font-weight: 400;
+    letter-spacing: -0.4px;
+    margin-bottom: -8px;
+  }
+
+  .carousel-sub-title {
+    font-family: 'Jaldi', sans-serif;
+    font-size: var(--font-size-h4);
+    font-weight: 400;
+    letter-spacing: -0.4px;
+  }
+
+  .carousel-link {
+    color: var(--link-color-blue);
+    font-size: var(--font-size-h6);
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.4px;
+    text-decoration-line: underline;
+  }
+
+  .filter-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 5%;
+  }
+  
+  .filter-container, .location-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .filter-container img, .location-container img {
+    margin-right: 7px; /* adjust as needed */
+  }
+
+  .custom-collapse :global(.ant-collapse-expand-icon) {
+    margin: auto !important;
+  }
+
+  .custom-collapse :global(.ant-collapse-item:last-child) {
+    border-radius: 0;
+  }
+
+  /* .custom-collapse :global(.ant-collapse-content-box) {
+    padding: 0;
+  } */
+
+  .custom-collapse{
+    border-radius: 0;
+  }

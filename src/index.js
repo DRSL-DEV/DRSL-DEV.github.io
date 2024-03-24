@@ -5,8 +5,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./data/store";
+import { setUser } from "./data/features/userInfoSlice";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+if (userInfo) {
+  store.dispatch(setUser(userInfo));
+}
 root.render(
   <React.StrictMode>
     <Provider store={store}>

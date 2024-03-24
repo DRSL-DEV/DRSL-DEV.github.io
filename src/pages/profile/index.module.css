@@ -1,0 +1,31 @@
+.profile-page-container {
+    padding: 0;
+}
+
+.Card {
+  padding: 3% 5%;
+}
+
+.profile-tab-container{
+  border-top: solid;
+  border-width: 0.001px;
+  color: lightgray;
+  margin-top: 5%;
+}
+
+.profile-tab-container :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  background-color: rgba(202, 232, 250, 1);
+  padding: 0 5px;
+  border-radius: 100px;
+  font-weight: 400;
+}
+
+.card-container{
+  margin: 2% 5%;
+}
+
+.edit-profile-button{
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+}

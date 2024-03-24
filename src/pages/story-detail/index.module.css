@@ -11,14 +11,12 @@
   float: right;
 }
 
-.img {
-  width: 100%;
-  height: 100vh;
+.carousel img,
+.carousel video {
+  height: 25vh;
+  object-fit: contain;
+  display: flex;
   margin: auto;
-}
-
-.ant-carousel {
-  width: 100%;
 }
 
 .story-image-gallery {

@@ -20,6 +20,7 @@
 
   --secondary-color-sky-blue: rgba(107, 190, 240, 1);
   --secondary-color-sky-blue-translucent: rgba(107, 190, 240, 0.36);
+  --secondary-color-sky-blue-dark: rgba(16, 83, 125, 1);
 
   --secondary-color-light-green: rgba(146, 187, 95, 1);
 
@@ -27,6 +28,8 @@
   --secondary-color-dark-green-translucent: rgba(78, 138, 112, 0.36);
 
   --link-color-blue: rgba(46, 124, 246, 1);
+
+  --primary-warning-color-red: rgba(251, 23, 23, 1);
 
   /* Font families */
   --font-family-heading: "Open Sans", sans-serif;
