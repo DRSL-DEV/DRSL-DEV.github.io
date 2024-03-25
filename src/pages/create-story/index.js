@@ -12,10 +12,35 @@ import { uploadFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
+import {AudioRecorder, useAudioRecorder} from "react-audio-voice-recorder";  
+
 
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  useEffect(() => {
+    if (audioBlob) {
+      setFileList([...fileList, {uid: Date.now(), name: 'voice_recording', status: 'done', url: audioBlob}]);
+    }
+  }, [audioBlob]);
+
+  const addAudioElement = (blob) => {
+    const url = URL.createObjectURL(blob);
+    const audio = document.createElement('audio');
+    audio.src = url;
+    audio.controls = true;
+    document.body.appendChild(audio);
+  };
+
+  const recorderControls = useAudioRecorder(
+    {
+      noiseSuppression: true,
+      echoCancellation: true,
+    },
+    (err) => console.table(err) // onNotAllowedOrFound
+  );
 
   const navigate = useNavigate();
 
@@ -213,6 +238,26 @@ const CreateStory = () => {
             </div>
           </Form.Item>
         </div>
+
+        <AudioRecorder 
+          onStartRecording={() => setIsRecording(true)}
+          onStopRecording={(blob) => {
+            setAudioBlob(blob);
+            setIsRecording(false);
+            console.log(fileList);
+          }}
+          showUIAudio
+
+          // onRecordingComplete={(blob) => addAudioElement(blob)}
+          // recorderControls={recorderControls}
+
+          // handleAudioStop={data => console.log(data)}
+          // handleAudioUpload={data => console.log(data)}
+
+          handleReset={() => setAudioBlob(null)}
+        />
+
+        <br/>
 
         <Form.Item>
           <Button
