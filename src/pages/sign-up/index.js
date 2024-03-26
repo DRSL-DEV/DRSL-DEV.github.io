@@ -10,11 +10,9 @@ import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
 import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../data/features/userInfoSlice";
+import { addUser } from "../../data/features/userInfoSlice";
 import { db } from "../../firebase";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import {
   getAuth,
   signInWithRedirect,
@@ -30,37 +28,19 @@ const SignUpPage = () => {
 
   const user = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const redirect = location.state?.from || "/";
 
   const handleCredentials = (changedValues, allValues) => {
     setUserCredentials(allValues);
   };
 
   const onFinish = (values) => {
-    // console.log("Received values of form: ", values);
     setError("");
     const { email, password, username, anonymousSubmissionCheck } = values;
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { user } = userCredential;
-
-        setDoc(doc(db, "user", user.uid), {
-          username: username,
-          email: email,
-          anonymousSubmissionCheck: anonymousSubmissionCheck,
-          isAdmin: false,
-        })
-          .then(() => {
-            // console.log("Document successfully written!");
-          })
-          .catch((error) => {
-            console.error("Error writing document: ", error);
-          });
-
         const userInfo = {
           uid: user.uid,
           username,
@@ -68,9 +48,8 @@ const SignUpPage = () => {
           anonymousSubmissionCheck,
           isAdmin: false,
         };
-        dispatch(setUser(userInfo));
+        dispatch(addUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        // navigate(redirect);
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -101,29 +80,14 @@ const SignUpPage = () => {
           };
 
           console.log("userInfo:", userInfo);
-          // @TODO: You can now store the user info in your Firestore database
-          // @TODO: redirect to home page
-          setDoc(doc(db, "user", userInfo.uid), {
-            username: userInfo.username,
-            email: userInfo.email,
-            anonymousSubmissionCheck: userInfo.anonymousSubmissionCheck,
-            isAdmin: userInfo.isAdmin,
-          })
-            .then(() => {
-              // console.log("Document successfully written!");
-              // navigate(redirect);
-            })
-            .catch((error) => {
-              console.error("Error writing document: ", error);
-            });
-          dispatch(setUser(userInfo));
+
+          dispatch(addUser(userInfo));
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
         }
         setWelcomeMessage(`Welcome! Now logged in as ${auth.currentUser.displayName}!`);
             
       })
       .catch((error) => {
-        // Handle Errors here.
         console.error(error);
       });
   }, []);

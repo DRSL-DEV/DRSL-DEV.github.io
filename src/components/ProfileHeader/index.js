@@ -2,6 +2,8 @@ import styles from "./index.module.css";
 import { useDispatch } from "react-redux";
 import { signOutUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
+
 
 const ProfileHeader = ({
   profileBanner,
@@ -18,6 +20,10 @@ const ProfileHeader = ({
     dispatch(signOutUser());
     localStorage.removeItem("userInfo");
     navigate("/");
+    message.success({
+      content: `Successfully signed out!`,
+      duration: 2,
+    });
   };
 
   return (
