@@ -28,7 +28,7 @@ const EditProfilePage = () =>{
     'Cultural Identities',
     'Environment & Ecology',
     'Organizations & Industries',
-    'Mordern-Day History' ,
+    'Modern-Day History' ,
     'Post-European Settlement',
   ];
   const [selectedItems, setSelectedItems] = useState([]);

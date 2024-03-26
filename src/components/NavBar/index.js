@@ -20,7 +20,9 @@ const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
         <img src={logo_with_text} alt="logo_with_text" />
       </Link>
       <div className={styles["icons-container"]}>
-        <img src={search} alt="search" />
+        <Link to="/search">
+          <img src={search} alt="search" />
+        </Link>
 
         <Link to={loginLink}>
           <img src={profile} alt="login" />
