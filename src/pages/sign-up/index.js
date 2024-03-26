@@ -70,7 +70,7 @@ const SignUpPage = () => {
         };
         dispatch(setUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        navigate(redirect);
+        // navigate(redirect);
       })
       .catch((error) => {
         const errorMessage = error.message;

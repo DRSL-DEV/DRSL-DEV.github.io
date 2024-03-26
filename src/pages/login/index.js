@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../data/features/userInfoSlice';
+import { useDispatch } from "react-redux";
+import { setUser } from "../../data/features/userInfoSlice";
 import styles from "./index.module.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -15,19 +15,23 @@ import { doc, getDoc } from "firebase/firestore";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const redirect = location.state?.from || '/';
+  const redirect = location.state?.from || "/";
 
   const handleSubmit = async (values) => {
     const { email, password } = values;
-    setError('');
+    setError("");
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const { user } = userCredential;
 
       const userRef = doc(db, "user", user.uid);
@@ -37,11 +41,11 @@ const LoginPage = () => {
         const userInfo = {
           uid: user.uid,
           email: user.email,
-          ...userDoc.data()
+          ...userDoc.data(),
         };
         dispatch(setUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        navigate(redirect);
+        // navigate(redirect);
       } else {
         setError("User not found");
       }
@@ -75,7 +79,7 @@ const LoginPage = () => {
             name="password"
             rules={[
               { required: true, message: "Password cannot be empty" },
-              { min: 6, message: "Password must be at least 6 characters" }
+              { min: 6, message: "Password must be at least 6 characters" },
             ]}
           >
             <PasswordInput placeholder="Password" />

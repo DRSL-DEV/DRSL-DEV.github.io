@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
 import { useDispatch } from "react-redux";
-import { clearUser } from "../../data/features/userInfoSlice";
+import { signOutUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
 
 const ProfileHeader = ({
@@ -15,9 +15,8 @@ const ProfileHeader = ({
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    dispatch(clearUser());
+    dispatch(signOutUser());
     localStorage.removeItem("userInfo");
-    // console.log("User logged out");
     navigate("/");
   };
 
