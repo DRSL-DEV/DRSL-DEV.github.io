@@ -5,14 +5,36 @@ import filter from "../../assets/icons/filter.svg";
 import back from "../../assets/icons/back.svg"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Select, Radio, Button, Divider, Space } from 'antd';
+import { siteLocationList, tagList } from '../../constants/constants';
+
+const { Option } = Select;
+
 
 const SearchPage = () => {
   const onSearch = (value) => console.log(value);
   const navigate = useNavigate();
 
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const handleFilterClick = () => {
     setIsFilterOpen(true);
+  };
+
+  const handleApplyFilter = () => {
+    // Apply the filter based on the selected values
+  };
+
+  const handleCancelFilter = () => {
+    // Reset the selected values
+    setSelectedLocation(null);
+    setSelectedTag(null);
+    setSelectedAuthor(null);
+    setSelectedDate(null);
   };
 
   return (
@@ -24,9 +46,53 @@ const SearchPage = () => {
       </div>
       {isFilterOpen && (
         <div className={styles["filter-container"]}>
-          <p>hi</p>
+          <h2>Search Filter</h2>
+
+          <h3>Location</h3>
+          <Select placeholder="Select location" onChange={setSelectedLocation}>
+            {siteLocationList.map((location) => (
+              <Option key={location.value} value={location.value}>
+                {location.label}
+              </Option>
+            ))}
+          </Select>
+          <Divider />
+
+          <h3>Tag</h3>
+          <Select placeholder="Select tag" onChange={setSelectedTag}>
+            {tagList.map((tag) => (
+              <Option key={tag.value} value={tag.value}>
+                {tag.label}
+              </Option>
+            ))}
+          </Select>
+          <Divider />
+
+          <h3>Author</h3>
+          <Radio.Group onChange={(e) => setSelectedAuthor(e.target.value)}>
+          <Space direction="vertical">
+            <Radio value="all">All</Radio>
+            <Radio value="user">User</Radio>
+            <Radio value="detroitRiverStoryLab">Detroit River Story Lab *</Radio>
+          </Space>
+          </Radio.Group>
+          <Divider />
+
+          <h3>Date</h3>
+          <Radio.Group onChange={(e) => setSelectedDate(e.target.value)}>
+            <Space direction="vertical">
+              <Radio value="anytime">Anytime</Radio>
+              <Radio value="today">Today</Radio>
+              <Radio value="thisWeek">This Week</Radio>
+              <Radio value="thisMonth">This Month</Radio>
+              <Radio value="thisYear">This Year</Radio>
+            </Space>
+          </Radio.Group>
         </div>
       )}
+
+      
+      
     </div>
   )
 };

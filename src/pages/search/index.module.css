@@ -17,6 +17,30 @@
   z-index: 100;
 }
 
-.filter-container{
+/* .filter-container{
   margin: 70px 5vw;
+} */
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  /* margin: 0 auto; */
+  margin: 70px auto;
+}
+
+.filter-container h2 {
+  margin-top: 5%;
+  margin-bottom: 10%;
+
+}
+
+.filter-container h3 {
+  margin-bottom: 5%;
+}
+
+.filter-container .ant-select,
+.filter-container .ant-radio-group {
+  width: 100%;
+  margin-top: 10px;
 }
