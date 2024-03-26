@@ -19,17 +19,14 @@ import { ReactMic } from "react-mic";
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  const [audioBlob, setAudioBlob] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [audioData, setAudioData] = useState(null);
   const [recordedBlob, setRecordedBlob] = useState(null);
+  const [audioFile, setAudioFile] = useState(null); // For storing the recorded audio File object
 
-    // Function to start the recording
     const startRecording = () => {
       setIsRecording(true);
     };
   
-    // Function to stop the recording
     const stopRecording = () => {
       setIsRecording(false);
     };
@@ -41,31 +38,42 @@ const CreateStory = () => {
 
     const removeAudio = () => {
       setRecordedBlob(null);
+      setAudioFile(null);
+      setFileList(prevFileList => prevFileList.filter(file => file.uid !== 'audio-file'));
     };
 
     // Function to finish record and store the audio file
     const onStop = (recordedBlob) => {
-      console.log('recordedBlob is: ', recordedBlob);
-      setAudioData(recordedBlob.blobURL);
+      console.log('recordedBlob is: ', recordedBlob); 
+      // recordedBlob.blobURL
+      
       setRecordedBlob(recordedBlob);
-      // Here you can call the upload or handle the data as you see fit
+      setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav', 
+      { type: recordedBlob.blob.type ,
+      }));
+      // const mimeType = recordedBlob.blob.type || 'audio/wav';
+
+      // Construct a File using the blob, giving it a name and the above type
+      console.log('audioFile is: ', audioFile);
+      
+      setFileList((prevFileList) => {
+        // Remove the previous audio if it exists
+        const updatedFileList = prevFileList.filter(file => file.uid !== 'audio-file');
+    
+        // Create a file representation for the fileList
+        const audioFileObject = {
+          uid: 'audio-file', // identifier for the recorded file
+          name: 'voice-recording.wav',
+          status: 'done',
+          originFileObj: recordedBlob.blob, // The file object itself
+          type: String(recordedBlob.blob.type), // The MIME type of the file
+        };
+        console.log('audioFileObject is: ', audioFileObject);
+    
+        return [...updatedFileList, audioFileObject];
+      });
+      console.log('current filelist is: ', fileList);
     };
-
-  const addAudioElement = (blob) => {
-    const url = URL.createObjectURL(blob);
-    const audio = document.createElement('audio');
-    audio.src = url;
-    audio.controls = true;
-    document.body.appendChild(audio);
-  };
-
-  const recorderControls = useAudioRecorder(
-    {
-      noiseSuppression: true,
-      echoCancellation: true,
-    },
-    (err) => console.table(err) // onNotAllowedOrFound
-  );
 
   const navigate = useNavigate();
 
@@ -125,24 +133,6 @@ const CreateStory = () => {
   const handleSubmission = async (values) => {
     // console.log("Received values of form: ", values);
     // console.log("Uploaded files: ", fileList);
-    if (recordedBlob){
-      // const audioFile = new File([recordedBlob.blob], 'audio.webm', {type: 'audio/webm'});
-      try{
-        const audioFile = new File([recordedBlob.blob], 'recording.wav', {
-          type: 'audio/wav'
-        });
-        setFileList([...fileList, audioFile]);
-        console.log("Current filelist is:", fileList);
-      } catch (error) {
-        message.error({
-          content: "Failed to include audio file to the list of files.",
-          duration: 2,
-        });
-        console.error('Error creating file from recording:', error);
-      }
-      
-    }
-
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
         uploadFile({
@@ -292,7 +282,7 @@ const CreateStory = () => {
             onStop={onStop}
             onData={onData}
             strokeColor="#000000"
-            backgroundColor="#FF4081"
+            backgroundColor="#cae8fa"
           />
           <button onClick={startRecording} type="button" disabled={isRecording}>Start Recording</button>
           <button onClick={stopRecording} type="button" disabled={!isRecording}>Stop Recording</button>
@@ -304,7 +294,6 @@ const CreateStory = () => {
           )}
         </div>
 
-        {/* {audioData && <audio src={audioData} controls />} */}
 
         <Form.Item>
           <Button
