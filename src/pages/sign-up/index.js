@@ -111,7 +111,7 @@ const SignUpPage = () => {
           })
             .then(() => {
               // console.log("Document successfully written!");
-              navigate(redirect);
+              // navigate(redirect);
             })
             .catch((error) => {
               console.error("Error writing document: ", error);
