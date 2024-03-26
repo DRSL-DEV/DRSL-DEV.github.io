@@ -6,3 +6,9 @@
 .map-page-container :global(*) {
   overflow: visible;
 }
+
+.locate-user-button{
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+}
