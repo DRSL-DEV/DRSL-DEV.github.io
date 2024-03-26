@@ -45,6 +45,7 @@ const SignUpPage = () => {
           username: username,
           email: email,
           anonymousSubmissionCheck: anonymousSubmissionCheck,
+          isAdmin: false,
         })
           .then(() => {
             // console.log("Document successfully written!");
@@ -58,6 +59,7 @@ const SignUpPage = () => {
           username,
           email,
           anonymousSubmissionCheck,
+          isAdmin: false,
         };
         dispatch(setUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));

@@ -1,0 +1,8 @@
+.map-page-container {
+  width: 100%;
+  height: calc(100vh - 60px);
+}
+
+.map-page-container :global(*) {
+  overflow: visible;
+}
