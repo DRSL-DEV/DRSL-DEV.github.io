@@ -12,3 +12,9 @@
   bottom: 100px;
   right: 100px;
 }
+
+.primary-modal-button {
+  background-color: #F6DFA4;
+  font-family: var(--font-family-heading);
+}
+
