@@ -13,6 +13,7 @@ import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
 import {AudioRecorder, useAudioRecorder} from "react-audio-voice-recorder";  
+import { ReactMic } from "react-mic";
 
 
 const CreateStory = () => {
@@ -20,11 +21,35 @@ const CreateStory = () => {
   const [fileList, setFileList] = useState([]);
   const [audioBlob, setAudioBlob] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  useEffect(() => {
-    if (audioBlob) {
-      setFileList([...fileList, {uid: Date.now(), name: 'voice_recording', status: 'done', url: audioBlob}]);
-    }
-  }, [audioBlob]);
+  const [audioData, setAudioData] = useState(null);
+  const [recordedBlob, setRecordedBlob] = useState(null);
+
+    // Function to start the recording
+    const startRecording = () => {
+      setIsRecording(true);
+    };
+  
+    // Function to stop the recording
+    const stopRecording = () => {
+      setIsRecording(false);
+    };
+
+    // Function to save the recorded audio
+    const onData = (recordedBlob) => {
+      // Do nothing; this function is called continuously when audio data is being recorded
+    };
+
+    const removeAudio = () => {
+      setRecordedBlob(null);
+    };
+
+    // Function to finish record and store the audio file
+    const onStop = (recordedBlob) => {
+      console.log('recordedBlob is: ', recordedBlob);
+      setAudioData(recordedBlob.blobURL);
+      setRecordedBlob(recordedBlob);
+      // Here you can call the upload or handle the data as you see fit
+    };
 
   const addAudioElement = (blob) => {
     const url = URL.createObjectURL(blob);
@@ -100,6 +125,23 @@ const CreateStory = () => {
   const handleSubmission = async (values) => {
     // console.log("Received values of form: ", values);
     // console.log("Uploaded files: ", fileList);
+    if (recordedBlob){
+      // const audioFile = new File([recordedBlob.blob], 'audio.webm', {type: 'audio/webm'});
+      try{
+        const audioFile = new File([recordedBlob.blob], 'recording.wav', {
+          type: 'audio/wav'
+        });
+        setFileList([...fileList, audioFile]);
+        console.log("Current filelist is:", fileList);
+      } catch (error) {
+        message.error({
+          content: "Failed to include audio file to the list of files.",
+          duration: 2,
+        });
+        console.error('Error creating file from recording:', error);
+      }
+      
+    }
 
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
@@ -239,25 +281,30 @@ const CreateStory = () => {
           </Form.Item>
         </div>
 
-        <AudioRecorder 
-          onStartRecording={() => setIsRecording(true)}
-          onStopRecording={(blob) => {
-            setAudioBlob(blob);
-            setIsRecording(false);
-            console.log(fileList);
-          }}
-          showUIAudio
-
-          // onRecordingComplete={(blob) => addAudioElement(blob)}
-          // recorderControls={recorderControls}
-
-          // handleAudioStop={data => console.log(data)}
-          // handleAudioUpload={data => console.log(data)}
-
-          handleReset={() => setAudioBlob(null)}
-        />
 
         <br/>
+        
+        <div>
+          {/* ReactMic component to record audio */}
+          <ReactMic
+            record={isRecording}
+            className="sound-wave"
+            onStop={onStop}
+            onData={onData}
+            strokeColor="#000000"
+            backgroundColor="#FF4081"
+          />
+          <button onClick={startRecording} type="button" disabled={isRecording}>Start Recording</button>
+          <button onClick={stopRecording} type="button" disabled={!isRecording}>Stop Recording</button>
+          {recordedBlob && (
+            <>
+              <button onClick={removeAudio} type="button">Remove Audio</button>
+              <audio src={recordedBlob.blobURL} controls />
+            </>
+          )}
+        </div>
+
+        {/* {audioData && <audio src={audioData} controls />} */}
 
         <Form.Item>
           <Button
