@@ -15,6 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../data/features/userInfoSlice";
 import { db } from "../../firebase";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  getAuth,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+} from "firebase/auth";
+
 
 const SignUpPage = () => {
   const [form] = Form.useForm();
@@ -71,8 +78,60 @@ const SignUpPage = () => {
       });
   };
 
+  //Google SignUp
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  const [welcomeMessage, setWelcomeMessage] = useState('');
+
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;        
+          const userInfo = {
+            uid: auth.currentUser.uid,
+            username: auth.currentUser.displayName,
+            email: auth.currentUser.email,
+            anonymousSubmissionCheck: auth.currentUser.isAnonymous,
+            isAdmin: false,
+          };
+
+          console.log("userInfo:", userInfo);
+          // @TODO: You can now store the user info in your Firestore database
+          // @TODO: redirect to home page
+          setDoc(doc(db, "user", userInfo.uid), {
+            username: userInfo.username,
+            email: userInfo.email,
+            anonymousSubmissionCheck: userInfo.anonymousSubmissionCheck,
+            isAdmin: userInfo.isAdmin,
+          })
+            .then(() => {
+              // console.log("Document successfully written!");
+              navigate(redirect);
+            })
+            .catch((error) => {
+              console.error("Error writing document: ", error);
+            });
+          dispatch(setUser(userInfo));
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        }
+        setWelcomeMessage(`Welcome! Now logged in as ${auth.currentUser.displayName}!`);
+            
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.error(error);
+      });
+  }, []);
+    //Google SignUp
+
   const handleGoogleSignUp = () => {
     //Code here for Google Sign Up
+    signInWithRedirect(auth, provider);
   };
 
   return (
