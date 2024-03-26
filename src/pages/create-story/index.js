@@ -284,8 +284,8 @@ const CreateStory = () => {
             strokeColor="#000000"
             backgroundColor="#cae8fa"
           />
-          <button onClick={startRecording} type="button" disabled={isRecording}>Start Recording</button>
-          <button onClick={stopRecording} type="button" disabled={!isRecording}>Stop Recording</button>
+          <button onClick={startRecording}   disabled={isRecording}>Start Recording</button>
+          <button onClick={stopRecording}   disabled={!isRecording}>Stop Recording</button>
           {recordedBlob && (
             <>
               <button onClick={removeAudio} type="button">Remove Audio</button>
