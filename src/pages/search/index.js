@@ -5,8 +5,13 @@ import filter from "../../assets/icons/filter.svg";
 import back from "../../assets/icons/back.svg"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Select, Radio, Button, Divider, Space } from 'antd';
+import { Select, Radio, Divider, Space } from 'antd';
+import Button from "../../components/Button";
 import { siteLocationList, tagList } from '../../constants/constants';
+import tag_blue from "../../assets/icons/tag_blue.svg";
+import location_red from "../../assets/icons/location_red.svg";
+
+
 
 const { Option } = Select;
 
@@ -22,7 +27,7 @@ const SearchPage = () => {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const handleFilterClick = () => {
-    setIsFilterOpen(true);
+    setIsFilterOpen(!isFilterOpen);
   };
 
   const handleApplyFilter = () => {
@@ -35,7 +40,11 @@ const SearchPage = () => {
     setSelectedTag(null);
     setSelectedAuthor(null);
     setSelectedDate(null);
+    setIsFilterOpen(!isFilterOpen)
   };
+
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <div className={`page-container ${styles["search-page-container"]}`}>
@@ -49,7 +58,17 @@ const SearchPage = () => {
           <h2>Search Filter</h2>
 
           <h3>Location</h3>
-          <Select placeholder="Select location" onChange={setSelectedLocation}>
+          <Select 
+            placeholder="Select location"
+            onChange={setSelectedLocation}
+            mode="location"
+            showSearch
+            optionFilterProp="children"
+            filterOption={filterOption}
+            suffixIcon={<img src={location_red} alt="location" />}
+            options={tagList}
+            className={styles["drop-down"]}
+          >
             {siteLocationList.map((location) => (
               <Option key={location.value} value={location.value}>
                 {location.label}
@@ -59,7 +78,17 @@ const SearchPage = () => {
           <Divider />
 
           <h3>Tag</h3>
-          <Select placeholder="Select tag" onChange={setSelectedTag}>
+          <Select 
+            placeholder="Select tag" 
+            onChange={setSelectedTag}
+            mode="tags"
+            showSearch
+            optionFilterProp="children"
+            filterOption={filterOption}
+            suffixIcon={<img src={tag_blue} alt="tags" />}
+            options={tagList}
+            className={styles["drop-down"]}
+          >
             {tagList.map((tag) => (
               <Option key={tag.value} value={tag.value}>
                 {tag.label}
@@ -88,11 +117,14 @@ const SearchPage = () => {
               <Radio value="thisYear">This Year</Radio>
             </Space>
           </Radio.Group>
+          
+          <div className={styles["filter-button"]}>
+            <Button text="Cancel Filter" handleOnClick={handleCancelFilter} customStyles={{ backgroundColor: '#D7D7D7' }} />
+            <Button text="Apply Filter" handleOnClick={handleApplyFilter} />
+          </div>
         </div>
       )}
 
-      
-      
     </div>
   )
 };

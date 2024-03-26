@@ -24,7 +24,7 @@
 .filter-container {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
   /* margin: 0 auto; */
   margin: 70px auto;
 }
@@ -44,3 +44,22 @@
   width: 100%;
   margin-top: 10px;
 }
+
+.filter-button {
+  display: flex;
+  justify-content: space-between; /* Adjusts the space between the buttons */
+  margin-top: 10%;
+}
+
+.drop-down :global(.ant-select-selector) {
+  min-height: 40px;
+}
+
+.filter-container :global(.ant-select .ant-select-arrow) {
+  top: 0;
+  height: 100%;
+  margin-top: 0;
+}
+
+
+
