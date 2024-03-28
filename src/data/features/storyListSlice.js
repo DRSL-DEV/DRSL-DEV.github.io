@@ -25,6 +25,23 @@ export const subscribeToStoryList = () => (dispatch) => {
   return unsubscribe;
 };
 
+// filtered story list
+export const filterStoryList = (selectedTag) => (dispatch) => {
+  let query = collection(db, "post");
+  
+  // If a tag is selected, add a filter based on the selected tag
+  if (selectedTag) {
+    query = query.where("tags", "array-contains", selectedTag);
+  }
+  
+  const unsubscribe = onSnapshot(query, (snapshot) => {
+    const stories = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    dispatch(storyListSlice.actions.updateStoryList(stories));
+  });
+
+  return unsubscribe;
+};
+
 // Fetch story informtiaon by ID for Story Detail Page
 export const fetchStoryById = createAsyncThunk(
   "items/fetchStoryById",

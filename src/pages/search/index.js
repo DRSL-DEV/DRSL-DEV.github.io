@@ -4,7 +4,7 @@ import search from "../../assets/icons/search.svg";
 import filter from "../../assets/icons/filter.svg";
 import back from "../../assets/icons/back.svg"
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Select, Radio, Divider, Space } from 'antd';
 import Button from "../../components/Button";
 import { siteLocationList, tagList } from '../../constants/constants';
@@ -13,6 +13,8 @@ import location_red from "../../assets/icons/location_red.svg";
 import { useSelector, useDispatch } from "react-redux";
 import storyListSlice from "../../data/features/storyListSlice";
 import Card from "../../components/Card";
+import { subscribeToStoryList } from "../../data/features/storyListSlice";
+import { filterStoryList } from "../../data/features/storyListSlice";
 
 const { Option } = Select;
 
@@ -27,17 +29,26 @@ const SearchPage = () => {
   const [selectedTag, setSelectedTag] = useState(null);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filteredStories, setFilteredStories] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = dispatch(subscribeToStoryList(selectedTag)); // Pass selectedTag
+    return () => unsubscribe(); // Unsubscribe when component unmounts
+  }, [dispatch, selectedTag]); // Include selectedTag as a dependency
+
   const handleFilterClick = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const filterStories = (storyList, selectedLocation, selectedTag, selectedAuthor, selectedDate) => {
+  const filterStories = (storyList, selectedTag, selectedLocation, selectedAuthor, selectedDate) => {
     return storyList.filter((story) => {
       const matchesLocation = selectedLocation ? story.location === selectedLocation : true;
       const matchesTag = selectedTag ? (story.tags && story.tags.includes(selectedTag)) : true;
+
+      console.log("Story:", story);
+      console.log("Selected Tag:", selectedTag);
+      console.log("Matches Tag:", matchesTag);
       // const matchesAuthor = selectedAuthor
       //   ? selectedAuthor === "all" ||
       //     (selectedAuthor === "user" && story.author === "user") ||
@@ -57,17 +68,26 @@ const SearchPage = () => {
     });
   };
 
+  // const handleApplyFilter = () => {
+  //   const filteredStories = filterStories(
+  //     storyList,
+  //     // selectedLocation,
+  //     selectedTag,
+  //     // selectedAuthor,
+  //     // selectedDate
+  //   );
+  //   setFilteredStories(filteredStories);
+  //   setIsFilterOpen(!isFilterOpen)
+  // };
+
   const handleApplyFilter = () => {
-    const filteredStories = filterStories(
-      storyList,
-      // selectedLocation,
-      selectedTag,
-      // selectedAuthor,
-      // selectedDate
-    );
+    console.log("Selected Tag:", selectedTag);
+    const filteredStories = filterStories(storyList, selectedTag[0]); // Pass selectedTag[0]
     setFilteredStories(filteredStories);
-    setIsFilterOpen(!isFilterOpen)
+    setIsFilterOpen(!isFilterOpen);
   };
+  
+  
 
   const handleCancelFilter = () => {
     // Reset the selected values
@@ -78,9 +98,6 @@ const SearchPage = () => {
     setIsFilterOpen(!isFilterOpen)
   };
 
-  // const filterOption = (input, option) =>
-  //   (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
   const filterOption = (input, option) => {
     if (typeof option === 'string') {
       return option.toLowerCase().includes(input.toLowerCase());
@@ -88,7 +105,7 @@ const SearchPage = () => {
       return (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     }
   };
-  
+
   return (
     <div className={`page-container ${styles["search-page-container"]}`}>
       <div className={styles["new-navbar-container"]}>
@@ -123,7 +140,9 @@ const SearchPage = () => {
           <h3>Tag</h3>
           <Select
             placeholder="Select tag"
-            onChange={setSelectedTag}
+            onChange={(value) => {
+              setSelectedTag(value);
+            }}
             mode="tags"
             showSearch
             optionFilterProp="children"
@@ -170,6 +189,7 @@ const SearchPage = () => {
 
       <div className={styles["filtered-stories-container"]}>
         {filteredStories.map((story) => (
+          // console.log("Filtered Stories:", filteredStories);
           <Card
             key={story.id}
             postId={story.id}

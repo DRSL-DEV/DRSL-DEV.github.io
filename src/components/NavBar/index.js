@@ -1,6 +1,7 @@
 import logo_with_text from "../../assets/images/logo_with_text.svg";
 import menu from "../../assets/icons/menu.svg";
 import profile from "../../assets/icons/profile.svg";
+import search from "../../assets/icons/search.svg"
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Menu from "../Menu";
