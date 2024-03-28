@@ -8,13 +8,17 @@ import CheckBox from "../../components/Checkbox";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
 import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
-import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { auth } from "../../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../data/features/userInfoSlice";
-import { db } from "../../firebase";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addUser } from "../../data/features/userInfoSlice";
+import {
+  getAuth,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+} from "firebase/auth";
+
 
 const SignUpPage = () => {
   const [form] = Form.useForm();
@@ -23,37 +27,29 @@ const SignUpPage = () => {
 
   const user = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const redirect = location.state?.from || "/";
 
   const handleCredentials = (changedValues, allValues) => {
     setUserCredentials(allValues);
   };
 
   const onFinish = (values) => {
-    // console.log("Received values of form: ", values);
     setError("");
     const { email, password, username, anonymousSubmissionCheck } = values;
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const { user } = userCredential;
+      .then((userCredential) => {   
 
-        setDoc(doc(db, "user", user.uid), {
-          username: username,
-          email: email,
-          anonymousSubmissionCheck: anonymousSubmissionCheck,
-          isAdmin: false,
+        const { user } = userCredential;
+        updateProfile(user, {
+          displayName: username,
         })
           .then(() => {
-            // console.log("Document successfully written!");
+            console.log("User profile updated successfully");
           })
           .catch((error) => {
-            console.error("Error writing document: ", error);
+            console.error("Error updating user profile:", error);
           });
-
         const userInfo = {
           uid: user.uid,
           username,
@@ -61,9 +57,8 @@ const SignUpPage = () => {
           anonymousSubmissionCheck,
           isAdmin: false,
         };
-        dispatch(setUser(userInfo));
+        dispatch(addUser(userInfo));
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        navigate(redirect);
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -71,8 +66,42 @@ const SignUpPage = () => {
       });
   };
 
+  //Google SignUp
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;        
+          const userInfo = {
+            uid: auth.currentUser.uid,
+            username: auth.currentUser.displayName,
+            email: auth.currentUser.email,
+            anonymousSubmissionCheck: auth.currentUser.isAnonymous,
+            isAdmin: false,
+          };
+
+          console.log("userInfo:", userInfo);
+
+          dispatch(addUser(userInfo));
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        }            
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+    //Google SignUp
+
   const handleGoogleSignUp = () => {
     //Code here for Google Sign Up
+    signInWithRedirect(auth, provider);
   };
 
   return (

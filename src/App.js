@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   HashRouter as Router,
   Routes,
@@ -30,25 +30,51 @@ import ExploreStory from "./pages/explore-story";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UnauthorizedPage from "./pages/unauthorized";
 import MapPage from "./pages/map";
+import AuthListener from "./components/AuthListener";
 
 const FooterWithCondition = () =>
   ["/login", "/signup", "/map"].includes(useLocation().pathname) ? null : (
     <Footer />
   );
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <NavBar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
         <div className="routes-wrapper">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route
+              path="/login"
+              element={
+                <AuthListener>
+                  <LoginPage />
+                </AuthListener>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <AuthListener>
+                  <SignUpPage />
+                </AuthListener>
+              }
+            />
             <Route path="/story/:title" element={<StoryDetailPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />
@@ -60,16 +86,31 @@ function App() {
             <Route path="/site-page" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
-            <Route path="/admin-page" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
+            <Route
+              path="/admin-page"
+              element={
+                <ProtectedRoute>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/admin-page" element={<AdminPage />} />
             <Route path="/map" element={<MapPage />} />
             <Route
               path="/admin-page/admin-story-detail/:title"
-              element={<ProtectedRoute><AdminStoryDetailPage /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <AdminStoryDetailPage />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/admin-page/admin-reject-form/:title"
-              element={<ProtectedRoute><AdminRejectForm /></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <AdminRejectForm />
+                </ProtectedRoute>
+              }
             />
 
             {/* 404 or default page */}
