@@ -2,8 +2,9 @@
   display: flex;
   border-radius: 10px;
   margin-bottom: 5%;
+  margin-top: 5%;
   height: 140px;
-  overflow: hidden;
+  /* overflow: hidden; */
   min-width: 0;
 }
 
@@ -19,7 +20,7 @@
   height: 110px;
   flex-shrink: 0;
   border-radius: 10px;
-  margin: 14px 16px;
+  margin: 16px;
   object-fit: cover;
 }
 
@@ -38,27 +39,21 @@
 .customized-card-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-left: 16px;
+  justify-content: flex-start;
   flex-grow: 1;
+  padding: 10px 16px 32px 0;
+  position: relative;
 }
 
 .customized-card-content h2 {
-  padding-right: 18px;
-  font-family: "Open Sans", sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: #000;
-  margin: 0;
 }
 
 .customized-card-content p {
-  padding-right: 18px;
-  font-family: Montserrat, sans-serif;
+  padding-top: 4px;
   font-size: 12px;
-  font-weight: 400;
-  color: #000;
-  margin: 4px 0;
+  flex: 1;
 }
 
 .customized-card-footer > div {
@@ -73,6 +68,9 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  position: absolute;
+  bottom: 12px;
+  right: 0;
 }
 
 .customized-card-footer > div,
