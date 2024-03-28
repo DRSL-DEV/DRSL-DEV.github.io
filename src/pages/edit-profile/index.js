@@ -6,6 +6,9 @@ import PageHeader from "../../components/PageHeader";
 import profileImg from "../../assets/images/profile.png";
 import { useState } from 'react';
 import googleIcon from "../../assets/icons/Google icon.svg"
+import { useDispatch } from "react-redux";
+import { signOutUser } from "../../data/features/userInfoSlice";
+import { useNavigate } from "react-router-dom";
 
 const EditProfilePage = () =>{
 
@@ -28,7 +31,7 @@ const EditProfilePage = () =>{
     'Cultural Identities',
     'Environment & Ecology',
     'Organizations & Industries',
-    'Mordern-Day History' ,
+    'Modern-Day History' ,
     'Post-European Settlement',
   ];
   const [selectedItems, setSelectedItems] = useState([]);
@@ -37,6 +40,15 @@ const EditProfilePage = () =>{
   const currentUsername = "Story_with_Jada";
   const currentPassword = "12345678";
   const currentEmail = 'detroitriverstory@gmail.com';
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(signOutUser());
+    localStorage.removeItem("userInfo");
+    navigate("/");
+  };
 
 
   return (
@@ -124,7 +136,12 @@ const EditProfilePage = () =>{
 
         <Button
           text="Save"
-          customStyles={{margin:"8% auto", display:"flex", justifyContent:"center"}}
+          customStyles={{margin:"8% auto 0 auto", display:"flex", justifyContent:"center"}}
+        />
+
+        <Button
+          text="Log Out"
+          customStyles={{margin:"3% auto 8% auto", display:"flex", justifyContent:"center"}}
         />
       </Form>
 
@@ -147,3 +164,4 @@ const EditProfilePage = () =>{
 
 };
 export default EditProfilePage;
+
