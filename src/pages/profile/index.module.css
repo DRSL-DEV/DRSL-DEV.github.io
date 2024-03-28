@@ -21,11 +21,9 @@
 }
 
 .card-container{
-  margin: 2% 5%;
+  margin: 0 5%;
 }
 
-.edit-profile-button{
-  position: fixed;
-  bottom: 100px;
-  right: 30px;
+.add-post-card{
+  margin: 2% 5% 0 5%;
 }
