@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import ProfileHeader from "../../components/ProfileHeader";
 import profile_bg from "../../assets/images/profile_bg.png";
 import profile from "../../assets/images/profile.png";
+import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from 'antd';
 import Card from "../../components/Card";
 import editProfile from "../../assets/icons/edit_profile.svg";
@@ -44,6 +45,9 @@ export const ProfilePage = () => {
           </div>
         </TabPane>
         <TabPane tab={<span className={styles["tab-title"]}>My Stories</span>} key="2">
+          <Link to="/create-story">
+            <img className={styles["add-post-card"]} src={add_post} alt="add post" />
+          </Link>
           <div className={styles["card-container"]}>
             {postedStories.map((story, index) => (
               <Card key={index}
@@ -64,12 +68,6 @@ export const ProfilePage = () => {
           </div>
         </TabPane>
       </Tabs>
-
-      <div>
-        <Link to="/profile/profile-edit">
-          <img className={styles["edit-profile-button"]} src={editProfile} alt="edit profile" />
-        </Link>
-      </div>
     </div>
   </div>;
 };
