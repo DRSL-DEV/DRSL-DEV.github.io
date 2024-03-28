@@ -35,6 +35,20 @@ export const fetchStoryById = createAsyncThunk(
   }
 );
 
+// export const searchStories = createAsyncThunk(
+//   "storyList/searchStories",
+//   async (searchTerm) => {
+//     const stories = await getDoc(collection(db, "post"));
+//     return stories.docs
+//       .map((doc) => ({ id: doc.id, ...doc.data() }))
+//       .filter(
+//         (story) =>
+//           story.title.includes(searchTerm) ||
+//           story.content.includes(searchTerm)
+//       );
+//   }
+// );
+
 // Add new story
 export const addNewStory = createAsyncThunk(
   "storyList/addNewStory",
@@ -70,7 +84,11 @@ export const storyListSlice = createSlice({
       .addCase(fetchStoryById.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+      // .addCase(searchStories.fulfilled, (state, action) => {
+      //   state.status = "succeeded";
+      //   state.storyList = action.payload;
+      // });
   },
 });
 

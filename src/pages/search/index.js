@@ -10,8 +10,9 @@ import Button from "../../components/Button";
 import { siteLocationList, tagList } from '../../constants/constants';
 import tag_blue from "../../assets/icons/tag_blue.svg";
 import location_red from "../../assets/icons/location_red.svg";
-
-
+import { useSelector, useDispatch } from "react-redux";
+import storyListSlice from "../../data/features/storyListSlice";
+import Card from "../../components/Card";
 
 const { Option } = Select;
 
@@ -19,6 +20,8 @@ const { Option } = Select;
 const SearchPage = () => {
   const onSearch = (value) => console.log(value);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const storyList = useSelector((state) => state.storyList.storyList);
 
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -26,12 +29,44 @@ const SearchPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filteredStories, setFilteredStories] = useState([]);
   const handleFilterClick = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
+  const filterStories = (storyList, selectedLocation, selectedTag, selectedAuthor, selectedDate) => {
+    return storyList.filter((story) => {
+      const matchesLocation = selectedLocation ? story.location === selectedLocation : true;
+      const matchesTag = selectedTag ? (story.tags && story.tags.includes(selectedTag)) : true;
+      // const matchesAuthor = selectedAuthor
+      //   ? selectedAuthor === "all" ||
+      //     (selectedAuthor === "user" && story.author === "user") ||
+      //     (selectedAuthor === "detroitRiverStoryLab" && story.author === "detroitRiverStoryLab")
+      //   : true;
+      // const matchesDate = selectedDate
+      //   ? selectedDate === "anytime" ||
+      //     (selectedDate === "today" && isToday(story.date)) ||
+      //     (selectedDate === "thisWeek" && isThisWeek(story.date)) ||
+      //     (selectedDate === "thisMonth" && isThisMonth(story.date)) ||
+      //     (selectedDate === "thisYear" && isThisYear(story.date))
+      //   : true;
+  
+      // return matchesLocation && matchesTag && matchesAuthor && matchesDate;
+      // return matchesLocation && matchesTag;
+      return matchesTag
+    });
+  };
+
   const handleApplyFilter = () => {
-    // Apply the filter based on the selected values
+    const filteredStories = filterStories(
+      storyList,
+      // selectedLocation,
+      selectedTag,
+      // selectedAuthor,
+      // selectedDate
+    );
+    setFilteredStories(filteredStories);
+    setIsFilterOpen(!isFilterOpen)
   };
 
   const handleCancelFilter = () => {
@@ -43,9 +78,17 @@ const SearchPage = () => {
     setIsFilterOpen(!isFilterOpen)
   };
 
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  // const filterOption = (input, option) =>
+  //   (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
+  const filterOption = (input, option) => {
+    if (typeof option === 'string') {
+      return option.toLowerCase().includes(input.toLowerCase());
+    } else {
+      return (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+    }
+  };
+  
   return (
     <div className={`page-container ${styles["search-page-container"]}`}>
       <div className={styles["new-navbar-container"]}>
@@ -58,7 +101,7 @@ const SearchPage = () => {
           <h2>Search Filter</h2>
 
           <h3>Location</h3>
-          <Select 
+          <Select
             placeholder="Select location"
             onChange={setSelectedLocation}
             mode="location"
@@ -78,8 +121,8 @@ const SearchPage = () => {
           <Divider />
 
           <h3>Tag</h3>
-          <Select 
-            placeholder="Select tag" 
+          <Select
+            placeholder="Select tag"
             onChange={setSelectedTag}
             mode="tags"
             showSearch
@@ -125,6 +168,19 @@ const SearchPage = () => {
         </div>
       )}
 
+      <div className={styles["filtered-stories-container"]}>
+        {filteredStories.map((story) => (
+          <Card
+            key={story.id}
+            postId={story.id}
+            title={story.title}
+            content={story.content}
+            author={story.userId}
+            type="user-story"
+            imgSrc={story.media[0]}
+          />
+        ))}
+      </div>
     </div>
   )
 };

@@ -61,5 +61,10 @@
   margin-top: 0;
 }
 
+.filter-container :global(.ant-select-single) {
+  height: unset;
+}
+
+
 
 
