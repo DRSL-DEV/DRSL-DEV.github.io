@@ -267,12 +267,10 @@ const CreateStory = () => {
             </div>
           </Form.Item>
         </div>
-
-
-        <br/>
         
         <div>
-          {/* ReactMic component to record audio */}
+          {/* ReactMic component to display for record audio */}
+          <div className="audio-recording-buttons">
           <ReactMic
             record={isRecording}
             className="sound-wave"
@@ -281,17 +279,40 @@ const CreateStory = () => {
             strokeColor="#000000"
             backgroundColor="#cae8fa"
           />
-          <button onClick={startRecording} disabled={isRecording}>Start Recording</button>
-          <button onClick={stopRecording} disabled={!isRecording}>Stop Recording</button>
+          <Button
+            text="Start Recording"
+            handleOnClick={startRecording}
+            disabled={isRecording}
+            customStyles={{
+              backgroundColor: isRecording ? "#ccc" : "rgba(146, 187, 95, 0.75)",
+            }}
+          />
+          </div>
+
+          <Button
+            text="Stop Recording"
+            handleOnClick={stopRecording}
+            disabled={!isRecording}
+            customStyles= {{
+              backgroundColor: isRecording ? "var(--secondary-color-light-blue)" : "#ccc"
+            }}
+          />
+          
           {recordedBlob && (
             <>
-              <button onClick={removeAudio} type="button">Remove Audio</button>
               <audio src={recordedBlob.blobURL} controls />
+              <Button
+                text="Remove Audio"
+                handleOnClick={removeAudio}
+                customStyles={{
+                  backgroundColor: "rgba(255, 156, 150, 0.75)",
+                  
+                }}
+              />
             </>
           )}
         </div>
-
-
+        <br/>
         <Form.Item>
           <Button
             text="Submit"
