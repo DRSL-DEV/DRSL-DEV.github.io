@@ -12,7 +12,6 @@ import { uploadFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
-import {AudioRecorder, useAudioRecorder} from "react-audio-voice-recorder";  
 import { ReactMic } from "react-mic";
 
 
@@ -33,7 +32,7 @@ const CreateStory = () => {
 
     // Function to save the recorded audio
     const onData = (recordedBlob) => {
-      // Do nothing; this function is called continuously when audio data is being recorded
+      // No action is required; called continuously when audio data is being recorded
     };
 
     const removeAudio = () => {
@@ -42,10 +41,9 @@ const CreateStory = () => {
       setFileList(prevFileList => prevFileList.filter(file => file.uid !== 'audio-file'));
     };
 
-    // Function to finish record and store the audio file
+    // Finish record and store the audio file
     const onStop = (recordedBlob) => {
-      console.log('recordedBlob is: ', recordedBlob); 
-      // recordedBlob.blobURL
+      // console.log('recordedBlob is: ', recordedBlob); //recordedBlob.blobURL
       
       setRecordedBlob(recordedBlob);
       setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav', 
@@ -53,8 +51,7 @@ const CreateStory = () => {
       }));
       // const mimeType = recordedBlob.blob.type || 'audio/wav';
 
-      // Construct a File using the blob, giving it a name and the above type
-      console.log('audioFile is: ', audioFile);
+      // Construct a File using the blob, giving it a name and the above type //console.log('audioFile is: ', audioFile);
       
       setFileList((prevFileList) => {
         // Remove the previous audio if it exists
@@ -62,17 +59,17 @@ const CreateStory = () => {
     
         // Create a file representation for the fileList
         const audioFileObject = {
-          uid: 'audio-file', // identifier for the recorded file
+          uid: 'audio-file', // identifier for the recorded file - removed if recording again
           name: 'voice-recording.wav',
           status: 'done',
           originFileObj: recordedBlob.blob, // The file object itself
-          type: String(recordedBlob.blob.type), // The MIME type of the file
+          type: String(recordedBlob.blob.type), 
         };
-        console.log('audioFileObject is: ', audioFileObject);
+        // console.log('audioFileObject is: ', audioFileObject);
     
         return [...updatedFileList, audioFileObject];
       });
-      console.log('current filelist is: ', fileList);
+      // console.log('current filelist is: ', fileList);
     };
 
   const navigate = useNavigate();
@@ -284,8 +281,8 @@ const CreateStory = () => {
             strokeColor="#000000"
             backgroundColor="#cae8fa"
           />
-          <button onClick={startRecording}   disabled={isRecording}>Start Recording</button>
-          <button onClick={stopRecording}   disabled={!isRecording}>Stop Recording</button>
+          <button onClick={startRecording} disabled={isRecording}>Start Recording</button>
+          <button onClick={stopRecording} disabled={!isRecording}>Stop Recording</button>
           {recordedBlob && (
             <>
               <button onClick={removeAudio} type="button">Remove Audio</button>
