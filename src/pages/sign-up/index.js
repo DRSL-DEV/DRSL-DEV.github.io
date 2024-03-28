@@ -8,11 +8,10 @@ import CheckBox from "../../components/Checkbox";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
 import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
-import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "../../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../data/features/userInfoSlice";
-import { db } from "../../firebase";
 import {
   getAuth,
   signInWithRedirect,
@@ -39,8 +38,18 @@ const SignUpPage = () => {
     const { email, password, username, anonymousSubmissionCheck } = values;
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then((userCredential) => {   
+
         const { user } = userCredential;
+        updateProfile(user, {
+          displayName: username,
+        })
+          .then(() => {
+            console.log("User profile updated successfully");
+          })
+          .catch((error) => {
+            console.error("Error updating user profile:", error);
+          });
         const userInfo = {
           uid: user.uid,
           username,
@@ -60,7 +69,6 @@ const SignUpPage = () => {
   //Google SignUp
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-  const [welcomeMessage, setWelcomeMessage] = useState('');
 
   useEffect(() => {
     getRedirectResult(auth)
@@ -83,9 +91,7 @@ const SignUpPage = () => {
 
           dispatch(addUser(userInfo));
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        }
-        setWelcomeMessage(`Welcome! Now logged in as ${auth.currentUser.displayName}!`);
-            
+        }            
       })
       .catch((error) => {
         console.error(error);

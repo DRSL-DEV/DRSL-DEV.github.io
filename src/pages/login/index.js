@@ -1,30 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../data/features/userInfoSlice";
 import styles from "./index.module.css";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PrimaryButton from "../../components/PrimaryButton";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
 import PasswordInput from "../../components/PasswordInput";
 import EmailInput from "../../components/EmailInput";
 import PageHeader from "../../components/PageHeader";
-import { Form } from "antd";
+import { Form, message } from "antd";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  getAuth,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import { fetchUserById, addUser } from "../../data/features/userInfoSlice";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [errorMsg, setErrorMsg] = useState("");
   const dispatch = useDispatch();
-
-  const redirect = location.state?.from || "/";
 
   const handleSubmit = async (values) => {
     const { email, password } = values;
-    setError("");
+    setErrorMsg("");
 
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -33,26 +34,83 @@ const LoginPage = () => {
         password
       );
       const { user } = userCredential;
+      console.log("uid being dispatched to UserInfoSlice:", user.uid);
 
-      const userRef = doc(db, "user", user.uid);
-      const userDoc = await getDoc(userRef);
+      dispatch(fetchUserById(user.uid)).then((result) => {
 
-      if (userDoc.exists()) {
-        const userInfo = {
-          uid: user.uid,
-          email: user.email,
-          ...userDoc.data(),
-        };
-        dispatch(setUser(userInfo));
-        localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        // navigate(redirect);
-      } else {
-        setError("User not found");
-      }
+        console.log("User found? ", result.meta.requestStatus);
+
+        console.log("FetchUserbyID result: ", result);
+        if (result.meta.requestStatus === "fulfilled") {
+          const userInfo = result.payload;
+          console.log("User found: ", result.payload);
+          dispatch(setUser(userInfo));
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        } else {
+          setErrorMsg("Please double check your login credentials!");
+          message.error({
+            content: `Could not log in: ${errorMsg}`,
+            duration: 2,
+          })
+        }
+
+      });
+
     } catch (error) {
-      setError(error.message);
+      setErrorMsg(error.message);
     }
   };
+
+  //Google Signin
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const token = credential.accessToken;
+          // // The signed-in user info.
+          console.log("uid being dispatched to UserInfoSlice:", auth.currentUser.uid);
+
+          dispatch(fetchUserById(auth.currentUser.uid)).then((result) => {
+            console.log("User found? ", result.meta.requestStatus);
+
+            console.log("FetchUserbyID result: ", result);
+            if (result.meta.requestStatus === "fulfilled") {
+              console.log("User details: ", result.payload);
+
+              const userInfo = result.payload;
+              dispatch(setUser(userInfo));
+              localStorage.setItem("userInfo", JSON.stringify(userInfo));
+            } else {
+              console.log(result);
+              const userInfo = {
+                uid: auth.currentUser.uid,
+                username: auth.currentUser.displayName,
+                email: auth.currentUser.email,
+                anonymousSubmissionCheck: auth.currentUser.isAnonymous,
+                isAdmin: false,
+              };
+              console.log("Google user not found in Firestore, executing the signup flow instead:", userInfo);
+              dispatch(addUser(userInfo));
+              dispatch(setUser(userInfo));
+              localStorage.setItem("userInfo", JSON.stringify(userInfo));
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleGoogleSignIn = () => {
+    signInWithRedirect(auth, provider);
+  };
+  //Google Signin
 
   return (
     <div className="page-container">
@@ -97,7 +155,7 @@ const LoginPage = () => {
         <div className={styles["other-login"]}>
           <h4>Login with</h4>
           <div className={styles["social-login-icons"]}>
-            <img src={GoogleIcon} alt="Google Icon" />
+            <img src={GoogleIcon} alt="Google Icon" onClick={handleGoogleSignIn} />
           </div>
           {/* <p className={styles["help-text"]}>Contact Support</p> */}
         </div>

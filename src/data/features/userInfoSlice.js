@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "../../firebase";
-import { collection, getDocs, addDoc, doc, setDoc  } from "firebase/firestore";
+import { collection, getDoc, addDoc, doc, setDoc  } from "firebase/firestore";
 import { getAuth, signOut } from "firebase/auth";
 
 
@@ -23,6 +23,30 @@ export const signOutUser = () => async (dispatch) => {
       console.error("Error signing out: ", error);
     });
 };
+
+// Fetch user informtiaon by UID to validate login
+export const fetchUserById = createAsyncThunk(
+  "items/fetchUserById",
+  async (uid, { rejectWithValue }) => {
+    try{
+      const docRef = doc(db, "user", uid);
+      const docSnap = await getDoc(docRef);
+
+
+      if (docSnap.exists()) {
+        console.log("User found: ", docSnap.data());
+        return { id: docSnap.id, ...docSnap.data() };
+      } else {
+        console.log("No such user!");
+        return rejectWithValue("User not found in Firestore");
+      }
+    }
+    catch (error) {
+      console.error("Error fetching user by ID: ", error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const addUser = createAsyncThunk(
   'userInfo/addUser',
@@ -58,6 +82,16 @@ const userInfoSlice = createSlice({
       .addCase(addUser.rejected, (state, action) => {
         // Handle the state update when addUserDetails is rejected
         // ...
+      }).addCase(fetchUserById.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
   },
 });
