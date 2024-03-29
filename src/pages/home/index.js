@@ -16,6 +16,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const storyList = useSelector((state) => state.storyList.storyList);
   const status = useSelector((state) => state.storyList.status);
+  const currentUser = useSelector((state) => state.userInfo.user);
 
   const approvedUserStoryList = storyList.filter(
     (story) => story.status === "approved"
@@ -35,6 +36,7 @@ const HomePage = () => {
     };
   }, [dispatch]);
 
+  
   const mediaUrls = [
     gallery_placeholder,
     gallery_placeholder,

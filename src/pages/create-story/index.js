@@ -101,7 +101,6 @@ const CreateStory = () => {
       return false;
     },
     onChange: (info) => {
-      // console.log("file status change", info);
       setFileList(info.fileList);
       // Log details if the file is successfully read
       if (info.file.status === "done") {
@@ -109,7 +108,6 @@ const CreateStory = () => {
           content: `${info.file.name} file uploaded successfully`,
           duration: 2,
         });
-        // Here: any callback to trigger after successful upload
       } else if (info.file.status === "error") {
         message.error({
           content: `${info.file.name} file upload failed.`,
@@ -120,12 +118,14 @@ const CreateStory = () => {
   };
 
   const handleSubmission = async (values) => {
-    // console.log("Received values of form: ", values);
-    // console.log("Uploaded files: ", fileList);
+dev
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
         uploadFile({
-          file: fileInfo.originFileObj,
+          file: {
+            ...fileInfo.originFileObj,
+            name: `${fileInfo.originFileObj.name}_${new Date().getTime()}`,
+          },
           folderPath: `post/${fileInfo.type.split("/")[0]}`,
         })
       ).unwrap()

@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import profile from "../../assets/images/profile.png";
 import { useEffect } from "react";
 import { message } from "antd";
 import PageHeader from "../../components/PageHeader";
@@ -70,7 +69,7 @@ const AdminStoryDetailPage = () => {
         submitTime={convertTimeFormatMDY(submitTime)}
         tags={tags}
         status={status}
-        profileImg={profileImage || profile}
+        profileImg={profileImage}
         anonymous={anonymousSubmissionCheck}
       />
 

@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import profile from "../../assets/images/profile.png";
 
 const AdminStoryInfo = ({
   title,
@@ -7,14 +8,15 @@ const AdminStoryInfo = ({
   submitTime,
   content,
   tags,
+  anonymous,
 }) => {
   return (
     <div className={styles["story-info-container"]}>
       <div className={styles["post-info-top"]}>
         <div className={styles["user-info"]}>
-          <img src={profileImage} alt="profile image" />
+          <img src={profileImage || profile} alt="profile image" />
           <div className={styles["user-info-text"]}>
-            <h3>{username}</h3>
+            <h3>{anonymous ? "Anonymous" : username}</h3>
             <h5>{submitTime}</h5>
           </div>
         </div>

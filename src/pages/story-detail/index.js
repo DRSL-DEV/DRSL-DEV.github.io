@@ -1,10 +1,8 @@
 import PageHeader from "../../components/PageHeader";
 import StoryInfo from "../../components/StoryInfo";
 import link_icon from "../../assets/icons/link_icon.svg";
-import profile from "../../assets/images/profile.png";
 import { Carousel } from "antd";
 import styles from "./index.module.css";
-
 import "firebase/firestore";
 import { fetchStoryById } from "../../data/features/storyListSlice";
 import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
@@ -79,7 +77,7 @@ const StoryDetailPage = () => {
           <StoryInfo
             title={selectedPost.title}
             author={authorInfo.username}
-            profileImg={authorInfo.profileImage || profile}
+            profileImg={authorInfo.profileImage}
             anonymous={authorInfo.anonymousSubmissionCheck}
             date={selectedPost.submitTime}
             content={selectedPost.content}

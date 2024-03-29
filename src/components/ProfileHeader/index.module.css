@@ -5,13 +5,6 @@
     object-fit: cover
 }
 
-.user-name{
-    font-size: 14px;
-    width: 100px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
 .profile-img{
     border-radius: 50%;
     width: 108px;
@@ -28,9 +21,14 @@
     padding: 5px 5%;
 }
 
-.profile-name{
+.profile-name {
     text-align: center;
     padding-top: 25px;
+}
+
+.user-name{
+    text-align: center;
+    padding-top: 5px;
 }
 
 .user-bio, .topic-container{
@@ -55,4 +53,16 @@
     text-decoration: none;
     font-family: var(--font-family-body);
     font-size: var(--font-size-h4);
+}
+
+.profile-edit{
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 8%;
+}
+
+.edit-profile-button{
+    padding: 0 10%;
 }
