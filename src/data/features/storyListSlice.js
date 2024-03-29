@@ -26,14 +26,36 @@ export const subscribeToStoryList = () => (dispatch) => {
 };
 
 // filtered story list
-export const filterStoryList = (selectedTag) => (dispatch) => {
+// export const filterStoryList = (selectedTag) => (dispatch) => {
+//   let query = collection(db, "post");
+  
+//   // If a tag is selected, add a filter based on the selected tag
+//   if (selectedTag) {
+//     query = query.where("tags", "array-contains", selectedTag);
+//   }
+  
+//   const unsubscribe = onSnapshot(query, (snapshot) => {
+//     const stories = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+//     dispatch(storyListSlice.actions.updateStoryList(stories));
+//   });
+
+//   return unsubscribe;
+// };
+
+export const filterStoryList = (selectedTag, selectedLocation, selectedAuthor, selectedDate) => (dispatch) => {
   let query = collection(db, "post");
   
   // If a tag is selected, add a filter based on the selected tag
   if (selectedTag) {
     query = query.where("tags", "array-contains", selectedTag);
   }
-  
+
+  // Add additional filters for location, author, and date if selected
+  if (selectedLocation) {
+    query = query.where("site", "==", selectedLocation);
+  }
+  // Add other filters for author and date if needed
+
   const unsubscribe = onSnapshot(query, (snapshot) => {
     const stories = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     dispatch(storyListSlice.actions.updateStoryList(stories));
@@ -41,6 +63,8 @@ export const filterStoryList = (selectedTag) => (dispatch) => {
 
   return unsubscribe;
 };
+
+
 
 // Fetch story informtiaon by ID for Story Detail Page
 export const fetchStoryById = createAsyncThunk(

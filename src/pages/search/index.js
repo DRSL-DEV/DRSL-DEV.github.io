@@ -25,12 +25,14 @@ const SearchPage = () => {
   const dispatch = useDispatch();
   const storyList = useSelector((state) => state.storyList.storyList);
 
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedTag, setSelectedTag] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedTag, setSelectedTag] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filteredStories, setFilteredStories] = useState([]);
+  const [previousFilters, setPreviousFilters] = useState({});
+
 
   useEffect(() => {
     const unsubscribe = dispatch(subscribeToStoryList(selectedTag)); // Pass selectedTag
@@ -43,12 +45,14 @@ const SearchPage = () => {
 
   const filterStories = (storyList, selectedTag, selectedLocation, selectedAuthor, selectedDate) => {
     return storyList.filter((story) => {
-      const matchesLocation = selectedLocation ? story.location === selectedLocation : true;
+      const matchesLocation = selectedLocation ? (story.site && story.site.includes(selectedLocation)) : true;
       const matchesTag = selectedTag ? (story.tags && story.tags.includes(selectedTag)) : true;
 
       console.log("Story:", story);
       console.log("Selected Tag:", selectedTag);
       console.log("Matches Tag:", matchesTag);
+      console.log("Selected site:", selectedLocation);
+      console.log("Matches site:", matchesLocation);
       // const matchesAuthor = selectedAuthor
       //   ? selectedAuthor === "all" ||
       //     (selectedAuthor === "user" && story.author === "user") ||
@@ -63,8 +67,8 @@ const SearchPage = () => {
       //   : true;
   
       // return matchesLocation && matchesTag && matchesAuthor && matchesDate;
-      // return matchesLocation && matchesTag;
-      return matchesTag
+      return matchesLocation && matchesTag;
+      // return matchesTag
     });
   };
 
@@ -82,20 +86,23 @@ const SearchPage = () => {
 
   const handleApplyFilter = () => {
     console.log("Selected Tag:", selectedTag);
-    const filteredStories = filterStories(storyList, selectedTag[0]); // Pass selectedTag[0]
+    console.log("Selected site:", selectedLocation);
+    const filteredStories = filterStories(storyList, selectedTag[0],selectedLocation); // Pass selectedTag[0]
     setFilteredStories(filteredStories);
     setIsFilterOpen(!isFilterOpen);
+    // setPreviousFilters({ selectedLocation, selectedTag, selectedAuthor, selectedDate });
   };
   
   
 
   const handleCancelFilter = () => {
     // Reset the selected values
-    setSelectedLocation(null);
-    setSelectedTag(null);
+    setSelectedLocation('');
+    setSelectedTag('');
     setSelectedAuthor(null);
     setSelectedDate(null);
     setIsFilterOpen(!isFilterOpen)
+    // setPreviousFilters({});
   };
 
   const filterOption = (input, option) => {
@@ -105,6 +112,15 @@ const SearchPage = () => {
       return (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     }
   };
+
+  useEffect(() => {
+    if (isFilterOpen && Object.keys(previousFilters).length > 0) {
+      setSelectedLocation(previousFilters.selectedLocation);
+      setSelectedTag(previousFilters.selectedTag);
+      setSelectedAuthor(previousFilters.selectedAuthor);
+      setSelectedDate(previousFilters.selectedDate);
+    }
+  }, [isFilterOpen, previousFilters]);
 
   return (
     <div className={`page-container ${styles["search-page-container"]}`}>
@@ -120,13 +136,16 @@ const SearchPage = () => {
           <h3>Location</h3>
           <Select
             placeholder="Select location"
-            onChange={setSelectedLocation}
+            value={selectedLocation || undefined}
+            onChange={(value) => {
+              setSelectedLocation(value);
+            }}
             mode="location"
             showSearch
             optionFilterProp="children"
             filterOption={filterOption}
             suffixIcon={<img src={location_red} alt="location" />}
-            options={tagList}
+            options={siteLocationList}
             className={styles["drop-down"]}
           >
             {siteLocationList.map((location) => (
@@ -140,6 +159,7 @@ const SearchPage = () => {
           <h3>Tag</h3>
           <Select
             placeholder="Select tag"
+            value={selectedTag || undefined}
             onChange={(value) => {
               setSelectedTag(value);
             }}
@@ -188,18 +208,21 @@ const SearchPage = () => {
       )}
 
       <div className={styles["filtered-stories-container"]}>
-        {filteredStories.map((story) => (
-          // console.log("Filtered Stories:", filteredStories);
-          <Card
-            key={story.id}
-            postId={story.id}
-            title={story.title}
-            content={story.content}
-            author={story.userId}
-            type="user-story"
-            imgSrc={story.media[0]}
-          />
-        ))}
+        {filteredStories.length === 0 ? (
+          <p>No user stories found.</p>
+        ) : (
+          filteredStories.map((story) => (
+            <Card
+              key={story.id}
+              postId={story.id}
+              title={story.title}
+              content={story.content}
+              author={story.userId}
+              type="user-story"
+              imgSrc={story.media[0]}
+            />
+          ))
+        )}
       </div>
     </div>
   )
