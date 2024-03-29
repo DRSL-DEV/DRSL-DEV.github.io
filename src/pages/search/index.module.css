@@ -65,6 +65,8 @@
   height: unset;
 }
 
-
-
-
+.filtered-stories-container{
+  margin-top: 70px;
+  margin-left: 7%;
+  margin-right: 7%;
+}
