@@ -20,7 +20,7 @@ const CreateStory = () => {
   const [fileList, setFileList] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
-  const [audioFile, setAudioFile] = useState(null); // For storing the recorded audio File object
+  const [audioFile, setAudioFile] = useState(null); // For storing and testing the recorded audio File object
 
     const startRecording = () => {
       setIsRecording(true);
@@ -47,17 +47,14 @@ const CreateStory = () => {
       
       setRecordedBlob(recordedBlob);
       setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav', 
-      { type: recordedBlob.blob.type ,
-      }));
+      { type: recordedBlob.blob.type}));
       // const mimeType = recordedBlob.blob.type || 'audio/wav';
 
-      // Construct a File using the blob, giving it a name and the above type //console.log('audioFile is: ', audioFile);
-      
       setFileList((prevFileList) => {
         // Remove the previous audio if it exists
         const updatedFileList = prevFileList.filter(file => file.uid !== 'audio-file');
     
-        // Create a file representation for the fileList
+        // Create a representation for the fileList
         const audioFileObject = {
           uid: 'audio-file', // identifier for the recorded file - removed if recording again
           name: 'voice-recording.wav',
@@ -73,12 +70,7 @@ const CreateStory = () => {
     };
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-  const fileUploadStatus = useSelector(
-    (state) => state.fileUpload.uploadStatus
-  );
-
   const user = useSelector((state) => state.userInfo.user);
 
   useEffect(() => {
@@ -270,7 +262,7 @@ const CreateStory = () => {
         
         <div>
           {/* ReactMic component to display for record audio */}
-          <div className="audio-recording-buttons">
+          
           <ReactMic
             record={isRecording}
             className="sound-wave"
@@ -278,7 +270,10 @@ const CreateStory = () => {
             onData={onData}
             strokeColor="#000000"
             backgroundColor="#cae8fa"
+            styles={{ width: "100%", height: "20%" }}
           />
+
+          <div className="audio-recording-buttons">
           <Button
             text="Start Recording"
             handleOnClick={startRecording}
@@ -287,7 +282,6 @@ const CreateStory = () => {
               backgroundColor: isRecording ? "#ccc" : "rgba(146, 187, 95, 0.75)",
             }}
           />
-          </div>
 
           <Button
             text="Stop Recording"
@@ -297,6 +291,7 @@ const CreateStory = () => {
               backgroundColor: isRecording ? "var(--secondary-color-light-blue)" : "#ccc"
             }}
           />
+          </div>
           
           {recordedBlob && (
             <>
@@ -306,7 +301,6 @@ const CreateStory = () => {
                 handleOnClick={removeAudio}
                 customStyles={{
                   backgroundColor: "rgba(255, 156, 150, 0.75)",
-                  
                 }}
               />
             </>
