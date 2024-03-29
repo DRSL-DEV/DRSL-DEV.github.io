@@ -28,6 +28,7 @@ const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
         </Link>
 
         <img
+          id="menu_icon"
           src={menu}
           alt="menu"
           onClick={() => setIsMenuOpen((prev) => !prev)}

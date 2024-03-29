@@ -162,3 +162,7 @@
   display: flex;
   justify-content: center;
 }
+
+.sound-wave{
+  height: 60px;
+}

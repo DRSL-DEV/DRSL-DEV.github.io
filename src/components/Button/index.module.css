@@ -16,3 +16,12 @@
   padding: 0 16px;
   outline: none;
 }
+
+/* .button :disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+} */
+
+/* disabled: {
+  backgroundColor: "red"
+} */
