@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import submenu_arrow_up from "../../assets/icons/submenu_arrow_up.svg";
 import submenu_arrow_down from "../../assets/icons/submenu_arrow_down.svg";
@@ -38,10 +38,30 @@ const menuItems = [
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const [activeMenus, setActiveMenus] = useState({}); // Active submenus
   const location = useLocation(); // Get current location (routing location)
+  const menuRef = useRef();
 
   // Close the submenu when the menu is closed
   useEffect(() => {
     if (!isMenuOpen) setActiveMenus({});
+
+    const handleClickOutside = (event) => {
+      const menuIcon = document.querySelector("#menu_icon");
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        event.target !== menuIcon &&
+        isMenuOpen
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Clean up the event listener when the component unmounts or rerenders
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [isMenuOpen]);
 
   const handleMenuClick = (item) => {
@@ -69,6 +89,11 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   return (
     <div
       className={`${styles["menu-container"]} ${isMenuOpen ? styles.open : ""}`}
+      ref={menuRef}
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsMenuOpen(false);
+      }}
     >
       {menuItems.map((item) => (
         <div key={item.name}>
