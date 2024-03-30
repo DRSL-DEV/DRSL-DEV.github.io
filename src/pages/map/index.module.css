@@ -9,8 +9,8 @@
 
 .locate-user-button{
   position: fixed;
-  bottom: 100px;
-  right: 100px;
+  bottom: 60px;
+  right: 60px;
 }
 
 .primary-modal-button {
@@ -18,3 +18,15 @@
   font-family: var(--font-family-heading);
 }
 
+/* .primary-modal-button :global(.ant-btn-link) {
+  background-color: #F6DFA4;
+  font-family: var(--font-family-heading);
+} */
+
+.select-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  margin: 20px;
+}

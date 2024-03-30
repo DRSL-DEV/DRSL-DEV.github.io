@@ -80,7 +80,7 @@ const CreateStory = () => {
   }, []);
 
   const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+    option?.children.toLowerCase().includes(input.toLowerCase())
 
   const fileUploadProps = {
     beforeUpload: (file) => {
@@ -203,7 +203,11 @@ dev
               optionFilterProp="children"
               filterOption={filterOption}
               suffixIcon={<img src={location_red} alt="location" />}
-              options={siteLocationList}
+              options={siteLocationList.map((site) => ({
+                value: site.id,
+                label: site.name,
+              }))
+              }
             />
           </Form.Item>
 
