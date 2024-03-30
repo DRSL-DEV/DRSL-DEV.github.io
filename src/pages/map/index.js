@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.css";
 import { APIProvider, Map, Marker, useMap } from "@vis.gl/react-google-maps";
-import { Button, Modal } from "antd";
+import { Button, Modal, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import userMarker from "../../assets/icons/user_marker.svg";
 import locateUser from "../../assets/icons/locate_user.svg";
+import location_red from "../../assets/icons/location_red.svg";
 import { siteLocationList } from "../../constants/constants";
 
 const MapPage = () => {
@@ -56,6 +57,15 @@ const MapPage = () => {
     console.log("Locate user", userPosition, mapCenter, zoom);
   };
 
+  const handleSelectSite = (selectedSiteId) => {
+    const selectedSite = siteLocationList.find(site => site.id === selectedSiteId);
+    if (selectedSite) {
+      setMapCenter({ lat: selectedSite.lat, lng: selectedSite.lng });
+      setZoom(15); // 或者您希望的其他缩放级别
+    }
+  };
+
+
   const handleMarkerClick = (site) => {
     setSelectedSite(site);
     setModalOpen(true);
@@ -87,6 +97,23 @@ const MapPage = () => {
   return (
     <div className={styles["map-page-container"]}>
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+        <div className={styles["select-container"]}>
+          <Select
+            showSearch
+            style={{ width: 400, height: 40 }}
+            placeholder="Select or Search a Site Location"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            suffixIcon={<img src={location_red} alt="location" />}
+            options={siteLocationList.map((site) => ({
+              value: site.id,
+              label: site.name,
+            }))}
+            onSelect={handleSelectSite}
+          />
+        </div>
         <Map
           defaultCenter={center}
           defaultZoom={zoom}
@@ -106,6 +133,7 @@ const MapPage = () => {
           )}
         </Map>
       </APIProvider>
+
       <Modal
         title={selectedSite?.name}
         open={modalOpen}
