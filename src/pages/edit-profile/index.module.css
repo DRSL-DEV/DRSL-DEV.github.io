@@ -11,6 +11,7 @@
 .profile-images-input{
   display: flex;
   margin: 3% 0;
+  gap: 20%;
 }
 
 .profile-image-left{
@@ -19,6 +20,10 @@
   gap: 10%;
   margin-top: 3%;
   width: 48vw;
+}
+
+.profile-upload{
+  margin-top: 5%;
 }
 
 .profile-img{
