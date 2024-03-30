@@ -70,7 +70,7 @@ const MapPage = () => {
     if (userPosition && selectedSite) {
       const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userPosition.lat},${userPosition.lng}&destination=${selectedSite.lat},${selectedSite.lng}&travelmode=walking`;
       setTimeout(() => {
-        window.open(directionsUrl, '_top');
+        window.open(directionsUrl, '_blank');
       })
 
     }
