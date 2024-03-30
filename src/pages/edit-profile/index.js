@@ -1,16 +1,26 @@
 import styles from "./index.module.css";
-import { Form, Input, InputNumber, Checkbox, Upload, Select} from 'antd';
+import { Form, Input, InputNumber, Checkbox, Upload, Select } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
 import profileImg from "../../assets/images/profile.png";
 import { useState } from 'react';
 import googleIcon from "../../assets/icons/Google icon.svg"
-import { useDispatch } from "react-redux";
-import { signOutUser } from "../../data/features/userInfoSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import PrimaryButton from "../../components/PrimaryButton";
+import { updateUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
 
-const EditProfilePage = () =>{
+const EditProfilePage = () => {
+
+  const currentUser = useSelector((state) => state.userInfo.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const [profileImage, setProfileImage] = useState(currentUser.profileImage);
+  // const [profileBanner, setProfileBanner] = useState(currentUser.profileBanner);
+  const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
+  const [formFields, setFormFields] = useState({});
+
 
   const validateMessages = {
     required: '${label} is required!',
@@ -31,50 +41,78 @@ const EditProfilePage = () =>{
     'Cultural Identities',
     'Environment & Ecology',
     'Organizations & Industries',
-    'Modern-Day History' ,
+    'Modern-Day History',
     'Post-European Settlement',
   ];
-  const [selectedItems, setSelectedItems] = useState([]);
-  const filteredOptions = options.filter(o => !selectedItems.includes(o));
+  const filteredOptions = options.filter(o => !selectedTags.includes(o));
 
-  const currentUsername = "Story_with_Jada";
+
   const currentPassword = "12345678";
-  const currentEmail = 'detroitriverstory@gmail.com';
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  //TODO: Add the ability to upload profile and banner images
+  //TODO: Add a cancel button on this page
+  //TODO: Vaidate phone number input
 
-  const handleLogOut = () => {
-    dispatch(signOutUser());
-    localStorage.removeItem("userInfo");
-    navigate("/");
+  //TODO: Discuss: Should we display anonymous submission details on profile page?
+  //TODO: Discuss: Handle password change
+  //TODO: Discuss: Add a delete account button on this page
+
+  const handleSave = (values) => {
+    const userDetails = {
+      email: values.email,
+      username: values.userName,
+      profileName: values.profileName,
+      biography: values.userBio,
+      phoneNumber: values.phoneNumber,
+      anonymousSubmissionCheck: values.anonySubChk,
+      tagsOfInterest: selectedTags,
+    };
+    console.log("Dispatching user Details: ", userDetails);
+    dispatch(updateUser({ userDetails: userDetails, uid: currentUser.id }));
+    navigate("/profile");
+  }
+
+  const handleValuesChange = (changedValues, allValues) => {
+    setFormFields(allValues);
   };
-
 
   return (
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
       <PageHeader title='Account Information' />
       <h3>Profile</h3>
-      <Form initialValues={{
-        userName: currentUsername,
-        password: currentPassword,
-        email: currentEmail,
-        }} 
-        name="nest-messages" 
+      <Form
+        initialValues={{
+          userName: currentUser.username,
+          profileName: currentUser.profileName,
+          password: currentPassword,
+          email: currentUser.email,
+          userBio: currentUser.biography,
+          phoneNumber: currentUser.phoneNumber,
+          anonySubChk: !!currentUser.anonymousSubmissionCheck,
+          interest: currentUser.tagsOfInterest,
+        }}
+        onFinish={handleSave}
+        onValuesChange={handleValuesChange}
+        name="nest-messages"
         validateMessages={validateMessages}
         className={styles["edit-profile-form"]}
-        >
+      >
 
         <div>
           <div className={styles["short-input-container"]}>
             <Form.Item name="userName" label="Username" rules={[{ required: true }]}>
               <Input className={styles["short-input"]}/>
+              {/* <Input className={styles["short-input"]} value={userName} onChange={(text) => setUserName(text)} /> */}
             </Form.Item>
             <Form.Item name="profileName" label="Profile Name" rules={[{ required: false }]}>
-              <Input className={styles["short-input"]} />
+            <Input className={styles["short-input"]} />
+              {/* <Input className={styles["short-input"]} value={profileName} onChange={(text) => setProfileName(text)} /> */}
             </Form.Item>
           </div>
-          <Checkbox className={styles["check-box"]}><span>Optional: Have account displayed as anonymous.</span><span>This can be changed at any time.</span></Checkbox>
+          <Form.Item name="anonySubChk" label="Anonymous Submissions" valuePropName="checked"
+              getValueFromEvent={(e) => e.target.checked}>
+            <Checkbox className={styles["check-box"]} ><span>Optional: Have account displayed as anonymous.</span><span>This can be changed at any time.</span></Checkbox>
+          </Form.Item>
 
           <Form.Item name="userBio" label="Biography">
             <Input.TextArea showCount maxLength={200} placeholder="Would you like to add a biography?"/>
@@ -87,7 +125,7 @@ const EditProfilePage = () =>{
             <div className={styles["profile-image-left"]}>
               <img className={styles["profile-img"]} src={profileImg} alt="profile" />
               <Upload>
-                <Button customStyles={{fontSize:'12px', width:'75px', height:'30px'}} text="Upload"/>
+                <Button customStyles={{ fontSize: '12px', width: '75px', height: '30px' }} text="Upload" />
               </Upload>
             </div>
           </div>
@@ -96,7 +134,7 @@ const EditProfilePage = () =>{
             <div className={styles["profile-image-left"]}>
               <img className={styles["profile-img"]} src={profileImg} alt="profile" />
               <Upload>
-                <Button customStyles={{fontSize:'12px', width:'75px', height:'30px'}} text="Upload"/>
+                <Button customStyles={{ fontSize: '12px', width: '75px', height: '30px' }} text="Upload" />
               </Upload>
             </div>
           </div>
@@ -108,8 +146,8 @@ const EditProfilePage = () =>{
             <Select
               mode="multiple"
               placeholder="Please pick your topics"
-              value={selectedItems}
-              onChange={setSelectedItems}
+              value={selectedTags}
+              onChange={setSelectedTags}
               options={filteredOptions.map(item => ({
                 value: item,
                 label: item,
@@ -121,7 +159,7 @@ const EditProfilePage = () =>{
         <div>
           <h3>Personal Information</h3>
           <Form.Item name="email" label="Email" rules={[{ type: 'email' }]}>
-              <Input />
+            <Input />
           </Form.Item>
           <Form.Item name="password" label="Password">
             <Input.Password
@@ -130,19 +168,13 @@ const EditProfilePage = () =>{
             />
           </Form.Item>
           <Form.Item name="phoneNumber" label="Phone Number">
-            <Input />
+            <Input/>
           </Form.Item>
         </div>
 
-        <Button
-          text="Save"
-          customStyles={{margin:"8% auto 0 auto", display:"flex", justifyContent:"center"}}
-        />
-
-        <Button
-          text="Log Out"
-          customStyles={{margin:"3% auto 8% auto", display:"flex", justifyContent:"center"}}
-        />
+        <Form.Item>
+          <PrimaryButton text="Save" htmlType="submit" />
+        </Form.Item>
       </Form>
 
       <div className={styles["link-account-section"]}>
@@ -154,7 +186,7 @@ const EditProfilePage = () =>{
             alt="google log in"
           />
           <h4>Google</h4>
-          <Button customStyles={{fontSize:'14px', width:'100px', height:'30px'}} text="Unlink"/>
+          <Button customStyles={{ fontSize: '14px', width: '100px', height: '30px' }} text="Unlink" />
         </div>
       </div>
 

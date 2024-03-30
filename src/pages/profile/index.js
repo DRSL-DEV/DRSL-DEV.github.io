@@ -5,21 +5,23 @@ import profile from "../../assets/images/profile.png";
 import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from 'antd';
 import Card from "../../components/Card";
-import editProfile from "../../assets/icons/edit_profile.svg";
 import { Link } from "react-router-dom";
+import {useSelector } from 'react-redux';
+
 
 
 export const ProfilePage = () => {
   const { TabPane } = Tabs;
+  const CurrentUser = useSelector((state) => state.userInfo.user);
 
-  const userName = 'Stories_with_Jada'
-  const profileName = 'Jada Williams'
-  const userBio = "Journalist and community activist that is interested in learning, sharing, expanding community knowledge about narratives in Metro Detroit."
-  const interestedTopics = ["Communities & Livelihoods", "Environment & Ecology", "Indigenous History"]
+  const userName = CurrentUser.username;
+  const profileName = CurrentUser.profileName || "Set a display name?"
+  const userBio = CurrentUser.biography || "When you add a bio, it'll show up here"
+  const interestedTopics = CurrentUser.tagsOfInterest || ["Communities & Livelihoods", "Environment & Ecology", "Indigenous History"]
 
-  const bookMarkedPostTitles = ['Title1', 'Title2']
-  const postedStories = ['Story1', 'Story2']
-  const friends = ['User1', 'User2', 'User3']
+  const bookMarkedPostTitles = CurrentUser.bookMarkedPostID || ["No Stories to show, yet"]
+  const postedStories = CurrentUser.postedStoriesID || ["Start your first story, by clicking the plus sign above!"]
+  const friends = CurrentUser.friendsID || ["Time to make some friends!"]
 
   return <div className="profile-page-container">
 

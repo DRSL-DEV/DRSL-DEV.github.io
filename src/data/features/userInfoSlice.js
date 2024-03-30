@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "../../firebase";
-import { collection, getDoc, addDoc, doc, setDoc  } from "firebase/firestore";
+import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { getAuth, signOut } from "firebase/auth";
 
 
@@ -28,11 +28,9 @@ export const signOutUser = () => async (dispatch) => {
 export const fetchUserById = createAsyncThunk(
   "items/fetchUserById",
   async (uid, { rejectWithValue }) => {
-    try{
+    try {
       const docRef = doc(db, "user", uid);
       const docSnap = await getDoc(docRef);
-
-
       if (docSnap.exists()) {
         console.log("User found: ", docSnap.data());
         return { id: docSnap.id, ...docSnap.data() };
@@ -62,6 +60,28 @@ export const addUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  'userInfo/updateUser',
+  async ({userDetails, uid}, { rejectWithValue }) => {
+    try {
+      console.log("In the reducer function. Received: ", userDetails, uid);
+      await updateDoc(doc(db, "user", uid), userDetails);
+      const updatedDocRef = doc(db, "user", uid);
+      const updatedDocSnap = await getDoc(updatedDocRef);
+      if (updatedDocSnap.exists()) {
+        console.log("Updated document in Firestore: ", updatedDocSnap.data());
+        const updatedUser = { id: updatedDocSnap.id, ...updatedDocSnap.data() };
+        return updatedUser;
+      } else {
+        console.log("No updated document found!");
+        return rejectWithValue("No updated document found!");
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const userInfoSlice = createSlice({
   name: "userInfo",
   initialState,
@@ -77,12 +97,21 @@ const userInfoSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(addUser.fulfilled, (state, action) => {
-        state.user=action.payload;
+        state.user = action.payload;
       })
       .addCase(addUser.rejected, (state, action) => {
         // Handle the state update when addUserDetails is rejected
         // ...
-      }).addCase(fetchUserById.pending, (state) => {
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        // Handle the state update when addUserDetails is rejected
+        // ...
+      })
+      .addCase(fetchUserById.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchUserById.fulfilled, (state, action) => {
