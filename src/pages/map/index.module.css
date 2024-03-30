@@ -9,12 +9,17 @@
 
 .locate-user-button{
   position: fixed;
-  bottom: 100px;
-  right: 100px;
+  bottom: 60px;
+  right: 60px;
 }
 
 .primary-modal-button {
   background-color: #F6DFA4;
   font-family: var(--font-family-heading);
 }
+
+/* .primary-modal-button :global(.ant-btn-link) {
+  background-color: #F6DFA4;
+  font-family: var(--font-family-heading);
+} */
 

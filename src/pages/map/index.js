@@ -5,29 +5,21 @@ import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import userMarker from "../../assets/icons/user_marker.svg";
 import locateUser from "../../assets/icons/locate_user.svg";
+import { siteLocationList } from "../../constants/constants";
 
 const MapPage = () => {
-  const sites = [
-    { id: 1, name: "Site 1", lat: 42.280701, lng: -83.740119 },
-    { id: 2, name: "Site 2", lat: 42.304709, lng: -83.709036 },
-    { id: 3, name: "Site 3", lat: 42.291144, lng: -83.717423 },
-    { id: 4, name: "Site 4", lat: 42.326088, lng: -83.452158 },
-    { id: 5, name: "Site 5", lat: 42.259408, lng: -83.713515 },
-    { id: 6, name: "Site 6", lat: 42.240263, lng: -83.524090 },
-    { id: 7, name: "Site 7", lat: 42.231830, lng: -83.744704 }
-  ];
 
-  const center = sites.reduce((acc, site) => {
+  const center = siteLocationList.reduce((acc, site) => {
     acc.lat += site.lat;
     acc.lng += site.lng;
     return acc;
   }, { lat: 0, lng: 0 });
-  center.lat /= sites.length;
-  center.lng /= sites.length;
+  center.lat /= siteLocationList.length;
+  center.lng /= siteLocationList.length;
 
   const [userPosition, setUserPosition] = useState(null);
   const [mapCenter, setMapCenter] = useState(center);
-  const [zoom, setZoom] = useState(12);
+  const [zoom, setZoom] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedSite, setSelectedSite] = useState(null);
 
@@ -57,7 +49,7 @@ const MapPage = () => {
   const handleLocateUser = () => {
     if (userPosition) {
       setMapCenter(userPosition);
-      setZoom(15);
+      setZoom(12);
     } else {
       console.log("Error: Your browser doesn't support geolocation.");
     }
@@ -77,10 +69,14 @@ const MapPage = () => {
   const handleDirections = () => {
     if (userPosition && selectedSite) {
       const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userPosition.lat},${userPosition.lng}&destination=${selectedSite.lat},${selectedSite.lng}&travelmode=walking`;
-      window.open(directionsUrl, '_blank');
+      setTimeout(() => {
+        window.open(directionsUrl, '_top');
+      })
+
     }
     setModalOpen(false);
   };
+
 
 
   const handleCancel = () => {
@@ -99,7 +95,7 @@ const MapPage = () => {
           onCenterChanged={ev => setMapCenter(ev.detail.center)}
           onZoomChanged={ev => setZoom(ev.detail.zoom)}
         >
-          {sites.map((site, index) => (
+          {siteLocationList.map((site, index) => (
             <Marker key={index} position={site} onClick={() => handleMarkerClick(site)} />
           ))}
           {userPosition && (
