@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@vis.gl/react-google-maps": "^0.8.0",
     "antd": "^5.15.1",
+    "antd-img-crop": "^4.21.0",
     "firebase": "^10.8.1",
     "google-auth-library": "^9.6.3",
     "react": "^18.2.0",
