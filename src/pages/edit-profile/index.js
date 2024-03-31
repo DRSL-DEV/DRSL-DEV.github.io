@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { Form, Input, InputNumber, Checkbox, Upload, Select} from 'antd';
+import { Form, Input, Checkbox, Upload, Select} from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
@@ -9,6 +9,7 @@ import googleIcon from "../../assets/icons/Google icon.svg"
 import { useDispatch } from "react-redux";
 import { signOutUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
+import ImgCrop from 'antd-img-crop';
 
 const EditProfilePage = () =>{
 
@@ -37,19 +38,32 @@ const EditProfilePage = () =>{
   const [selectedItems, setSelectedItems] = useState([]);
   const filteredOptions = options.filter(o => !selectedItems.includes(o));
 
+  const [fileList, setFileList] = useState([]);
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
   const currentUsername = "Story_with_Jada";
   const currentPassword = "12345678";
   const currentEmail = 'detroitriverstory@gmail.com';
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleLogOut = () => {
-    dispatch(signOutUser());
-    localStorage.removeItem("userInfo");
-    navigate("/");
-  };
-
 
   return (
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
@@ -84,20 +98,32 @@ const EditProfilePage = () =>{
         <div className={styles["profile-images-input"]}>
           <div>
             <h3>Profile Photo</h3>
-            <div className={styles["profile-image-left"]}>
-              <img className={styles["profile-img"]} src={profileImg} alt="profile" />
-              <Upload>
-                <Button customStyles={{fontSize:'12px', width:'75px', height:'30px'}} text="Upload"/>
-              </Upload>
+            <div className={styles["profile-upload"]}>
+              <ImgCrop rotationSlider>
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Upload>
+              </ImgCrop>
             </div>
           </div>
           <div>
             <h3>Profile Banner</h3>
-            <div className={styles["profile-image-left"]}>
-              <img className={styles["profile-img"]} src={profileImg} alt="profile" />
-              <Upload>
-                <Button customStyles={{fontSize:'12px', width:'75px', height:'30px'}} text="Upload"/>
-              </Upload>
+            <div className={styles["profile-upload"]}>
+              <ImgCrop rotationSlider>
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Upload>
+              </ImgCrop>
             </div>
           </div>
         </div>
@@ -136,12 +162,7 @@ const EditProfilePage = () =>{
 
         <Button
           text="Save"
-          customStyles={{margin:"8% auto 0 auto", display:"flex", justifyContent:"center"}}
-        />
-
-        <Button
-          text="Log Out"
-          customStyles={{margin:"3% auto 8% auto", display:"flex", justifyContent:"center"}}
+          customStyles={{margin:"8% auto", display:"flex", justifyContent:"center"}}
         />
       </Form>
 
