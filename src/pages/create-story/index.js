@@ -124,7 +124,7 @@ const CreateStory = () => {
         uploadFile({
           file: {
             ...fileInfo.originFileObj,
-            name: `${fileInfo.originFileObj.name}_${new Date().getTime()}`,
+            name: `${new Date().getTime()}_${fileInfo.originFileObj.name}`,
           },
           folderPath: `post/${fileInfo.type.split("/")[0]}`,
         })
