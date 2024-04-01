@@ -1,27 +1,55 @@
-import { useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import like_unfilled from "../../assets/icons/like_unfilled.svg";
 import like_filled from "../../assets/icons/like_filled.svg";
 import styles from "./index.module.css";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toggleBookmark } from "../../data/features/bookmarkSlice";
+import { useDispatch } from "react-redux";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
-const LikeButton = () => {
+const LikeButton = ({postId}) => {
   const [isFilled, setIsFilled] = useState(false);
   const navigate = useNavigate();
-  const user = useSelector((state) => state.userInfo.user);
+  const dispatch = useDispatch();
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
 
-  const handleClick = useCallback(() => {
-    // Check if user is logged in
-    if (!user) {
+  useEffect(() => {
+    const fetchUserBookmarks = async () => {
+      if (currentUser) {
+        try {
+          const userDocRef = doc(db, "user", currentUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            const userBookmarks = userData.bookmarks || [];
+
+            if (userBookmarks.includes(postId)) {
+              setIsFilled(true);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user bookmarks:", error);
+        }
+      }
+    };
+    fetchUserBookmarks();
+  }, [currentUser, postId]);
+
+  const handleBookmark = useCallback(() => {
+    if (!currentUser) {
       navigate("/login");
     } else {
-      // Toggle like status
       setIsFilled(!isFilled);
+      dispatch(toggleBookmark(postId));
     }
-  }, [user, navigate, isFilled]);
+  }, [currentUser, navigate, isFilled, dispatch, postId]);
 
   return (
-    <button onClick={handleClick} className={styles.button}>
+    <button onClick={handleBookmark} className={styles.button}>
       {isFilled ? (
         <img src={like_filled} alt="liked" />
       ) : (
