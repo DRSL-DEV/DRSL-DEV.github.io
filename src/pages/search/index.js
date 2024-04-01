@@ -11,10 +11,8 @@ import { siteLocationList, tagList } from '../../constants/constants';
 import tag_blue from "../../assets/icons/tag_blue.svg";
 import location_red from "../../assets/icons/location_red.svg";
 import { useSelector, useDispatch } from "react-redux";
-// import storyListSlice from "../../data/features/storyListSlice";
 import Card from "../../components/Card";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
-// import { filterStoryList } from "../../data/features/storyListSlice";
 
 const { Option } = Select;
 
@@ -88,15 +86,8 @@ const SearchPage = () => {
       console.log("Matches site:", matchesLocation);
       console.log("match author", matchesAuthor)
       console.log("match date", matchesDate)
-      // const matchesDate = selectedDate
-      //   ? selectedDate === "anytime" ||
-      //     (selectedDate === "today" && isToday(story.date)) ||
-      //     (selectedDate === "thisWeek" && isThisWeek(story.date)) ||
-      //     (selectedDate === "thisMonth" && isThisMonth(story.date)) ||
-      //     (selectedDate === "thisYear" && isThisYear(story.date))
-      //   : true;
+
   
-      // return matchesLocation && matchesTag && matchesAuthor && matchesDate;
       return matchesLocation && matchesTag && matchesAuthor && matchesDate;
     });
   };
@@ -118,7 +109,6 @@ const SearchPage = () => {
     setSelectedAuthor(null);
     setSelectedDate(null);
     setIsFilterOpen(!isFilterOpen)
-    // setPreviousFilters({});
   };
 
   const filterOption = (input, option) => {

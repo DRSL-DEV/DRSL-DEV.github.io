@@ -25,15 +25,30 @@ export const subscribeToStoryList = () => (dispatch) => {
   return unsubscribe;
 };
 
-// filtered story list
-// export const filterStoryList = (selectedTag) => (dispatch) => {
+
+// export const filterStoryList = (selectedTag, selectedLocation, selectedAuthor, selectedDate) => (dispatch) => {
 //   let query = collection(db, "post");
   
 //   // If a tag is selected, add a filter based on the selected tag
 //   if (selectedTag) {
 //     query = query.where("tags", "array-contains", selectedTag);
 //   }
-  
+
+//   // Add additional filters for location, author, and date if selected
+//   if (selectedLocation) {
+//     query = query.where("site", "==", selectedLocation);
+//   }
+
+//   if (selectedAuthor) {
+//     if (selectedAuthor === 'user') {
+//       query = query.where("postType", "!=", "admin");
+//     } else if (selectedAuthor === 'detroitRiverStoryLab') {
+//       query = query.where("postType", "==", "admin");
+//     }
+//   }
+
+//   // Add other filters for author and date if needed
+
 //   const unsubscribe = onSnapshot(query, (snapshot) => {
 //     const stories = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 //     dispatch(storyListSlice.actions.updateStoryList(stories));
@@ -41,38 +56,6 @@ export const subscribeToStoryList = () => (dispatch) => {
 
 //   return unsubscribe;
 // };
-
-export const filterStoryList = (selectedTag, selectedLocation, selectedAuthor, selectedDate) => (dispatch) => {
-  let query = collection(db, "post");
-  
-  // If a tag is selected, add a filter based on the selected tag
-  if (selectedTag) {
-    query = query.where("tags", "array-contains", selectedTag);
-  }
-
-  // Add additional filters for location, author, and date if selected
-  if (selectedLocation) {
-    query = query.where("site", "==", selectedLocation);
-  }
-
-  if (selectedAuthor) {
-    if (selectedAuthor === 'user') {
-      query = query.where("postType", "!=", "admin");
-    } else if (selectedAuthor === 'detroitRiverStoryLab') {
-      query = query.where("postType", "==", "admin");
-    }
-  }
-
-  // Add other filters for author and date if needed
-
-  const unsubscribe = onSnapshot(query, (snapshot) => {
-    const stories = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    dispatch(storyListSlice.actions.updateStoryList(stories));
-  });
-
-  return unsubscribe;
-};
-
 
 
 // Fetch story informtiaon by ID for Story Detail Page
@@ -84,20 +67,6 @@ export const fetchStoryById = createAsyncThunk(
     return { id: docSnap.id, ...docSnap.data() };
   }
 );
-
-// export const searchStories = createAsyncThunk(
-//   "storyList/searchStories",
-//   async (searchTerm) => {
-//     const stories = await getDoc(collection(db, "post"));
-//     return stories.docs
-//       .map((doc) => ({ id: doc.id, ...doc.data() }))
-//       .filter(
-//         (story) =>
-//           story.title.includes(searchTerm) ||
-//           story.content.includes(searchTerm)
-//       );
-//   }
-// );
 
 // Add new story
 export const addNewStory = createAsyncThunk(
@@ -135,10 +104,6 @@ export const storyListSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      // .addCase(searchStories.fulfilled, (state, action) => {
-      //   state.status = "succeeded";
-      //   state.storyList = action.payload;
-      // });
   },
 });
 
