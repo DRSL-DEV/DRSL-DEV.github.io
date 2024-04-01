@@ -40,7 +40,7 @@ const StoryDetailPage = () => {
   return (
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
       <div className={styles["story-icons"]}>
-        <LikeButton postId={postId}/>
+        <LikeButton postId={postId} />
         <img
           className={styles["share-icon"]}
           onClick={handleShare}
@@ -62,6 +62,11 @@ const StoryDetailPage = () => {
                     <source src={mediaUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
+                ) : mediaUrl.includes("audio") ? (
+                  <audio controls>
+                    <source src={mediaUrl} type="audio/mpeg" />
+                    Your browser does not support the audio tag.
+                  </audio>
                 ) : (
                   <img
                     className={styles["story-image-gallery"]}

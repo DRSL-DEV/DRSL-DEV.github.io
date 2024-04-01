@@ -25,6 +25,13 @@
   margin: auto;
 }
 
+.carousel audio {
+  height: 25vh;
+  object-fit: contain;
+  display: flex;
+  margin: auto;
+}
+
 .story-image-gallery {
   width: 100%;
 }
