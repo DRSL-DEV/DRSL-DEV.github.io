@@ -54,6 +54,15 @@ export const filterStoryList = (selectedTag, selectedLocation, selectedAuthor, s
   if (selectedLocation) {
     query = query.where("site", "==", selectedLocation);
   }
+
+  if (selectedAuthor) {
+    if (selectedAuthor === 'user') {
+      query = query.where("postType", "!=", "admin");
+    } else if (selectedAuthor === 'detroitRiverStoryLab') {
+      query = query.where("postType", "==", "admin");
+    }
+  }
+
   // Add other filters for author and date if needed
 
   const unsubscribe = onSnapshot(query, (snapshot) => {

@@ -11,10 +11,10 @@ import { siteLocationList, tagList } from '../../constants/constants';
 import tag_blue from "../../assets/icons/tag_blue.svg";
 import location_red from "../../assets/icons/location_red.svg";
 import { useSelector, useDispatch } from "react-redux";
-import storyListSlice from "../../data/features/storyListSlice";
+// import storyListSlice from "../../data/features/storyListSlice";
 import Card from "../../components/Card";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
-import { filterStoryList } from "../../data/features/storyListSlice";
+// import { filterStoryList } from "../../data/features/storyListSlice";
 
 const { Option } = Select;
 
@@ -45,19 +45,49 @@ const SearchPage = () => {
 
   const filterStories = (storyList, selectedTag, selectedLocation, selectedAuthor, selectedDate) => {
     return storyList.filter((story) => {
+
       const matchesLocation = selectedLocation ? (story.site && story.site.includes(selectedLocation)) : true;
+
       const matchesTag = selectedTag ? (story.tags && story.tags.includes(selectedTag)) : true;
+
+      let matchesAuthor = true;
+      if (selectedAuthor === 'user') {
+        matchesAuthor = story.postType !== 'admin';
+      } else if (selectedAuthor === 'detroitRiverStoryLab') {
+        matchesAuthor = story.postType === 'admin';
+      }
+
+      let matchesDate = true;
+      if (selectedDate) {
+        const storyDate = new Date(story.submitTime);
+        const today = new Date();
+        const daysDifference = (today - storyDate) / (1000 * 60 * 60 * 24); // Calculate difference in days
+
+        switch (selectedDate) {
+          case 'today':
+            matchesDate = daysDifference < 1;
+            break;
+          case 'thisWeek':
+            matchesDate = daysDifference < 7;
+            break;
+          case 'thisMonth':
+            matchesDate = today.getMonth() === storyDate.getMonth() && today.getFullYear() === storyDate.getFullYear();
+            break;
+          case 'thisYear':
+            matchesDate = today.getFullYear() === storyDate.getFullYear();
+            break;
+          default:
+            matchesDate = true;
+        }
+      }
 
       console.log("Story:", story);
       console.log("Selected Tag:", selectedTag);
       console.log("Matches Tag:", matchesTag);
       console.log("Selected site:", selectedLocation);
       console.log("Matches site:", matchesLocation);
-      // const matchesAuthor = selectedAuthor
-      //   ? selectedAuthor === "all" ||
-      //     (selectedAuthor === "user" && story.author === "user") ||
-      //     (selectedAuthor === "detroitRiverStoryLab" && story.author === "detroitRiverStoryLab")
-      //   : true;
+      console.log("match author", matchesAuthor)
+      console.log("match date", matchesDate)
       // const matchesDate = selectedDate
       //   ? selectedDate === "anytime" ||
       //     (selectedDate === "today" && isToday(story.date)) ||
@@ -67,33 +97,19 @@ const SearchPage = () => {
       //   : true;
   
       // return matchesLocation && matchesTag && matchesAuthor && matchesDate;
-      return matchesLocation && matchesTag;
-      // return matchesTag
+      return matchesLocation && matchesTag && matchesAuthor && matchesDate;
     });
   };
-
-  // const handleApplyFilter = () => {
-  //   const filteredStories = filterStories(
-  //     storyList,
-  //     // selectedLocation,
-  //     selectedTag,
-  //     // selectedAuthor,
-  //     // selectedDate
-  //   );
-  //   setFilteredStories(filteredStories);
-  //   setIsFilterOpen(!isFilterOpen)
-  // };
 
   const handleApplyFilter = () => {
     console.log("Selected Tag:", selectedTag);
     console.log("Selected site:", selectedLocation);
-    const filteredStories = filterStories(storyList, selectedTag[0],selectedLocation); // Pass selectedTag[0]
+    console.log("Selected author", selectedAuthor);
+    console.log("selected date", selectedDate)
+    const filteredStories = filterStories(storyList, selectedTag[0],selectedLocation, selectedAuthor, selectedDate); // Pass selectedTag[0]
     setFilteredStories(filteredStories);
     setIsFilterOpen(!isFilterOpen);
-    // setPreviousFilters({ selectedLocation, selectedTag, selectedAuthor, selectedDate });
   };
-  
-  
 
   const handleCancelFilter = () => {
     // Reset the selected values
@@ -199,7 +215,7 @@ const SearchPage = () => {
               <Radio value="thisYear">This Year</Radio>
             </Space>
           </Radio.Group>
-          
+
           <div className={styles["filter-button"]}>
             <Button text="Cancel Filter" handleOnClick={handleCancelFilter} customStyles={{ backgroundColor: '#D7D7D7' }} />
             <Button text="Apply Filter" handleOnClick={handleApplyFilter} />

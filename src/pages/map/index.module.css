@@ -13,15 +13,22 @@
   right: 60px;
 }
 
+/* .primary-modal-button :global(.ant-modal .ant-modal-footer >.ant-btn+.ant-btn) {
+  background-color: #F6DFA4;
+  font-family: var(--font-family-heading);
+  font-size: 10px;
+} */
+
+.primary-modal-button :global(.ant-btn-link) {
+  background-color: #F6DFA4;
+  font-family: var(--font-family-heading);
+  font-size: 10px;
+}
+
 .primary-modal-button {
   background-color: #F6DFA4;
   font-family: var(--font-family-heading);
 }
-
-/* .primary-modal-button :global(.ant-btn-link) {
-  background-color: #F6DFA4;
-  font-family: var(--font-family-heading);
-} */
 
 .select-container {
   position: absolute;
