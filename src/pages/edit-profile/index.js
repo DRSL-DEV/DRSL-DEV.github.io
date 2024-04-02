@@ -50,12 +50,12 @@ const EditProfilePage = () => {
   const currentPassword = "12345678";
 
   //TODO: Add the ability to upload profile and banner images
-  //TODO: Add a cancel button on this page
   //TODO: Vaidate phone number input
 
-  //TODO: Discuss: Should we display anonymous submission details on profile page?
-  //TODO: Discuss: Handle password change
-  //TODO: Discuss: Add a delete account button on this page
+  //TODO: Discuss: Should we display anonymous submission details on profile page - Yes
+  //TODO: Discuss: Handle password change - Work with Ceceil.
+  //TODO: Discuss: Add a delete account button on this page and a confirmation dialogue - confirmed - Also ask confirmation about deeting posts
+  //TODO: Discuss: Unlinking Social Profile? - Low Priority
 
   const handleSave = (values) => {
     const userDetails = {
