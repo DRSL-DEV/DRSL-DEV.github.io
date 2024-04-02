@@ -36,7 +36,6 @@ const HomePage = () => {
     };
   }, [dispatch]);
 
-  
   const mediaUrls = [
     gallery_placeholder,
     gallery_placeholder,
