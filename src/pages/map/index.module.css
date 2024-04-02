@@ -1,20 +1,20 @@
 .map-page-container {
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(var(--vh, 1vh) * 100 - 60px);
 }
 
 .map-page-container :global(*) {
   overflow: visible;
 }
 
-.locate-user-button{
+.locate-user-button {
   position: fixed;
   bottom: 60px;
   right: 60px;
 }
 
 .primary-modal-button {
-  background-color: #F6DFA4;
+  background-color: #f6dfa4;
   font-family: var(--font-family-heading);
 }
 
