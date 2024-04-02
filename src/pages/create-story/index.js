@@ -12,18 +12,65 @@ import { uploadFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
+import { ReactMic } from "react-mic";
+
 
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedBlob, setRecordedBlob] = useState(null);
+  const [audioFile, setAudioFile] = useState(null); // For storing and testing the recorded audio File object
+
+    const startRecording = () => {
+      setIsRecording(true);
+    };
+  
+    const stopRecording = () => {
+      setIsRecording(false);
+    };
+
+    // Function to save the recorded audio
+    const onData = (recordedBlob) => {
+      // No action is required; called continuously when audio data is being recorded
+    };
+
+    const removeAudio = () => {
+      setRecordedBlob(null);
+      setAudioFile(null);
+      setFileList(prevFileList => prevFileList.filter(file => file.uid !== 'audio-file'));
+    };
+
+    // Finish record and store the audio file
+    const onStop = (recordedBlob) => {
+      // console.log('recordedBlob is: ', recordedBlob); //recordedBlob.blobURL
+      
+      setRecordedBlob(recordedBlob);
+      setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav', 
+      { type: recordedBlob.blob.type}));
+      // const mimeType = recordedBlob.blob.type || 'audio/wav';
+
+      setFileList((prevFileList) => {
+        // Remove the previous audio if it exists
+        const updatedFileList = prevFileList.filter(file => file.uid !== 'audio-file');
+    
+        // Create a representation for the fileList
+        const audioFileObject = {
+          uid: 'audio-file', // identifier for the recorded file - removed if recording again
+          name: 'voice-recording.wav',
+          status: 'done',
+          originFileObj: recordedBlob.blob, // The file object itself
+          type: String(recordedBlob.blob.type), 
+        };
+        // console.log('audioFileObject is: ', audioFileObject);
+    
+        return [...updatedFileList, audioFileObject];
+      });
+      // console.log('current filelist is: ', fileList);
+    };
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-  const fileUploadStatus = useSelector(
-    (state) => state.fileUpload.uploadStatus
-  );
-
   const user = useSelector((state) => state.userInfo.user);
 
   useEffect(() => {
@@ -33,7 +80,7 @@ const CreateStory = () => {
   }, []);
 
   const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+    option?.children.toLowerCase().includes(input.toLowerCase())
 
   const fileUploadProps = {
     beforeUpload: (file) => {
@@ -71,12 +118,13 @@ const CreateStory = () => {
   };
 
   const handleSubmission = async (values) => {
+// dev
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
         uploadFile({
           file: {
             ...fileInfo.originFileObj,
-            name: `${fileInfo.originFileObj.name}_${new Date().getTime()}`,
+            name: `${new Date().getTime()}_${fileInfo.originFileObj.name}`,
           },
           folderPath: `post/${fileInfo.type.split("/")[0]}`,
         })
@@ -155,7 +203,11 @@ const CreateStory = () => {
               optionFilterProp="children"
               filterOption={filterOption}
               suffixIcon={<img src={location_red} alt="location" />}
-              options={siteLocationList}
+              options={siteLocationList.map((site) => ({
+                value: site.id,
+                label: site.name,
+              }))
+              }
             />
           </Form.Item>
 
@@ -211,7 +263,54 @@ const CreateStory = () => {
             </div>
           </Form.Item>
         </div>
+        
+        <div>
+          {/* ReactMic component to display for record audio */}
+          
+          <ReactMic
+            record={isRecording}
+            className="sound-wave"
+            onStop={onStop}
+            onData={onData}
+            strokeColor="#000000"
+            backgroundColor="#cae8fa"
+            styles={{ width: "100%", height: "20%" }}
+          />
 
+          <div className="audio-recording-buttons">
+          <Button
+            text="Start Recording"
+            handleOnClick={startRecording}
+            disabled={isRecording}
+            customStyles={{
+              backgroundColor: isRecording ? "#ccc" : "rgba(146, 187, 95, 0.75)",
+            }}
+          />
+
+          <Button
+            text="Stop Recording"
+            handleOnClick={stopRecording}
+            disabled={!isRecording}
+            customStyles= {{
+              backgroundColor: isRecording ? "var(--secondary-color-light-blue)" : "#ccc"
+            }}
+          />
+          </div>
+          
+          {recordedBlob && (
+            <>
+              <audio src={recordedBlob.blobURL} controls />
+              <Button
+                text="Remove Audio"
+                handleOnClick={removeAudio}
+                customStyles={{
+                  backgroundColor: "rgba(255, 156, 150, 0.75)",
+                }}
+              />
+            </>
+          )}
+        </div>
+        <br/>
         <Form.Item>
           <Button
             text="Submit"

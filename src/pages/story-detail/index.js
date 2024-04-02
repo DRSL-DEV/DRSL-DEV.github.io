@@ -9,6 +9,7 @@ import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import LikeButton from "../../components/LikeButton"
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
@@ -38,7 +39,8 @@ const StoryDetailPage = () => {
 
   return (
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
-      <div>
+      <div className={styles["story-icons"]}>
+        <LikeButton postId={postId} />
         <img
           className={styles["share-icon"]}
           onClick={handleShare}
@@ -60,6 +62,11 @@ const StoryDetailPage = () => {
                     <source src={mediaUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
+                ) : mediaUrl.includes("audio") ? (
+                  <audio controls>
+                    <source src={mediaUrl} type="audio/mpeg" />
+                    Your browser does not support the audio tag.
+                  </audio>
                 ) : (
                   <img
                     className={styles["story-image-gallery"]}

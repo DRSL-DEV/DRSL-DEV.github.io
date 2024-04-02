@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { Form, Input, InputNumber, Checkbox, Upload, Select } from 'antd';
+import { Form, Input, Checkbox, Upload, Select } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PrimaryButton from "../../components/PrimaryButton";
 import { updateUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
+import ImgCrop from 'antd-img-crop';
 
 const EditProfilePage = () => {
 
@@ -45,6 +46,26 @@ const EditProfilePage = () => {
     'Post-European Settlement',
   ];
   const filteredOptions = options.filter(o => !selectedTags.includes(o));
+
+  const [fileList, setFileList] = useState([]);
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
 
   const currentPassword = "12345678";
@@ -122,20 +143,32 @@ const EditProfilePage = () => {
         <div className={styles["profile-images-input"]}>
           <div>
             <h3>Profile Photo</h3>
-            <div className={styles["profile-image-left"]}>
-              <img className={styles["profile-img"]} src={profileImg} alt="profile" />
-              <Upload>
-                <Button customStyles={{ fontSize: '12px', width: '75px', height: '30px' }} text="Upload" />
-              </Upload>
+            <div className={styles["profile-upload"]}>
+              <ImgCrop rotationSlider>
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Upload>
+              </ImgCrop>
             </div>
           </div>
           <div>
             <h3>Profile Banner</h3>
-            <div className={styles["profile-image-left"]}>
-              <img className={styles["profile-img"]} src={profileImg} alt="profile" />
-              <Upload>
-                <Button customStyles={{ fontSize: '12px', width: '75px', height: '30px' }} text="Upload" />
-              </Upload>
+            <div className={styles["profile-upload"]}>
+              <ImgCrop rotationSlider>
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Upload>
+              </ImgCrop>
             </div>
           </div>
         </div>
