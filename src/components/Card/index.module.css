@@ -43,25 +43,21 @@
   justify-content: flex-start;
   flex-grow: 1;
   padding-right: 16px;
-  padding-bottom: 10px;
+  padding-bottom: 6px;
   position: relative;
 }
 
 .customized-card-content h2 {
   font-size: 18px;
   font-weight: 700;
+  line-height: normal;
 }
 
 .customized-card-content p {
   padding-top: 4px;
   font-size: 12px;
   flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: normal;
+  max-height: 50px;
 }
 
 .customized-card-footer > div {
@@ -77,8 +73,8 @@
   align-items: center;
   width: 100%;
   position: absolute;
-  bottom: -4px;
-  right: -20px;
+  bottom: 0;
+  right: -12px;
 }
 
 .customized-card-footer > div,
