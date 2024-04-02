@@ -18,8 +18,8 @@ const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
         <img src={logo_with_text} alt="logo_with_text" />
       </Link>
       <div className={styles["icons-container"]}>
-        <Link to={loginLink}>
-          <img src={profile} alt="login" />
+        <Link to={loginLink} style={{ height: "28px" }}>
+          <img src={profile} alt="login" style={{ height: "28px" }} />
         </Link>
 
         <img
