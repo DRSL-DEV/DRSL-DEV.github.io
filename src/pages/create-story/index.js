@@ -22,52 +22,52 @@ const CreateStory = () => {
   const [recordedBlob, setRecordedBlob] = useState(null);
   const [audioFile, setAudioFile] = useState(null); // For storing and testing the recorded audio File object
 
-    const startRecording = () => {
-      setIsRecording(true);
-    };
-  
-    const stopRecording = () => {
-      setIsRecording(false);
-    };
+  const startRecording = () => {
+    setIsRecording(true);
+  };
 
-    // Function to save the recorded audio
-    const onData = (recordedBlob) => {
-      // No action is required; called continuously when audio data is being recorded
-    };
+  const stopRecording = () => {
+    setIsRecording(false);
+  };
 
-    const removeAudio = () => {
-      setRecordedBlob(null);
-      setAudioFile(null);
-      setFileList(prevFileList => prevFileList.filter(file => file.uid !== 'audio-file'));
-    };
+  // Function to save the recorded audio
+  const onData = (recordedBlob) => {
+    // No action is required; called continuously when audio data is being recorded
+  };
 
-    // Finish record and store the audio file
-    const onStop = (recordedBlob) => {
-      // console.log('recordedBlob is: ', recordedBlob); //recordedBlob.blobURL
-      
-      setRecordedBlob(recordedBlob);
-      setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav', 
-      { type: recordedBlob.blob.type}));
-      // const mimeType = recordedBlob.blob.type || 'audio/wav';
+  const removeAudio = () => {
+    setRecordedBlob(null);
+    setAudioFile(null);
+    setFileList(prevFileList => prevFileList.filter(file => file.uid !== 'audio-file'));
+  };
 
-      setFileList((prevFileList) => {
-        // Remove the previous audio if it exists
-        const updatedFileList = prevFileList.filter(file => file.uid !== 'audio-file');
-    
-        // Create a representation for the fileList
-        const audioFileObject = {
-          uid: 'audio-file', // identifier for the recorded file - removed if recording again
-          name: 'voice-recording.wav',
-          status: 'done',
-          originFileObj: recordedBlob.blob, // The file object itself
-          type: String(recordedBlob.blob.type), 
-        };
-        // console.log('audioFileObject is: ', audioFileObject);
-    
-        return [...updatedFileList, audioFileObject];
-      });
-      // console.log('current filelist is: ', fileList);
-    };
+  // Finish record and store the audio file
+  const onStop = (recordedBlob) => {
+    // console.log('recordedBlob is: ', recordedBlob); //recordedBlob.blobURL
+
+    setRecordedBlob(recordedBlob);
+    setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav',
+      { type: recordedBlob.blob.type }));
+    // const mimeType = recordedBlob.blob.type || 'audio/wav';
+
+    setFileList((prevFileList) => {
+      // Remove the previous audio if it exists
+      const updatedFileList = prevFileList.filter(file => file.uid !== 'audio-file');
+
+      // Create a representation for the fileList
+      const audioFileObject = {
+        uid: 'audio-file', // identifier for the recorded file - removed if recording again
+        name: 'voice-recording.wav',
+        status: 'done',
+        originFileObj: recordedBlob.blob, // The file object itself
+        type: String(recordedBlob.blob.type),
+      };
+      // console.log('audioFileObject is: ', audioFileObject);
+
+      return [...updatedFileList, audioFileObject];
+    });
+    // console.log('current filelist is: ', fileList);
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -118,7 +118,7 @@ const CreateStory = () => {
   };
 
   const handleSubmission = async (values) => {
-// dev
+    // dev
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
         uploadFile({
@@ -211,6 +211,14 @@ const CreateStory = () => {
             />
           </Form.Item>
 
+
+          <Form.Item
+            name="content"
+            rules={[{ required: true, message: "Please write your story!" }]}
+          >
+            <Input.TextArea rows={4} placeholder="Write your story here..." />
+          </Form.Item>
+
           <Form.Item
             name="tags"
             rules={[
@@ -242,13 +250,6 @@ const CreateStory = () => {
             />
           </Form.Item>
 
-          <Form.Item
-            name="content"
-            rules={[{ required: true, message: "Please write your story!" }]}
-          >
-            <Input.TextArea rows={4} placeholder="Write your story here..." />
-          </Form.Item>
-
           <Form.Item valuePropName="fileList">
             <div className="upload-container">
               <Upload
@@ -262,11 +263,13 @@ const CreateStory = () => {
               </Upload>
             </div>
           </Form.Item>
+
+
         </div>
-        
+
         <div>
           {/* ReactMic component to display for record audio */}
-          
+
           <ReactMic
             record={isRecording}
             className="sound-wave"
@@ -278,25 +281,25 @@ const CreateStory = () => {
           />
 
           <div className="audio-recording-buttons">
-          <Button
-            text="Start Recording"
-            handleOnClick={startRecording}
-            disabled={isRecording}
-            customStyles={{
-              backgroundColor: isRecording ? "#ccc" : "rgba(146, 187, 95, 0.75)",
-            }}
-          />
+            <Button
+              text="Start Recording"
+              handleOnClick={startRecording}
+              disabled={isRecording}
+              customStyles={{
+                backgroundColor: isRecording ? "#ccc" : "rgba(146, 187, 95, 0.75)",
+              }}
+            />
 
-          <Button
-            text="Stop Recording"
-            handleOnClick={stopRecording}
-            disabled={!isRecording}
-            customStyles= {{
-              backgroundColor: isRecording ? "var(--secondary-color-light-blue)" : "#ccc"
-            }}
-          />
+            <Button
+              text="Stop Recording"
+              handleOnClick={stopRecording}
+              disabled={!isRecording}
+              customStyles={{
+                backgroundColor: isRecording ? "var(--secondary-color-light-blue)" : "#ccc"
+              }}
+            />
           </div>
-          
+
           {recordedBlob && (
             <>
               <audio src={recordedBlob.blobURL} controls />
@@ -310,7 +313,7 @@ const CreateStory = () => {
             </>
           )}
         </div>
-        <br/>
+        <br />
         <Form.Item>
           <Button
             text="Submit"
