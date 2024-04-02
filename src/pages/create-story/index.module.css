@@ -107,9 +107,6 @@
   flex-direction: column-reverse;
 }
 
-.create-story-form :global(.ant-upload-select) {
-  border-top: 1px solid #000;
-}
 
 .create-story-form :global(.ant-upload) {
   display: flex;
