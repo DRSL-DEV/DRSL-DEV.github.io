@@ -13,30 +13,6 @@ const menuItems = [
   { name: "Share Your Story", link: "/create-story" },
   { name: "Explore Regional Stories", link: "/site-page" },
   { name: "Station Map", link: "/map" },
-  {
-    name: "Learning Activities",
-    link: "/learning",
-    subMenu: [
-      { name: "Quizzes", link: "/learning/quiz" },
-      { name: "Site Scavenger Hunt", link: "/learning/site-hunt" },
-      { name: "Partnered Programs", link: "/learning/partner-program" },
-    ],
-  },
-  // { name: "River Timeline", link: "/timeline" },
-  // { name: "River Podcasts", link: "/podcast" },
-  {
-    name: "About Us",
-    link: "/about",
-    subMenu: [
-      { name: "Projects", link: "/about/project" },
-      { name: "News", link: "/about/news" },
-      { name: "Contact Information", link: "/about/contact-info" },
-    ],
-  },
-  {
-    name: "FAQ",
-    link: "/faq",
-  },
 ];
 
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -119,56 +95,24 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
     >
       {menuItems.map((item) => (
         <div key={item.name}>
-          {/* check if the item has a submenu */}
-          {item.subMenu ? (
-            <>
-              <h1
-                className={`${styles["menu-item"]} ${isActiveMenuItem(item) ? styles["active-menu-item"] : ""
-                  }`}
-                onClick={() => handleMenuClick(item)}
-              >
-                {item.name}
-                <img
-                  className={styles["submenu-arrow"]}
-                  src={
-                    isSubMenuActive(item.name)
-                      ? submenu_arrow_up
-                      : submenu_arrow_down
-                  }
-                  alt="Toggle Submenu"
-                />
-              </h1>
-
-              {/*  If the submenu is active, show the submenu */}
-              {isSubMenuActive(item.name) && (
-                <div className={styles["sub-menu"]}>
-                  {item.subMenu.map((subItem) => (
-                    <Link
-                      to={subItem.link}
-                      key={subItem.name}
-                      className={styles["sub-menu-item"]}
-                      onClick={() => setIsMenuOpen(false)} // Close the menu
-                    >
-                      <h2>{subItem.name}</h2>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            // If the item does not have a submenu, show the item
-            <Link
-              to={item.link}
-              className={`${styles["menu-item"]} ${isActiveMenuItem(item) ? styles["active-menu-item"] : ""
-                }`}
-              onClick={() => setIsMenuOpen(false)} // Close the menu
-            >
-              <h1>{item.name}</h1>
-            </Link>
-          )}
+          <Link
+            to={item.link}
+            className={`${styles["menu-item"]} ${
+              isActiveMenuItem(item) ? styles["active-menu-item"] : ""
+            }`}
+            onClick={() => setIsMenuOpen(false)} // Close the menu
+          >
+            <h1>{item.name}</h1>
+          </Link>
         </div>
       ))}
-      {!!user && <div><a className={styles["menu-item"]} onClick={handleLogOut}><h1 className={styles["sign-out"]}>Sign Out</h1></a></div>}
+      {!!user && (
+        <div>
+          <a className={styles["menu-item"]} onClick={handleLogOut}>
+            <h1 className={styles["sign-out"]}>Sign Out</h1>
+          </a>
+        </div>
+      )}
     </div>
   );
 };
