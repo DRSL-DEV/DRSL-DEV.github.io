@@ -70,3 +70,7 @@
 .sub-menu-item:hover {
   background-color: var(--primary-color-light-blue);
 }
+
+.sign-out {
+ color: var(--primary-warning-color-red);
+}

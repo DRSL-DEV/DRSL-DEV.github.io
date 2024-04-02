@@ -3,6 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import submenu_arrow_up from "../../assets/icons/submenu_arrow_up.svg";
 import submenu_arrow_down from "../../assets/icons/submenu_arrow_down.svg";
 import styles from "./index.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutUser } from "../../data/features/userInfoSlice";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 // Menu items
 const menuItems = [
@@ -18,8 +22,8 @@ const menuItems = [
       { name: "Partnered Programs", link: "/learning/partner-program" },
     ],
   },
-  { name: "River Timeline", link: "/timeline" },
-  { name: "River Podcasts", link: "/podcast" },
+  // { name: "River Timeline", link: "/timeline" },
+  // { name: "River Podcasts", link: "/podcast" },
   {
     name: "About Us",
     link: "/about",
@@ -38,6 +42,24 @@ const menuItems = [
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const [activeMenus, setActiveMenus] = useState({}); // Active submenus
   const location = useLocation(); // Get current location (routing location)
+  const user = useSelector((state) => state.userInfo.user);
+
+  //Signout button functionality
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    setIsMenuOpen(false);
+    dispatch(signOutUser());
+    localStorage.removeItem("userInfo");
+    navigate("/");
+    message.success({
+      content: `Successfully signed out!`,
+      duration: 2,
+    });
+  };
+
   const menuRef = useRef();
 
   // Close the submenu when the menu is closed
@@ -101,9 +123,8 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
           {item.subMenu ? (
             <>
               <h1
-                className={`${styles["menu-item"]} ${
-                  isActiveMenuItem(item) ? styles["active-menu-item"] : ""
-                }`}
+                className={`${styles["menu-item"]} ${isActiveMenuItem(item) ? styles["active-menu-item"] : ""
+                  }`}
                 onClick={() => handleMenuClick(item)}
               >
                 {item.name}
@@ -138,9 +159,8 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
             // If the item does not have a submenu, show the item
             <Link
               to={item.link}
-              className={`${styles["menu-item"]} ${
-                isActiveMenuItem(item) ? styles["active-menu-item"] : ""
-              }`}
+              className={`${styles["menu-item"]} ${isActiveMenuItem(item) ? styles["active-menu-item"] : ""
+                }`}
               onClick={() => setIsMenuOpen(false)} // Close the menu
             >
               <h1>{item.name}</h1>
@@ -148,6 +168,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
           )}
         </div>
       ))}
+      {!!user && <div><a className={styles["menu-item"]} onClick={handleLogOut}><h1 className={styles["sign-out"]}>Sign Out</h1></a></div>}
     </div>
   );
 };

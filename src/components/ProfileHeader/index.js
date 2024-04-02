@@ -1,9 +1,4 @@
 import styles from "./index.module.css";
-import { useDispatch } from "react-redux";
-import { signOutUser } from "../../data/features/userInfoSlice";
-import { useNavigate } from "react-router-dom";
-import { message } from "antd";
-
 import edit_profile from "../../assets/icons/edit_icon.svg";
 import { Link } from "react-router-dom";
 
@@ -15,18 +10,7 @@ const ProfileHeader = ({
   bio,
   topics,
 }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const handleLogOut = () => {
-    dispatch(signOutUser());
-    localStorage.removeItem("userInfo");
-    navigate("/");
-    message.success({
-      content: `Successfully signed out!`,
-      duration: 2,
-    });
-  };
 
   return (
     <div className={styles["user-profile-container"]}>
