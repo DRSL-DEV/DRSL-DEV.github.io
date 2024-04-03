@@ -17,6 +17,10 @@
   gap: 18px;
 }
 
+.icons-container a img {
+  height: 28px;
+}
+
 img {
   cursor: pointer;
 }
