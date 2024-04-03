@@ -23,8 +23,8 @@ const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
           <img src={search} alt="search" />
         </Link>
 
-        <Link to={loginLink}>
-          <img src={profile} alt="login" />
+        <Link to={loginLink} style={{ height: "28px" }}>
+          <img src={profile} alt="login" style={{ height: "28px" }} />
         </Link>
 
         <img

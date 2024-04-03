@@ -100,7 +100,7 @@ const MapPage = () => {
         <div className={styles["select-container"]}>
           <Select
             showSearch
-            style={{ width: 400, height: 40 }}
+            style={{ width: 300, height: 40 }}
             placeholder="Select or Search a Site Location"
             optionFilterProp="children"
             filterOption={(input, option) =>

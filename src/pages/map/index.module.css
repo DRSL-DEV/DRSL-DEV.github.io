@@ -1,13 +1,13 @@
 .map-page-container {
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(var(--vh, 1vh) * 100 - 60px);
 }
 
 .map-page-container :global(*) {
   overflow: visible;
 }
 
-.locate-user-button{
+.locate-user-button {
   position: fixed;
   bottom: 60px;
   right: 60px;
@@ -26,14 +26,26 @@
 }
 
 .primary-modal-button {
-  background-color: #F6DFA4;
+  background-color: #f6dfa4;
   font-family: var(--font-family-heading);
 }
 
 .select-container {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 120px;
+  left: 20px;
+  right: 20px;
   z-index: 2;
-  margin: 20px;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .select-container {
+    left: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+  }
 }

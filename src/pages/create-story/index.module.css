@@ -79,6 +79,7 @@
   line-height: normal;
   color: #000;
   overflow-y: scroll;
+  border-bottom: 1px solid #000 !important;
 }
 
 .create-story-form :global(#create_story_content::placeholder) {
@@ -106,9 +107,6 @@
   flex-direction: column-reverse;
 }
 
-.create-story-form :global(.ant-upload-select) {
-  border-top: 1px solid #000;
-}
 
 .create-story-form :global(.ant-upload) {
   display: flex;

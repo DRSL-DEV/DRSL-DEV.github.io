@@ -1,21 +1,22 @@
 import styles from "./index.module.css";
+import { useState } from "react";
 import arrow_right from "../../assets/icons/arrow_right.svg";
+import defaultImg from "../../assets/images/default_media.png";
 import { Link } from "react-router-dom";
 
 const Card = ({ title, content, userId, type, imgSrc, postId }) => {
-  // Fetch the user's name from another collection using userId
-  // This is just a placeholder. Replace it with actual code.
-  // const author = fetchUserName(userId);
-
-  // Use the first item in the media array as the image source
-  // const imgSrc = media[0];
+  const [hasError, setHasError] = useState(false);
 
   return (
     <>
       {type === "lab-story" ? (
         <div className={`${styles["customized-card"]} ${styles[type]}`}>
           <div className={styles["customized-card-image"]}>
-            <img src={imgSrc} alt="" />
+            <img
+              src={hasError ? defaultImg : imgSrc}
+              alt=""
+              onError={() => setHasError(true)}
+            />
           </div>
           <div className={styles["customized-card-content"]}>
             <h2>{title}</h2>
@@ -37,9 +38,15 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
           state={{ postId: postId }}
         >
           <div className={`${styles["customized-card"]} ${styles[type]}`}>
-            <div className={styles["customized-card-image"]}>
-              <img src={imgSrc} alt="" />
-            </div>
+            {imgSrc && (
+              <div className={styles["customized-card-image"]}>
+                <img
+                  src={hasError ? defaultImg : imgSrc}
+                  alt=""
+                  onError={() => setHasError(true)}
+                />
+              </div>
+            )}
             <div className={styles["customized-card-content"]}>
               <h2>{title}</h2>
               <p>{content}</p>
