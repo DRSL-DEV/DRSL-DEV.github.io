@@ -14,9 +14,6 @@ import { useSelector, useDispatch } from "react-redux";
 import Card from "../../components/Card";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
 
-const { Option } = Select;
-
-
 const SearchPage = () => {
   const onSearch = (value) => console.log(value);
   const navigate = useNavigate();
@@ -25,11 +22,11 @@ const SearchPage = () => {
 
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
-  const [selectedAuthor, setSelectedAuthor] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedAuthor, setSelectedAuthor] = useState('all');
+  const [selectedDate, setSelectedDate] = useState('anytime');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filteredStories, setFilteredStories] = useState([]);
-  const [previousFilters, setPreviousFilters] = useState({});
+  // const [previousFilters, setPreviousFilters] = useState({});
 
 
   useEffect(() => {
@@ -119,15 +116,6 @@ const SearchPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (isFilterOpen && Object.keys(previousFilters).length > 0) {
-      setSelectedLocation(previousFilters.selectedLocation);
-      setSelectedTag(previousFilters.selectedTag);
-      setSelectedAuthor(previousFilters.selectedAuthor);
-      setSelectedDate(previousFilters.selectedDate);
-    }
-  }, [isFilterOpen, previousFilters]);
-
   return (
     <div className={`page-container ${styles["search-page-container"]}`}>
       <div className={styles["new-navbar-container"]}>
@@ -143,22 +131,20 @@ const SearchPage = () => {
           <Select
             placeholder="Select location"
             value={selectedLocation || undefined}
-            onChange={(value) => {
-              setSelectedLocation(value);
+            onChange={(id) => {
+              setSelectedLocation(id);
             }}
             mode="location"
             showSearch
             optionFilterProp="children"
             filterOption={filterOption}
             suffixIcon={<img src={location_red} alt="location" />}
-            options={siteLocationList}
+            options={siteLocationList.map((site) => ({
+              value: site.id,
+              label: site.name,
+            }))}
             className={styles["drop-down"]}
           >
-            {siteLocationList.map((location) => (
-              <Option key={location.value} value={location.value}>
-                {location.label}
-              </Option>
-            ))}
           </Select>
           <Divider />
 
@@ -174,19 +160,17 @@ const SearchPage = () => {
             optionFilterProp="children"
             filterOption={filterOption}
             suffixIcon={<img src={tag_blue} alt="tags" />}
-            options={tagList}
+            options={tagList.map((tag) => ({
+              value: tag.value,
+              label: tag.label,
+            }))}
             className={styles["drop-down"]}
           >
-            {tagList.map((tag) => (
-              <Option key={tag.value} value={tag.value}>
-                {tag.label}
-              </Option>
-            ))}
           </Select>
           <Divider />
 
           <h3>Author</h3>
-          <Radio.Group onChange={(e) => setSelectedAuthor(e.target.value)}>
+          <Radio.Group onChange={(e) => setSelectedAuthor(e.target.value)} value={selectedAuthor}>
           <Space direction="vertical">
             <Radio value="all">All</Radio>
             <Radio value="user">User</Radio>
@@ -196,7 +180,7 @@ const SearchPage = () => {
           <Divider />
 
           <h3>Date</h3>
-          <Radio.Group onChange={(e) => setSelectedDate(e.target.value)}>
+          <Radio.Group onChange={(e) => setSelectedDate(e.target.value)} value={selectedDate}>
             <Space direction="vertical">
               <Radio value="anytime">Anytime</Radio>
               <Radio value="today">Today</Radio>

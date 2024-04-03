@@ -53,6 +53,11 @@
 
 .drop-down :global(.ant-select-selector) {
   min-height: 40px;
+  padding: 10px; /* Add padding to ensure text visibility */
+}
+
+.ant-select-item-option-content {
+  white-space: normal; /* Allow text to wrap within the dropdown options */
 }
 
 .filter-container :global(.ant-select .ant-select-arrow) {
