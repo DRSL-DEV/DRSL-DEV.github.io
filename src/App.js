@@ -4,7 +4,6 @@ import {
   Routes,
   Route,
   useLocation,
-  RouterProvider,
 } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";

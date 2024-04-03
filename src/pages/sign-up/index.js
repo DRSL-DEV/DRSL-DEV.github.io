@@ -8,7 +8,6 @@ import CheckBox from "../../components/Checkbox";
 import GoogleIcon from "../../assets/icons/Google icon.svg";
 import PageHeader from "../../components/PageHeader";
 import styles from "./index.module.css";
-// import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../data/features/userInfoSlice";
@@ -19,27 +18,24 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 
-
 const SignUpPage = () => {
-  const [form] = Form.useForm();
-  const [userCredentials, setUserCredentials] = useState({});
+  // const [form] = Form.useForm();
+  // const [userCredentials, setUserCredentials] = useState({});
   const [error, setError] = useState("");
 
   const user = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
 
-
-  const handleCredentials = (changedValues, allValues) => {
-    setUserCredentials(allValues);
-  };
+  // const handleCredentials = (changedValues, allValues) => {
+  //   setUserCredentials(allValues);
+  // };
 
   const onFinish = (values) => {
     setError("");
     const { email, password, username, anonymousSubmissionCheck } = values;
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {   
-
+      .then((userCredential) => {
         const { user } = userCredential;
         updateProfile(user, {
           displayName: username,
@@ -74,11 +70,11 @@ const SignUpPage = () => {
     getRedirectResult(auth)
       .then((result) => {
         if (result) {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
+          // const credential = GoogleAuthProvider.credentialFromResult(result);
           // This gives you a Google Access Token. You can use it to access the Google API.
-          const token = credential.accessToken;
+          // const token = credential.accessToken;
           // The signed-in user info.
-          const user = result.user;        
+          // const user = result.user;
           const userInfo = {
             uid: auth.currentUser.uid,
             username: auth.currentUser.displayName,
@@ -91,13 +87,13 @@ const SignUpPage = () => {
 
           dispatch(addUser(userInfo));
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        }            
+        }
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
-    //Google SignUp
+  }, [auth, dispatch]);
+  //Google SignUp
 
   const handleGoogleSignUp = () => {
     //Code here for Google Sign Up
@@ -113,7 +109,7 @@ const SignUpPage = () => {
           <Form
             name="signup"
             onFinish={onFinish}
-            onValuesChange={handleCredentials}
+            // onValuesChange={handleCredentials}
             layout="vertical"
             initialValues={{
               username: user?.username,

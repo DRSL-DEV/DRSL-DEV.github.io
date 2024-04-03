@@ -5,7 +5,7 @@ import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import CategoryHeader from "../../components/CategoryHeader";
-import imgSrc from "../../assets/images/card_img.png";
+// import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
 import filter from "../../assets/icons/filter.svg";
 import location_pin from "../../assets/icons/location_pin.svg";

@@ -1,51 +1,46 @@
 import styles from "./index.module.css";
-import { Form, Input, Checkbox, Upload, Select } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Form, Input, Checkbox, Upload, Select } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
-import profileImg from "../../assets/images/profile.png";
-import { useState } from 'react';
-import googleIcon from "../../assets/icons/Google icon.svg"
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from "react";
+import googleIcon from "../../assets/icons/Google icon.svg";
+import { useSelector, useDispatch } from "react-redux";
 import PrimaryButton from "../../components/PrimaryButton";
 import { updateUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
-import ImgCrop from 'antd-img-crop';
+import ImgCrop from "antd-img-crop";
 
 const EditProfilePage = () => {
-
   const currentUser = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [profileImage, setProfileImage] = useState(currentUser.profileImage);
-  // const [profileBanner, setProfileBanner] = useState(currentUser.profileBanner);
   const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
   const [formFields, setFormFields] = useState({});
 
-
   const validateMessages = {
-    required: '${label} is required!',
+    required: "${label} is required!",
     types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
+      email: "${label} is not a valid email!",
+      number: "${label} is not a valid number!",
     },
     number: {
-      range: '${label} must be between ${min} and ${max}',
+      range: "${label} must be between ${min} and ${max}",
     },
   };
 
   const options = [
-    'Communities & Livelihood',
-    'Indigenous History',
-    'Underground Railroad',
-    'Civil Rights & Freedom',
-    'Cultural Identities',
-    'Environment & Ecology',
-    'Organizations & Industries',
-    'Modern-Day History',
-    'Post-European Settlement',
+    "Communities & Livelihood",
+    "Indigenous History",
+    "Underground Railroad",
+    "Civil Rights & Freedom",
+    "Cultural Identities",
+    "Environment & Ecology",
+    "Organizations & Industries",
+    "Modern-Day History",
+    "Post-European Settlement",
   ];
-  const filteredOptions = options.filter(o => !selectedTags.includes(o));
+  const filteredOptions = options.filter((o) => !selectedTags.includes(o));
 
   const [fileList, setFileList] = useState([]);
   const onChange = ({ fileList: newFileList }) => {
@@ -55,7 +50,7 @@ const EditProfilePage = () => {
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
-      src = await new Promise(resolve => {
+      src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj);
         reader.onload = () => resolve(reader.result);
@@ -66,7 +61,6 @@ const EditProfilePage = () => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-
 
   const currentPassword = "12345678";
 
@@ -91,7 +85,7 @@ const EditProfilePage = () => {
     console.log("Dispatching user Details: ", userDetails);
     dispatch(updateUser({ userDetails: userDetails, uid: currentUser.id }));
     navigate("/profile");
-  }
+  };
 
   const handleValuesChange = (changedValues, allValues) => {
     setFormFields(allValues);
@@ -99,7 +93,7 @@ const EditProfilePage = () => {
 
   return (
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
-      <PageHeader title='Account Information' />
+      <PageHeader title="Account Information" />
       <h3>Profile</h3>
       <Form
         initialValues={{
@@ -118,25 +112,43 @@ const EditProfilePage = () => {
         validateMessages={validateMessages}
         className={styles["edit-profile-form"]}
       >
-
         <div>
           <div className={styles["short-input-container"]}>
-            <Form.Item name="userName" label="Username" rules={[{ required: true }]}>
-              <Input className={styles["short-input"]}/>
+            <Form.Item
+              name="userName"
+              label="Username"
+              rules={[{ required: true }]}
+            >
+              <Input className={styles["short-input"]} />
               {/* <Input className={styles["short-input"]} value={userName} onChange={(text) => setUserName(text)} /> */}
             </Form.Item>
-            <Form.Item name="profileName" label="Profile Name" rules={[{ required: false }]}>
-            <Input className={styles["short-input"]} />
+            <Form.Item
+              name="profileName"
+              label="Profile Name"
+              rules={[{ required: false }]}
+            >
+              <Input className={styles["short-input"]} />
               {/* <Input className={styles["short-input"]} value={profileName} onChange={(text) => setProfileName(text)} /> */}
             </Form.Item>
           </div>
-          <Form.Item name="anonySubChk" label="Anonymous Submissions" valuePropName="checked"
-              getValueFromEvent={(e) => e.target.checked}>
-            <Checkbox className={styles["check-box"]} ><span>Optional: Have account displayed as anonymous.</span><span>This can be changed at any time.</span></Checkbox>
+          <Form.Item
+            name="anonySubChk"
+            label="Anonymous Submissions"
+            valuePropName="checked"
+            getValueFromEvent={(e) => e.target.checked}
+          >
+            <Checkbox className={styles["check-box"]}>
+              <span>Optional: Have account displayed as anonymous.</span>
+              <span>This can be changed at any time.</span>
+            </Checkbox>
           </Form.Item>
 
           <Form.Item name="userBio" label="Biography">
-            <Input.TextArea showCount maxLength={200} placeholder="Would you like to add a biography?"/>
+            <Input.TextArea
+              showCount
+              maxLength={200}
+              placeholder="Would you like to add a biography?"
+            />
           </Form.Item>
         </div>
 
@@ -151,7 +163,7 @@ const EditProfilePage = () => {
                   onChange={onChange}
                   onPreview={onPreview}
                 >
-                  {fileList.length < 1 && '+ Upload'}
+                  {fileList.length < 1 && "+ Upload"}
                 </Upload>
               </ImgCrop>
             </div>
@@ -166,7 +178,7 @@ const EditProfilePage = () => {
                   onChange={onChange}
                   onPreview={onPreview}
                 >
-                  {fileList.length < 1 && '+ Upload'}
+                  {fileList.length < 1 && "+ Upload"}
                 </Upload>
               </ImgCrop>
             </div>
@@ -181,7 +193,7 @@ const EditProfilePage = () => {
               placeholder="Please pick your topics"
               value={selectedTags}
               onChange={setSelectedTags}
-              options={filteredOptions.map(item => ({
+              options={filteredOptions.map((item) => ({
                 value: item,
                 label: item,
               }))}
@@ -191,17 +203,19 @@ const EditProfilePage = () => {
 
         <div>
           <h3>Personal Information</h3>
-          <Form.Item name="email" label="Email" rules={[{ type: 'email' }]}>
+          <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
             <Input />
           </Form.Item>
           <Form.Item name="password" label="Password">
             <Input.Password
               placeholder="input password"
-              iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
           <Form.Item name="phoneNumber" label="Phone Number">
-            <Input/>
+            <Input />
           </Form.Item>
         </div>
 
@@ -219,14 +233,13 @@ const EditProfilePage = () => {
             alt="google log in"
           />
           <h4>Google</h4>
-          <Button customStyles={{ fontSize: '14px', width: '100px', height: '30px' }} text="Unlink" />
+          <Button
+            customStyles={{ fontSize: "14px", width: "100px", height: "30px" }}
+            text="Unlink"
+          />
         </div>
       </div>
-
-
     </div>
   );
-
 };
 export default EditProfilePage;
-
