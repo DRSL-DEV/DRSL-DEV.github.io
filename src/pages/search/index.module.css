@@ -1,0 +1,77 @@
+
+.search-page-container{
+  margin: 0;
+  padding: 0;
+}
+
+.new-navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  background-color: var(--primary-color-light-blue);
+  padding: 0 18px;
+  position: fixed;
+  overflow: visible;
+  z-index: 100;
+}
+
+/* .filter-container{
+  margin: 70px 5vw;
+} */
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  /* margin: 0 auto; */
+  margin: 70px auto;
+}
+
+.filter-container h2 {
+  margin-top: 5%;
+  margin-bottom: 10%;
+
+}
+
+.filter-container h3 {
+  margin-bottom: 5%;
+}
+
+.filter-container .ant-select,
+.filter-container .ant-radio-group {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.filter-button {
+  display: flex;
+  justify-content: space-between; /* Adjusts the space between the buttons */
+  margin-top: 10%;
+}
+
+.drop-down :global(.ant-select-selector) {
+  min-height: 40px;
+  padding: 10px; /* Add padding to ensure text visibility */
+}
+
+.ant-select-item-option-content {
+  white-space: normal; /* Allow text to wrap within the dropdown options */
+}
+
+.filter-container :global(.ant-select .ant-select-arrow) {
+  top: 0;
+  height: 100%;
+  margin-top: 0;
+}
+
+.filter-container :global(.ant-select-single) {
+  height: unset;
+}
+
+.filtered-stories-container{
+  margin-top: 70px;
+  margin-left: 7%;
+  margin-right: 7%;
+}
