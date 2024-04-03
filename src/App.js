@@ -41,7 +41,7 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    document.querySelector("#App").scrollTo(0, 0);
   }, [pathname]);
 
   return null;
@@ -66,11 +66,12 @@ function App() {
 
   return (
     <Router>
-      <ScrollToTop />
-      <div className="App">
+      <div className="App" id="App">
         <NavBar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
         <div className="routes-wrapper">
+          <ScrollToTop />
+
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route
