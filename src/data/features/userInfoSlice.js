@@ -62,20 +62,28 @@ export const addUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'userInfo/updateUser',
-  async ({userDetails, uid}, { rejectWithValue }) => {
+  async ({ userDetails, uid }, { rejectWithValue }) => {
     try {
       console.log("In the reducer function. Received: ", userDetails, uid);
-      await updateDoc(doc(db, "user", uid), userDetails);
-      const updatedDocRef = doc(db, "user", uid);
-      const updatedDocSnap = await getDoc(updatedDocRef);
-      if (updatedDocSnap.exists()) {
-        console.log("Updated document in Firestore: ", updatedDocSnap.data());
-        const updatedUser = { id: updatedDocSnap.id, ...updatedDocSnap.data() };
-        return updatedUser;
-      } else {
-        console.log("No updated document found!");
-        return rejectWithValue("No updated document found!");
+      const userDocRef = doc(db, "user", uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+      if (userDocSnapshot.exists()) {
+        console.log("User found in firestore: ", userDocSnapshot.data());
+        await updateDoc(userDocRef, userDetails);
+        const updatedDocSnap = await getDoc(userDocRef);
+        if (updatedDocSnap.exists()) {
+          console.log("Updated document in Firestore: ", updatedDocSnap.data());
+          const updatedUser = { id: updatedDocSnap.id, ...updatedDocSnap.data() };
+          return updatedUser;
+        } else {
+          console.log("No updated document found!");
+          return rejectWithValue("No updated document found!");
+        }
       }
+      else {
+        console.log("User id to update in Firebase not found");
+      }
+
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -108,8 +116,8 @@ const userInfoSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        // Handle the state update when addUserDetails is rejected
-        // ...
+        state.status = "failed";
+        state.error = action.error.message;
       })
       .addCase(fetchUserById.pending, (state) => {
         state.status = "loading";

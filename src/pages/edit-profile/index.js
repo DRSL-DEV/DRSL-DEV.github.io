@@ -3,13 +3,15 @@ import { Form, Input, Checkbox, Upload, Select } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
-import { useState } from "react";
-import googleIcon from "../../assets/icons/Google icon.svg";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from 'react';
+import googleIcon from "../../assets/icons/Google icon.svg"
+import { useSelector, useDispatch } from 'react-redux';
 import PrimaryButton from "../../components/PrimaryButton";
 import { updateUser } from "../../data/features/userInfoSlice";
 import { useNavigate } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { message } from "antd";
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
@@ -40,7 +42,8 @@ const EditProfilePage = () => {
     "Modern-Day History",
     "Post-European Settlement",
   ];
-  const filteredOptions = options.filter((o) => !selectedTags.includes(o));
+
+  const filteredOptions = options.filter(o => selectedTags && !selectedTags.includes(o));
 
   const [fileList, setFileList] = useState([]);
   const onChange = ({ fileList: newFileList }) => {
@@ -62,8 +65,6 @@ const EditProfilePage = () => {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const currentPassword = "12345678";
-
   //TODO: Add the ability to upload profile and banner images
   //TODO: Vaidate phone number input
 
@@ -82,14 +83,48 @@ const EditProfilePage = () => {
       anonymousSubmissionCheck: values.anonySubChk,
       tagsOfInterest: selectedTags,
     };
-    console.log("Dispatching user Details: ", userDetails);
-    dispatch(updateUser({ userDetails: userDetails, uid: currentUser.id }));
-    navigate("/profile");
-  };
+    const userWithoutNullValues= Object.fromEntries(
+      Object.entries(userDetails).filter(([key, value]) => value !== undefined));
+      // Object.entries(userDetails).filter(([key, value]) => value !== undefined && !(Array.isArray(value) && value.length === 0)));
+    console.log("Dispatching user Details: ", userWithoutNullValues);
+    dispatch(updateUser({ userDetails: userWithoutNullValues, uid: currentUser.id })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        navigate("/profile");
+      } else {
+        console.log("Error updating user: ", result.payload);
+        message.error({
+          content: `Broken: ${result.payload}`,
+          duration: 8,
+        })      }
+    });
+  }
 
   const handleValuesChange = (changedValues, allValues) => {
     setFormFields(allValues);
   };
+
+  const handlePasswordChange = (email) => {
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        message.success({
+          content: `An email for changing your password has been sent to ${email}. Please check your inbox.`,
+          duration: 6,
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Error code: ", errorCode);
+        message.error({
+          content: `There was a problem in sending the password reset email: ${errorMessage}`,
+          duration: 5,
+        });
+      });
+    console.log("Password change requested for: ", email);
+
+  }
+
 
   return (
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
@@ -99,12 +134,11 @@ const EditProfilePage = () => {
         initialValues={{
           userName: currentUser.username,
           profileName: currentUser.profileName,
-          password: currentPassword,
           email: currentUser.email,
           userBio: currentUser.biography,
           phoneNumber: currentUser.phoneNumber,
           anonySubChk: !!currentUser.anonymousSubmissionCheck,
-          interest: currentUser.tagsOfInterest,
+          interest: currentUser.tagsOfInterests || selectedTags,
         }}
         onFinish={handleSave}
         onValuesChange={handleValuesChange}
@@ -114,41 +148,20 @@ const EditProfilePage = () => {
       >
         <div>
           <div className={styles["short-input-container"]}>
-            <Form.Item
-              name="userName"
-              label="Username"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="userName" label="Username" rules={[{ required: true }]}>
               <Input className={styles["short-input"]} />
-              {/* <Input className={styles["short-input"]} value={userName} onChange={(text) => setUserName(text)} /> */}
             </Form.Item>
-            <Form.Item
-              name="profileName"
-              label="Profile Name"
-              rules={[{ required: false }]}
-            >
+            <Form.Item name="profileName" label="Profile Name" rules={[{ required: false }]}>
               <Input className={styles["short-input"]} />
-              {/* <Input className={styles["short-input"]} value={profileName} onChange={(text) => setProfileName(text)} /> */}
             </Form.Item>
           </div>
-          <Form.Item
-            name="anonySubChk"
-            label="Anonymous Submissions"
-            valuePropName="checked"
-            getValueFromEvent={(e) => e.target.checked}
-          >
-            <Checkbox className={styles["check-box"]}>
-              <span>Optional: Have account displayed as anonymous.</span>
-              <span>This can be changed at any time.</span>
-            </Checkbox>
+          <Form.Item name="anonySubChk" label="Anonymous Submissions" valuePropName="checked"
+            getValueFromEvent={(e) => e.target.checked}>
+            <Checkbox className={styles["check-box"]} ><span>Optional: Have account displayed as anonymous.</span><span>This can be changed at any time.</span></Checkbox>
           </Form.Item>
 
           <Form.Item name="userBio" label="Biography">
-            <Input.TextArea
-              showCount
-              maxLength={200}
-              placeholder="Would you like to add a biography?"
-            />
+            <Input.TextArea showCount maxLength={200} placeholder="Would you like to add a biography?" />
           </Form.Item>
         </div>
 
@@ -203,20 +216,13 @@ const EditProfilePage = () => {
 
         <div>
           <h3>Personal Information</h3>
-          <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="password" label="Password">
-            <Input.Password
-              placeholder="input password"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
+          <Form.Item name="email" label="Email" rules={[{ type: 'email' }]}>
+            <Input disabled={true} />
           </Form.Item>
           <Form.Item name="phoneNumber" label="Phone Number">
             <Input />
           </Form.Item>
+            <a href="#" onClick={() => handlePasswordChange(currentUser.email)}>I want to change my password</a>
         </div>
 
         <Form.Item>

@@ -5,17 +5,23 @@ import { message } from "antd";
 
 const AuthListener = ({ children }) => {
   const navigate = useNavigate();
+  const auth = getAuth();
 
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, redirect to the home page
         navigate("/");
-        message.success({
+        if (user.displayName) {message.success({
           content: `Successfully signed in as ${user.displayName}!`,
           duration: 2,
-        });      } else {
+        }); } else{
+          message.success({
+            content: `Signup successful!`,
+            duration: 2,
+          });
+        }
+             } else {
         // User is signed out
         // Handle sign-out or maintain current state
         
@@ -24,7 +30,7 @@ const AuthListener = ({ children }) => {
 
     // Clean up the listener when the component unmounts
     return () => unsubscribe();
-  }, [navigate]);
+  }, [auth]);
 
   return children;
 };
