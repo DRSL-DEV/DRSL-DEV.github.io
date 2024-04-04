@@ -19,16 +19,10 @@ import {
 } from "firebase/auth";
 
 const SignUpPage = () => {
-  // const [form] = Form.useForm();
-  // const [userCredentials, setUserCredentials] = useState({});
   const [error, setError] = useState("");
 
   const user = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
-
-  // const handleCredentials = (changedValues, allValues) => {
-  //   setUserCredentials(allValues);
-  // };
 
   const onFinish = (values) => {
     setError("");
@@ -93,8 +87,8 @@ const SignUpPage = () => {
         console.error(error);
       });
   }, [auth, dispatch]);
-  //Google SignUp
 
+  //Google SignUp
   const handleGoogleSignUp = () => {
     //Code here for Google Sign Up
     signInWithRedirect(auth, provider);
@@ -109,7 +103,6 @@ const SignUpPage = () => {
           <Form
             name="signup"
             onFinish={onFinish}
-            // onValuesChange={handleCredentials}
             layout="vertical"
             initialValues={{
               username: user?.username,

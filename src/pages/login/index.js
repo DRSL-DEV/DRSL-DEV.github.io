@@ -34,16 +34,10 @@ const LoginPage = () => {
         password
       );
       const { user } = userCredential;
-      console.log("uid being dispatched to UserInfoSlice:", user.uid);
 
       dispatch(fetchUserById(user.uid)).then((result) => {
-
-        console.log("User found? ", result.meta.requestStatus);
-
-        console.log("FetchUserbyID result: ", result);
         if (result.meta.requestStatus === "fulfilled") {
           const userInfo = result.payload;
-          console.log("User found: ", result.payload);
           dispatch(setUser(userInfo));
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
         } else {
@@ -51,12 +45,16 @@ const LoginPage = () => {
           message.error({
             content: `Could not log in: ${errorMsg}`,
             duration: 2,
-          })
+          });
         }
-
       });
-
     } catch (error) {
+      message.error({
+        content: `Could not log in: ${error.code
+          .split("/")[1]
+          .replace(/-/g, " ")}`,
+        duration: 3,
+      });
       setErrorMsg(error.message);
     }
   };
@@ -72,21 +70,13 @@ const LoginPage = () => {
           const credential = GoogleAuthProvider.credentialFromResult(result);
           // This gives you a Google Access Token. You can use it to access the Google API.
           const token = credential.accessToken;
-          // // The signed-in user info.
-          console.log("uid being dispatched to UserInfoSlice:", auth.currentUser.uid);
 
           dispatch(fetchUserById(auth.currentUser.uid)).then((result) => {
-            console.log("User found? ", result.meta.requestStatus);
-
-            console.log("FetchUserbyID result: ", result);
             if (result.meta.requestStatus === "fulfilled") {
-              console.log("User details: ", result.payload);
-
               const userInfo = result.payload;
               dispatch(setUser(userInfo));
               localStorage.setItem("userInfo", JSON.stringify(userInfo));
             } else {
-              console.log(result);
               const userInfo = {
                 uid: auth.currentUser.uid,
                 username: auth.currentUser.displayName,
@@ -94,7 +84,7 @@ const LoginPage = () => {
                 anonymousSubmissionCheck: auth.currentUser.isAnonymous,
                 isAdmin: false,
               };
-              console.log("Google user not found in Firestore, executing the signup flow instead:", userInfo);
+
               dispatch(addUser(userInfo));
               dispatch(setUser(userInfo));
               localStorage.setItem("userInfo", JSON.stringify(userInfo));
@@ -155,7 +145,11 @@ const LoginPage = () => {
         <div className={styles["other-login"]}>
           <h4>Login with</h4>
           <div className={styles["social-login-icons"]}>
-            <img src={GoogleIcon} alt="Google Icon" onClick={handleGoogleSignIn} />
+            <img
+              src={GoogleIcon}
+              alt="Google Icon"
+              onClick={handleGoogleSignIn}
+            />
           </div>
           {/* <p className={styles["help-text"]}>Contact Support</p> */}
         </div>
