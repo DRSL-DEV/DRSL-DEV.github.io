@@ -3,7 +3,6 @@ import { db } from "../../firebase";
 import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { getAuth, signOut } from "firebase/auth";
 
-
 const initialState = {
   user: JSON.parse(localStorage.getItem("userInfo")) || null,
   status: "idle",
@@ -33,13 +32,12 @@ export const fetchUserById = createAsyncThunk(
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log("User found: ", docSnap.data());
-        return { id: docSnap.id, ...docSnap.data() };
+        return { uid: docSnap.id, ...docSnap.data() };
       } else {
         console.log("No such user!");
         return rejectWithValue("User not found in Firestore");
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching user by ID: ", error.message);
       return rejectWithValue(error.message);
     }
@@ -47,11 +45,11 @@ export const fetchUserById = createAsyncThunk(
 );
 
 export const addUser = createAsyncThunk(
-  'userInfo/addUser',
+  "userInfo/addUser",
   async (userDetails, { rejectWithValue }) => {
     try {
       const { uid, ...detailsWithoutUid } = userDetails;
-      await setDoc(doc(db, 'user', uid), detailsWithoutUid);
+      await setDoc(doc(db, "user", uid), detailsWithoutUid);
       console.log("Document successfully written: ", detailsWithoutUid);
       return { id: uid, ...detailsWithoutUid };
     } catch (error) {
@@ -61,7 +59,7 @@ export const addUser = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  'userInfo/updateUser',
+  "userInfo/updateUser",
   async ({ userDetails, uid }, { rejectWithValue }) => {
     try {
       console.log("In the reducer function. Received: ", userDetails, uid);
@@ -73,17 +71,18 @@ export const updateUser = createAsyncThunk(
         const updatedDocSnap = await getDoc(userDocRef);
         if (updatedDocSnap.exists()) {
           console.log("Updated document in Firestore: ", updatedDocSnap.data());
-          const updatedUser = { id: updatedDocSnap.id, ...updatedDocSnap.data() };
+          const updatedUser = {
+            id: updatedDocSnap.id,
+            ...updatedDocSnap.data(),
+          };
           return updatedUser;
         } else {
           console.log("No updated document found!");
           return rejectWithValue("No updated document found!");
         }
-      }
-      else {
+      } else {
         console.log("User id to update in Firebase not found");
       }
-
     } catch (error) {
       return rejectWithValue(error.message);
     }

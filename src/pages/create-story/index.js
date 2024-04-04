@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
 import { ReactMic } from "react-mic";
 
-
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
@@ -38,7 +37,9 @@ const CreateStory = () => {
   const removeAudio = () => {
     setRecordedBlob(null);
     setAudioFile(null);
-    setFileList(prevFileList => prevFileList.filter(file => file.uid !== 'audio-file'));
+    setFileList((prevFileList) =>
+      prevFileList.filter((file) => file.uid !== "audio-file")
+    );
   };
 
   // Finish record and store the audio file
@@ -46,27 +47,30 @@ const CreateStory = () => {
     // console.log('recordedBlob is: ', recordedBlob); //recordedBlob.blobURL
 
     setRecordedBlob(recordedBlob);
-    setAudioFile(new File([recordedBlob.blob], 'voice-recording.wav',
-      { type: recordedBlob.blob.type }));
+    setAudioFile(
+      new File([recordedBlob.blob], "voice-recording.wav", {
+        type: recordedBlob.blob.type,
+      })
+    );
     // const mimeType = recordedBlob.blob.type || 'audio/wav';
 
     setFileList((prevFileList) => {
       // Remove the previous audio if it exists
-      const updatedFileList = prevFileList.filter(file => file.uid !== 'audio-file');
+      const updatedFileList = prevFileList.filter(
+        (file) => file.uid !== "audio-file"
+      );
 
       // Create a representation for the fileList
       const audioFileObject = {
-        uid: 'audio-file', // identifier for the recorded file - removed if recording again
-        name: 'voice-recording.wav',
-        status: 'done',
+        uid: "audio-file", // identifier for the recorded file - removed if recording again
+        name: "voice-recording.wav",
+        status: "done",
         originFileObj: recordedBlob.blob, // The file object itself
         type: String(recordedBlob.blob.type),
       };
-      // console.log('audioFileObject is: ', audioFileObject);
 
       return [...updatedFileList, audioFileObject];
     });
-    // console.log('current filelist is: ', fileList);
   };
 
   const navigate = useNavigate();
@@ -80,22 +84,16 @@ const CreateStory = () => {
   }, []);
 
   const filterOption = (input, option) =>
-    option?.children.toLowerCase().includes(input.toLowerCase())
+    option?.children.toLowerCase().includes(input.toLowerCase());
 
   const fileUploadProps = {
     beforeUpload: (file) => {
       if (allowedFileTypes.includes(file.type)) {
-        // console.log("File details:", {
-        //   name: file.name,
-        //   type: file.type,
-        //   size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-        // });
       } else {
         message.error({
           content: "You can only upload image, video, or audio files!",
           duration: 2,
         });
-        // console.log("File type not allowed:", file.type);
         return Upload.LIST_IGNORE;
       }
       return false;
@@ -206,11 +204,9 @@ const CreateStory = () => {
               options={siteLocationList.map((site) => ({
                 value: site.id,
                 label: site.name,
-              }))
-              }
+              }))}
             />
           </Form.Item>
-
 
           <Form.Item
             name="content"
@@ -263,13 +259,10 @@ const CreateStory = () => {
               </Upload>
             </div>
           </Form.Item>
-
-
         </div>
 
         <div>
           {/* ReactMic component to display for record audio */}
-
           <ReactMic
             record={isRecording}
             className="sound-wave"
@@ -280,13 +273,15 @@ const CreateStory = () => {
             styles={{ width: "100%", height: "20%" }}
           />
 
-          <div className="audio-recording-buttons">
+          <div className={styles["audio-recording-buttons"]}>
             <Button
               text="Start Recording"
               handleOnClick={startRecording}
               disabled={isRecording}
               customStyles={{
-                backgroundColor: isRecording ? "#ccc" : "rgba(146, 187, 95, 0.75)",
+                backgroundColor: isRecording
+                  ? "#ccc"
+                  : "rgba(146, 187, 95, 0.75)",
               }}
             />
 
@@ -295,7 +290,9 @@ const CreateStory = () => {
               handleOnClick={stopRecording}
               disabled={!isRecording}
               customStyles={{
-                backgroundColor: isRecording ? "var(--secondary-color-light-blue)" : "#ccc"
+                backgroundColor: isRecording
+                  ? "var(--secondary-color-light-blue)"
+                  : "#ccc",
               }}
             />
           </div>

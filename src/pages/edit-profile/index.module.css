@@ -1,20 +1,20 @@
-.short-input-container{
+.short-input-container {
   display: flex;
   gap: 35px;
 }
 
-.long-input{
+.long-input {
   display: flex;
   margin-bottom: 3%;
 }
 
-.profile-images-input{
+.profile-images-input {
   display: flex;
   margin: 3% 0;
   gap: 20%;
 }
 
-.profile-image-left{
+.profile-image-left {
   display: flex;
   align-items: center;
   gap: 10%;
@@ -22,35 +22,35 @@
   width: 48vw;
 }
 
-.profile-upload{
+.profile-upload {
   margin-top: 5%;
 }
 
-.profile-img{
+.profile-img {
   border-radius: 50px;
   padding: 5px;
   width: 60px;
   height: 60px;
 }
 
-.check-box span{
+.check-box span {
   display: block;
   word-wrap: break-word;
   font-size: 12px;
 }
 
-.account-link-countainer{
+.account-link-countainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.login-icons{
+.login-icons {
   width: 18%;
   margin-top: 3%;
 }
 
-.link-account-section{
+.link-account-section {
   border-top: 0.01px solid #d3d3d3;
   padding-top: 8%;
   padding-bottom: 3%;
@@ -59,4 +59,8 @@
 .edit-profile-form :global(.ant-form-item) {
   width: 100%;
   margin: 3% 0;
+}
+
+.change-password {
+  color: #1677ff;
 }
