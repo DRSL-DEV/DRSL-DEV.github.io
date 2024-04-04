@@ -6,12 +6,14 @@ import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from 'antd';
 import Card from "../../components/Card";
 import { Link } from "react-router-dom";
-import {useSelector } from 'react-redux';
-
-
+import {useSelector, useDispatch } from 'react-redux';
+// import { useState, useEffect } from 'react';
+// import { fetchStoryById } from "../../data/features/storyListSlice";
 
 export const ProfilePage = () => {
   const { TabPane } = Tabs;
+  // const dispatch = useDispatch();
+
   const CurrentUser = useSelector((state) => state.userInfo.user);
 
   const userName = CurrentUser.username;
@@ -19,9 +21,24 @@ export const ProfilePage = () => {
   const userBio = CurrentUser.biography || "When you add a bio, it'll show up here"
   const interestedTopics = CurrentUser.tagsOfInterest || ["Communities & Livelihoods", "Environment & Ecology", "Indigenous History"]
 
-  const bookMarkedPostTitles = CurrentUser.bookMarkedPostID || ["No Stories to show, yet"]
+  const bookMarkedPostTitles = CurrentUser.bookmarks || ["No Stories to show, yet"]
   const postedStories = CurrentUser.postedStoriesID || ["Start your first story, by clicking the plus sign above!"]
   const friends = CurrentUser.friendsID || ["Time to make some friends!"]
+
+//   const stories = useSelector((state) => state.storyList.stories);
+//   const [bookMarkedPostTitles, setBookMarkedPostTitles] = useState([]);
+
+// useEffect(() => {
+//   if (CurrentUser.bookmarks && CurrentUser.bookmarks.length > 0) {
+//     for (const bookmarkId of CurrentUser.bookmarks) {
+//       dispatch(fetchStoryById(bookmarkId));
+//     }
+//   }
+// }, [dispatch, CurrentUser.bookmarks]);
+
+// useEffect(() => {
+//   setBookMarkedPostTitles(stories.map((story) => story.title));
+// }, [stories]);
 
   return <div className="profile-page-container">
 
