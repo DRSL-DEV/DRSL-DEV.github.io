@@ -1,153 +1,203 @@
 export const siteLocationList = [
   {
     id: 1,
+    value: 1,
+    label: "Windmill Point Lighthouse",
     name: "Windmill Point Lighthouse",
     lat: 42.35763611177103,
-    lng: -82.92987003173083
+    lng: -82.92987003173083,
   },
   {
     id: 2,
+    value: 2,
+    label: "Reid Memorial Park",
     name: "Reid Memorial Park",
     lat: 42.3577332736847,
-    lng: -82.96636629573561
+    lng: -82.96636629573561,
   },
   {
     id: 3,
+    value: 3,
+    label: "Sunset Point",
     name: "Sunset Point",
     lat: 42.33344335820095,
-    lng: -83.00397390289613
+    lng: -83.00397390289613,
   },
   {
     id: 4,
+    value: 4,
+    label: "Detroit Lighthouse Depot",
     name: "Detroit Lighthouse Depot",
     lat: 42.3411091617928,
-    lng: -83.0088519740599
+    lng: -83.0088519740599,
   },
   {
     id: 5,
+    value: 5,
+    label: "Detroit Dry Dock #2",
     name: "Detroit Dry Dock #2",
     lat: 42.332540042036584,
-    lng: -83.02413945499701
+    lng: -83.02413945499701,
   },
   {
     id: 6,
+    value: 6,
+    label: "International Memorial to the Underground Railroad",
     name: "International Memorial to the Underground Railroad",
     lat: 42.326435967345134,
-    lng: -83.04397927406063
+    lng: -83.04397927406063,
   },
   {
     id: 7,
+    value: 7,
+    label: "Ralph Wilson Centennial Park",
     name: "Ralph Wilson Centennial Park",
     lat: 42.322021303863366,
-    lng: -83.06083154311723
+    lng: -83.06083154311723,
   },
   {
     id: 8,
+    value: 8,
+    label: "Riverside Park",
     name: "Riverside Park",
     lat: 42.31186277442822,
-    lng: -83.07964521315563
+    lng: -83.07964521315563,
   },
   {
     id: 9,
+    value: 9,
+    label: "Historic Fort Wayne",
     name: "Historic Fort Wayne",
     lat: 42.300209961330744,
-    lng: -83.09796806266627
+    lng: -83.09796806266627,
   },
   {
     id: 10,
+    value: 10,
+    label: "Belanger Park",
     name: "Belanger Park",
     lat: 42.270632474132505,
-    lng: -83.1128155188545
+    lng: -83.1128155188545,
   },
   {
     id: 11,
+    value: 11,
+    label: "John Dingell Park",
     name: "John Dingell Park",
     lat: 42.23944790986766,
-    lng: -83.14533673066406
+    lng: -83.14533673066406,
   },
   {
     id: 12,
+    value: 12,
+    label: "Bishop Park",
     name: "Bishop Park",
     lat: 42.206084471006974,
-    lng: -83.14608775749032
+    lng: -83.14608775749032,
   },
   {
     id: 13,
+    value: 13,
+    label: "BASF Waterfront Park",
     name: "BASF Waterfront Park",
     lat: 42.196424815054115,
-    lng: -83.15022302007054
+    lng: -83.15022302007054,
   },
   {
     id: 14,
+    value: 14,
+    label: "Meyer Ellias Park",
     name: "Meyer Ellias Park",
     lat: 42.152090717219394,
-    lng: -83.17403650105368
+    lng: -83.17403650105368,
   },
   {
     id: 15,
+    value: 15,
+    label: "Rotary Park",
     name: "Rotary Park",
     lat: 42.146811052590685,
-    lng: -83.17408750290454
+    lng: -83.17408750290454,
   },
   {
     id: 16,
+    value: 16,
+    label: "Cherry Street Pocket Park",
     name: "Cherry Street Pocket Park",
     lat: 42.14445872616757,
-    lng: -83.17418740290462
+    lng: -83.17418740290462,
   },
   {
     id: 17,
+    value: 17,
+    label: "Elm Street Pocket Park",
     name: "Elm Street Pocket Park",
     lat: 42.1431881814417,
-    lng: -83.17462463174046
+    lng: -83.17462463174046,
   },
   {
     id: 18,
+    value: 18,
+    label: "West Road Pocket Park",
     name: "West Road Pocket Park",
     lat: 42.14055977121426,
-    lng: -83.17543667406896
+    lng: -83.17543667406896,
   },
   {
     id: 19,
+    value: 19,
+    label: "Elizabeth Park",
     name: "Elizabeth Park",
     lat: 42.135804083297934,
-    lng: -83.17912670290497
+    lng: -83.17912670290497,
   },
   {
     id: 20,
+    value: 20,
+    label: "Sunrise Park",
     name: "Sunrise Park",
     lat: 42.12610923066638,
-    lng: -83.14082665159209
+    lng: -83.14082665159209,
   },
   {
     id: 21,
+    value: 21,
+    label: "Hennepin Marsh Gateway",
     name: "Hennepin Marsh Gateway",
     lat: 42.17797526002849,
-    lng: -83.15112865855106
+    lng: -83.15112865855106,
   },
   {
     id: 22,
+    value: 22,
+    label: "Lake Erie Metropark",
     name: "Lake Erie Metropark",
     lat: 42.07175789936502,
-    lng: -83.19839628459775
+    lng: -83.19839628459775,
   },
   {
     id: 23,
+    value: 23,
+    label: "Hull's Trace",
     name: "Hull's Trace",
     lat: 42.04353223884651,
-    lng: -83.21326020290915
+    lng: -83.21326020290915,
   },
   {
     id: 24,
+    value: 24,
+    label: "Pointe Mouillee",
     name: "Pointe Mouillee",
     lat: 42.0096316609661,
-    lng: -83.21411328595015
+    lng: -83.21411328595015,
   },
   {
     id: 25,
+    value: 25,
+    label: "William Sterling State Park",
     name: "William Sterling State Park",
     lat: 41.90656245601501,
-    lng: -83.33764324524365
+    lng: -83.33764324524365,
   },
 ];
 

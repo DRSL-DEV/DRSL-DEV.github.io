@@ -13,9 +13,11 @@ export const uploadFile = createAsyncThunk(
   "fileUpload/uploadFile",
   async ({ file, folderPath }, { rejectWithValue }) => {
     try {
-      const storageRef = ref(storage, `${folderPath}/${file.name}`);
+      const storageRef = ref(
+        storage,
+        `${folderPath}/${new Date().getTime()}_${file.name}`
+      );
       const uploadTask = uploadBytesResumable(storageRef, file);
-
       return new Promise((resolve, reject) => {
         uploadTask.on(
           "state_changed",

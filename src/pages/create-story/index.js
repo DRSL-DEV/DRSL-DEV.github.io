@@ -83,8 +83,10 @@ const CreateStory = () => {
     }
   }, [navigate, user]);
 
-  const filterOption = (input, option) =>
-    option?.children.toLowerCase().includes(input.toLowerCase());
+  const filterOption = (input, option) => {
+    console.log("input", input, "option", option);
+    return option?.label.toLowerCase().includes(input.toLowerCase());
+  };
 
   const fileUploadProps = {
     beforeUpload: (file) => {
@@ -116,14 +118,10 @@ const CreateStory = () => {
   };
 
   const handleSubmission = async (values) => {
-    // dev
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
         uploadFile({
-          file: {
-            ...fileInfo.originFileObj,
-            name: `${new Date().getTime()}_${fileInfo.originFileObj.name}`,
-          },
+          file: fileInfo.originFileObj,
           folderPath: `post/${fileInfo.type.split("/")[0]}`,
         })
       ).unwrap()
@@ -198,13 +196,9 @@ const CreateStory = () => {
             <Select
               showSearch
               placeholder="Select or Search a Site Location"
-              optionFilterProp="children"
               filterOption={filterOption}
               suffixIcon={<img src={location_red} alt="location" />}
-              options={siteLocationList.map((site) => ({
-                value: site.id,
-                label: site.name,
-              }))}
+              options={siteLocationList}
             />
           </Form.Item>
 
@@ -228,7 +222,6 @@ const CreateStory = () => {
               mode="tags"
               showSearch
               placeholder="Select or Search Tags"
-              optionFilterProp="children"
               filterOption={filterOption}
               suffixIcon={<img src={tag_blue} alt="tags" />}
               options={tagList}
