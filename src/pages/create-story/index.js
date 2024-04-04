@@ -117,6 +117,7 @@ const CreateStory = () => {
     const uploadPromises = fileList.map((fileInfo) =>
       dispatch(
         uploadFile({
+          fileName: fileInfo.name,
           file: fileInfo.originFileObj,
           folderPath: `post/${fileInfo.type.split("/")[0]}`,
         })
