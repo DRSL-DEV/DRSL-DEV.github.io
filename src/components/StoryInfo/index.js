@@ -15,7 +15,7 @@ const StoryInfo = ({
     <div className={styles["story-info-container"]}>
       <div className={styles["post-info-top"]}>
         <div className={styles["user-info"]}>
-          <img src={profileImg || profile} alt="profile image" />
+          <img src={profileImg || profile} alt="profile" />
           <div className={styles["user-info-text"]}>
             <h6>{anonymous ? "Anonymous" : author}</h6>
             <h6>{convertTimeFormatMDY(date)}</h6>

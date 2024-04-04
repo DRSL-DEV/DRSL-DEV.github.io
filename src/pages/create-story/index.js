@@ -81,7 +81,7 @@ const CreateStory = () => {
     if (!user) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate, user]);
 
   const filterOption = (input, option) =>
     option?.children.toLowerCase().includes(input.toLowerCase());

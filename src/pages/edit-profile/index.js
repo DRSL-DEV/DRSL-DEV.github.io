@@ -17,9 +17,6 @@ const EditProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
-  const [formFields, setFormFields] = useState({});
-
-  console.log("currentUser", currentUser);
 
   const validateMessages = {
     required: "${label} is required!",
@@ -91,10 +88,6 @@ const EditProfilePage = () => {
     });
   };
 
-  const handleValuesChange = (changedValues, allValues) => {
-    setFormFields(allValues);
-  };
-
   const handlePasswordChange = (email) => {
     const auth = getAuth();
     sendPasswordResetEmail(auth, email)
@@ -131,7 +124,6 @@ const EditProfilePage = () => {
           interest: currentUser.tagsOfInterests || selectedTags,
         }}
         onFinish={handleSave}
-        onValuesChange={handleValuesChange}
         name="nest-messages"
         validateMessages={validateMessages}
         className={styles["edit-profile-form"]}

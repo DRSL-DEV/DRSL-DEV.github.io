@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import submenu_arrow_up from "../../assets/icons/submenu_arrow_up.svg";
-import submenu_arrow_down from "../../assets/icons/submenu_arrow_down.svg";
 import styles from "./index.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutUser } from "../../data/features/userInfoSlice";
@@ -16,7 +14,6 @@ const menuItems = [
 ];
 
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
-  const [activeMenus, setActiveMenus] = useState({}); // Active submenus
   const location = useLocation(); // Get current location (routing location)
   const user = useSelector((state) => state.userInfo.user);
 
@@ -40,8 +37,6 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
 
   // Close the submenu when the menu is closed
   useEffect(() => {
-    if (!isMenuOpen) setActiveMenus({});
-
     const handleClickOutside = (event) => {
       const menuIcon = document.querySelector("#menu_icon");
       if (
@@ -60,15 +55,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
       // Clean up the event listener when the component unmounts or rerenders
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMenuOpen]);
-
-  const handleMenuClick = (item) => {
-    // Toggle submenu
-    setActiveMenus((prevActiveMenus) => ({
-      ...prevActiveMenus,
-      [item.name]: !prevActiveMenus[item.name],
-    }));
-  };
+  }, [isMenuOpen, setIsMenuOpen]);
 
   // Check if the menu item is active
   const isActiveMenuItem = (item) => {
@@ -80,9 +67,6 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
     }
     return false;
   };
-
-  // Check if the submenu is active
-  const isSubMenuActive = (itemName) => !!activeMenus[itemName];
 
   return (
     <div
@@ -108,9 +92,9 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
       ))}
       {!!user && (
         <div>
-          <a className={styles["menu-item"]} onClick={handleLogOut}>
+          <div className={styles["menu-item"]} onClick={handleLogOut}>
             <h1 className={styles["sign-out"]}>Sign Out</h1>
-          </a>
+          </div>
         </div>
       )}
     </div>

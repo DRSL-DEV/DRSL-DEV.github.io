@@ -67,9 +67,9 @@ const LoginPage = () => {
     getRedirectResult(auth)
       .then((result) => {
         if (result) {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          const token = credential.accessToken;
+          // const credential = GoogleAuthProvider.credentialFromResult(result);
+          // // This gives you a Google Access Token. You can use it to access the Google API.
+          // const token = credential.accessToken;
 
           dispatch(fetchUserById(auth.currentUser.uid)).then((result) => {
             if (result.meta.requestStatus === "fulfilled") {
@@ -95,7 +95,7 @@ const LoginPage = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [dispatch, auth]);
 
   const handleGoogleSignIn = () => {
     signInWithRedirect(auth, provider);
