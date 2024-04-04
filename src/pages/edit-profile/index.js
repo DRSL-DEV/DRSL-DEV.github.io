@@ -1,16 +1,16 @@
 import styles from "./index.module.css";
-import { Form, Input, Checkbox, Upload, Select } from "antd";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Checkbox, Upload, Select, message } from "antd";
+import googleIcon from "../../assets/icons/Google icon.svg";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
-import { useState } from "react";
-import googleIcon from "../../assets/icons/Google icon.svg";
-import { useSelector, useDispatch } from "react-redux";
 import PrimaryButton from "../../components/PrimaryButton";
 import { updateUser } from "../../data/features/userInfoSlice";
-import { useNavigate } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import { message } from "antd";
+import { tagList } from "../../constants/constants";
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
@@ -41,10 +41,6 @@ const EditProfilePage = () => {
     "Modern-Day History",
     "Post-European Settlement",
   ];
-
-  const filteredOptions = options.filter(
-    (o) => selectedTags && !selectedTags.includes(o)
-  );
 
   const [fileList, setFileList] = useState([]);
   const onChange = ({ fileList: newFileList }) => {
@@ -87,14 +83,12 @@ const EditProfilePage = () => {
     const userWithoutNullValues = Object.fromEntries(
       Object.entries(userDetails).filter(([key, value]) => value !== undefined)
     );
-    console.log("Dispatching user Details: ", userWithoutNullValues);
     dispatch(
-      updateUser({ userDetails: userWithoutNullValues, uid: currentUser.id })
+      updateUser({ userDetails: userWithoutNullValues, uid: currentUser.uid })
     ).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
         navigate("/profile");
       } else {
-        console.log("Error updating user: ", result.payload);
         message.error({
           content: `Broken: ${result.payload}`,
           duration: 8,
@@ -227,10 +221,7 @@ const EditProfilePage = () => {
               placeholder="Please pick your topics"
               value={selectedTags}
               onChange={setSelectedTags}
-              options={filteredOptions.map((item) => ({
-                value: item,
-                label: item,
-              }))}
+              options={tagList}
             />
           </Form.Item>
         </div>

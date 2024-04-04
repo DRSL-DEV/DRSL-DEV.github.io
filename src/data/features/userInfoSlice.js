@@ -65,7 +65,7 @@ export const updateUser = createAsyncThunk(
         const updatedDocSnap = await getDoc(userDocRef);
         if (updatedDocSnap.exists()) {
           const updatedUser = {
-            id: updatedDocSnap.id,
+            uid: updatedDocSnap.id,
             ...updatedDocSnap.data(),
           };
           return updatedUser;
