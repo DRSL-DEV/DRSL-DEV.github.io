@@ -261,7 +261,7 @@ const CreateStory = () => {
           </Form.Item>
         </div>
 
-        <div>
+        <div className={styles["audio-container"]}>
           {/* ReactMic component to display for record audio */}
           <ReactMic
             record={isRecording}
