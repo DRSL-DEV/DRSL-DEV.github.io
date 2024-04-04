@@ -60,13 +60,12 @@ const HomePage = () => {
                 <p className={styles["carousel-sub-title"]}>
                   Reflective Perspectives from Detroit Natives
                 </p>
-                <a
-                  href="/story"
-                  onClick={() => navigate("/story")}
+                <p
+                  onClick={() => navigate("/site-page")}
                   className={styles["carousel-link"]}
                 >
                   Learn More
-                </a>
+                </p>
               </div>
             </div>
           ))}
