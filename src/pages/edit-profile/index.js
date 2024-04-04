@@ -19,6 +19,8 @@ const EditProfilePage = () => {
   const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
   const [formFields, setFormFields] = useState({});
 
+  console.log("currentUser", currentUser);
+
   const validateMessages = {
     required: "${label} is required!",
     types: {
@@ -29,18 +31,6 @@ const EditProfilePage = () => {
       range: "${label} must be between ${min} and ${max}",
     },
   };
-
-  const options = [
-    "Communities & Livelihood",
-    "Indigenous History",
-    "Underground Railroad",
-    "Civil Rights & Freedom",
-    "Cultural Identities",
-    "Environment & Ecology",
-    "Organizations & Industries",
-    "Modern-Day History",
-    "Post-European Settlement",
-  ];
 
   const [fileList, setFileList] = useState([]);
   const onChange = ({ fileList: newFileList }) => {
@@ -87,6 +77,10 @@ const EditProfilePage = () => {
       updateUser({ userDetails: userWithoutNullValues, uid: currentUser.uid })
     ).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify({ uid: currentUser.uid, ...userDetails })
+        );
         navigate("/profile");
       } else {
         message.error({
