@@ -44,8 +44,6 @@ const CreateStory = () => {
 
   // Finish record and store the audio file
   const onStop = (recordedBlob) => {
-    // console.log('recordedBlob is: ', recordedBlob); //recordedBlob.blobURL
-
     setRecordedBlob(recordedBlob);
     setAudioFile(
       new File([recordedBlob.blob], "voice-recording.wav", {
@@ -83,10 +81,8 @@ const CreateStory = () => {
     }
   }, [navigate, user]);
 
-  const filterOption = (input, option) => {
-    console.log("input", input, "option", option);
-    return option?.label.toLowerCase().includes(input.toLowerCase());
-  };
+  const filterOption = (input, option) =>
+    option?.label.toLowerCase().includes(input.toLowerCase());
 
   const fileUploadProps = {
     beforeUpload: (file) => {
