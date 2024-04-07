@@ -11,21 +11,25 @@ import Title from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
+import { fetchSiteLocation } from "../../data/features/siteLocationSlice";
 import { useEffect } from "react";
 
 const SitePage = () => {
-  const siteTitle = "Site Title";
   const numberOfStories = 10;
   const contentTitle = "Support + Industry";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const storyList = useSelector((state) => state.storyList.storyList);
+  const siteLocation = useSelector((state) => state.siteLocation.siteLocation); // Get site location from redux store
+
 
   useEffect(() => {
-    const unsubscribe = dispatch(subscribeToStoryList());
+    const unsubscribeStory = dispatch(subscribeToStoryList());
+    const unsubscribeLocation = dispatch(fetchSiteLocation()); // Fetch site location
 
     return () => {
-      unsubscribe();
+      unsubscribeStory();
+      unsubscribeLocation();
     };
   }, [dispatch]);
 
@@ -34,6 +38,10 @@ const SitePage = () => {
   const handleViewChange = () => {
     setIsGridView(!isGridView);
   };
+
+  const siteTitle = siteLocation ? "Site Title: " + siteLocation.siteName : "Loading...";
+  // const siteTitle = "Site title"
+
 
   return (
     <div className="page-container">
@@ -51,33 +59,6 @@ const SitePage = () => {
         </section>
         <section className={styles["user-content"]}>
           <h2>Posts and Photos</h2>
-
-          {/* {isGridView ? (
-            <>
-              <Card
-                title={contentTitle}
-                content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-                author="Steven Henry"
-                type="user-story"
-                imgSrc={imgSrc}
-              />
-              <Card
-                title={contentTitle}
-                content="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-                author="Steven Henry"
-                type="user-story"
-                imgSrc={imgSrc}
-              />
-            </>
-          ) : (
-            <>
-              <div className={styles["grid-view"]}>
-                <GridCard title={contentTitle} imgSrc={imgSrc} />
-                <GridCard title={contentTitle} imgSrc={imgSrc} />
-                <GridCard title={contentTitle} imgSrc={imgSrc} />
-              </div>
-            </>
-          )} */}
 
           {isGridView ? (
             storyList.map((story) => (
