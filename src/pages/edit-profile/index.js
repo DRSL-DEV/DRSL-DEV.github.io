@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Checkbox, Upload, Select, message } from "antd";
@@ -11,12 +11,17 @@ import { updateUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { tagList } from "../../constants/constants";
+import { uploadUserImg } from "../../data/features/fileUploadSlice";
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
+  const allowedImgTypes = [
+    "image/jpeg",
+    "image/png",
+  ];
 
   const validateMessages = {
     required: "${label} is required!",
@@ -29,25 +34,27 @@ const EditProfilePage = () => {
     },
   };
 
-  const [fileList, setFileList] = useState([]);
-  const onChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const [file, setFile] = useState(null);
+  const onChange = (info) => {
+    setFile(info.fileList[0]); // Only keep the first file in the list
   };
 
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
+  const onPreview = async () => {
+    if (file) {
+      const src = file.url || await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj);
         reader.onload = () => resolve(reader.result);
       });
+      const image = new Image();
+      image.src = src;
+      image.className = styles["circular-image"];
+      const imgWindow = window.open(src);
+      imgWindow?.document.write(image.outerHTML);
     }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
   };
+
+
 
   //TODO: Add the ability to upload profile and banner images
   //TODO: Vaidate phone number input
@@ -172,12 +179,17 @@ const EditProfilePage = () => {
             <div className={styles["profile-upload"]}>
               <ImgCrop rotationSlider>
                 <Upload
+                
+                  customRequest={({ file }) => {
+                    dispatch(uploadUserImg({ file, userId: currentUser.uid }));
+                  }}
                   listType="picture-card"
-                  fileList={fileList}
+                  fileList={file ? [file] : []}
                   onChange={onChange}
                   onPreview={onPreview}
+                  beforeUpload={() => false} // Prevent file from being uploaded automatically
                 >
-                  {fileList.length < 1 && "+ Upload"}
+                  {!file && '+ Upload'}
                 </Upload>
               </ImgCrop>
             </div>
@@ -185,16 +197,19 @@ const EditProfilePage = () => {
           <div>
             <h3>Profile Banner</h3>
             <div className={styles["profile-upload"]}>
-              <ImgCrop rotationSlider>
+            
+            {/* <ImgCrop rotationSlider>
                 <Upload
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   listType="picture-card"
-                  fileList={fileList}
+                  fileList={file ? [file] : []}
                   onChange={onChange}
                   onPreview={onPreview}
+                  beforeUpload={() => false} // Prevent file from being uploaded automatically
                 >
-                  {fileList.length < 1 && "+ Upload"}
+                  {!file && '+ Upload'}
                 </Upload>
-              </ImgCrop>
+              </ImgCrop> */}
             </div>
           </div>
         </div>

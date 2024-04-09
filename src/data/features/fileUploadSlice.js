@@ -38,6 +38,40 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
+//upload User Image
+export const uploadUserImg = createAsyncThunk(
+  "fileUpload/uploadUserImg",
+  async ({ file, userId }) => {
+    try {
+      const folderPath = `user/profile/${userId}`;
+      const storageRef = ref(
+        storage,
+        `${folderPath}/${userId}_profile_${new Date().getTime()}_${file.name}`
+      );
+      console.log({storageRef})
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      const downloadURL = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          null,
+          (error) => reject(error),
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+              .then((url) => resolve(url))
+              .catch((error) => reject(error));
+          }
+        );
+      });
+      return (
+        downloadURL
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
 const fileUploadSlice = createSlice({
   name: "fileUpload",
   initialState: {
