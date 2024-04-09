@@ -246,6 +246,7 @@ const EditProfilePage = () => {
 
         <Form.Item>
           <PrimaryButton text="Save" htmlType="submit" />
+          <PrimaryButton text="Delete Account" />
         </Form.Item>
       </Form>
 
