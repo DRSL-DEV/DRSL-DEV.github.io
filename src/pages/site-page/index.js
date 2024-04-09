@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
 import { fetchSiteLocation } from "../../data/features/siteLocationSlice";
 import { useEffect } from "react";
+import { siteLocationList } from "../../constants/constants";
 
 const SitePage = () => {
   const numberOfStories = 10;
@@ -20,18 +21,25 @@ const SitePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const storyList = useSelector((state) => state.storyList.storyList);
-  const siteLocation = useSelector((state) => state.siteLocation.siteLocation); // Get site location from redux store
-
+  const siteLocation = useSelector((state) => state.siteLocation.siteLocation);
 
   useEffect(() => {
     const unsubscribeStory = dispatch(subscribeToStoryList());
-    const unsubscribeLocation = dispatch(fetchSiteLocation()); // Fetch site location
-
     return () => {
       unsubscribeStory();
-      unsubscribeLocation();
     };
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(fetchSiteLocation("sitelocationid")); // Pass your site location ID here
+  // }, [dispatch]);
+
+  useEffect(() => {
+    siteLocationList.forEach((site) => {
+      dispatch(fetchSiteLocation(site.id));
+    });
+    console.log("Site Location List: ", siteLocation);
+  }, [dispatch, siteLocation]);
 
   const [isGridView, setIsGridView] = useState(true);
 
@@ -39,9 +47,7 @@ const SitePage = () => {
     setIsGridView(!isGridView);
   };
 
-  const siteTitle = siteLocation ? "Site Title: " + siteLocation.siteName : "Loading...";
-  // const siteTitle = "Site title"
-
+  const siteTitle = siteLocation.siteName;
 
   return (
     <div className="page-container">

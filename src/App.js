@@ -97,8 +97,8 @@ function App() {
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
-            {/* <Route path="/site-page/:title" element={<SitePage />} /> */}
-            <Route path="/site-page/" element={<SitePage />} />
+            <Route path="/site-page/:title" element={<SitePage />} />
+            {/* <Route path="/site-page/" element={<SitePage />} /> */}
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
             <Route
