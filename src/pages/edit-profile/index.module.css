@@ -65,6 +65,6 @@
   color: #1677ff;
 }
 
-.profile-upload :global(.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-selec) {
-  border-radius: 50% !important;
+.profile-upload :global(.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload) {
+  border-radius: 50%;
 }
