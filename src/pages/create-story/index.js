@@ -85,66 +85,66 @@ const CreateStory = () => {
     option?.label.toLowerCase().includes(input.toLowerCase());
 
   const beforeUpload = (file) => {
-    if (!allowedFileTypes.includes(file.type)) {
-      message.error({
-        content: "You can only upload image, video, or audio files!",
-        duration: 2,
-      });
-      return Upload.LIST_IGNORE;
-    }
-    const isVideo = file.type.startsWith('video/');
-    const isAudio = file.type.startsWith('audio/');
-    const isImage = file.type.startsWith('image/');
+    // if (!allowedFileTypes.includes(file.type)) {
+    //   message.error({
+    //     content: "You can only upload image, video, or audio files!",
+    //     duration: 2,
+    //   });
+    //   return Upload.LIST_IGNORE;
+    // }
+    // const isVideo = file.type.startsWith('video/');
+    // const isAudio = file.type.startsWith('audio/');
+    // const isImage = file.type.startsWith('image/');
 
-    if (isVideo || isAudio) {
-      return new Promise((resolve, reject) => {
-        const url = URL.createObjectURL(file);
-        const mediaElement = document.createElement(isVideo ? 'video' : 'audio');
-        mediaElement.addEventListener('loadedmetadata', () => {
-          const duration = mediaElement.duration;
+    // if (isVideo || isAudio) {
+    //   return new Promise((resolve, reject) => {
+    //     const url = URL.createObjectURL(file);
+    //     const mediaElement = document.createElement(isVideo ? 'video' : 'audio');
+    //     mediaElement.addEventListener('loadedmetadata', () => {
+    //       const duration = mediaElement.duration;
 
-          if (isVideo && duration > 30) {
-            message.error({
-              content: 'Video length cannot exceed 30 seconds.',
-              duration: 2
-            });
-            reject();
-          } else if (isAudio && duration > 180) {
-            message.error({
-              content: 'Audio length cannot exceed 3 minutes.',
-              duration: 2
-            });
-            reject();
-          } else {
-            resolve();
-          }
+    //       if (isVideo && duration > 30) {
+    //         message.error({
+    //           content: 'Video length cannot exceed 30 seconds.',
+    //           duration: 2
+    //         });
+    //         reject();
+    //       } else if (isAudio && duration > 180) {
+    //         message.error({
+    //           content: 'Audio length cannot exceed 3 minutes.',
+    //           duration: 2
+    //         });
+    //         reject();
+    //       } else {
+    //         resolve();
+    //       }
 
-          URL.revokeObjectURL(url);
-        });
+    //       URL.revokeObjectURL(url);
+    //     });
 
-        mediaElement.addEventListener('error', () => {
-          message.error({
-            content: 'Failed to load video/audio metadata.',
-            duration: 2
-          });
-          reject();
-        });
+    //     mediaElement.addEventListener('error', () => {
+    //       message.error({
+    //         content: 'Failed to load video/audio metadata.',
+    //         duration: 2
+    //       });
+    //       reject();
+    //     });
 
-        mediaElement.src = url;
-      }).catch(() => Upload.LIST_IGNORE);
-    }
+    //     mediaElement.src = url;
+    //   }).catch(() => Upload.LIST_IGNORE);
+    // }
 
-    const imageSizeLimit = 2 * 1024 * 1024;
+    // const imageSizeLimit = 2 * 1024 * 1024;
 
-    if (isImage && file.size > imageSizeLimit) {
-      message.error({
-        content: "Image must be smaller than 2MB!",
-        duration: 2,
-      });
-      return Upload.LIST_IGNORE;
-    }
+    // if (isImage && file.size > imageSizeLimit) {
+    //   message.error({
+    //     content: "Image must be smaller than 2MB!",
+    //     duration: 2,
+    //   });
+    //   return Upload.LIST_IGNORE;
+    // }
 
-    return true;
+    return false;
   };
 
   const fileUploadProps = {
