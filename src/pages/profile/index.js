@@ -27,16 +27,21 @@ export const ProfilePage = () => {
     (state) => state.storyList.authorStoryList
   );
   const [activeTab, setActiveTab] = useState(
-    sessionStorage.getItem("profileTab") || "2"
+    sessionStorage.getItem("profileTab") || "1"
   );
 
-  const profileInfo = authorInfo || currentUser;
+  const profileInfo = authorInfo || {
+    ...currentUser,
+    profileName: currentUser.profileName || "Set a display name?",
+    biography:
+      currentUser.biography || "When you add a bio, it'll show up here",
+  };
 
   const {
     username: userName,
-    profileName = "Set a display name?",
+    profileName,
     profileImage = profile,
-    biography: userBio = "When you add a bio, it'll show up here",
+    biography: userBio,
     tagsOfInterest: interestedTopics = [],
     bookmarks = [],
     uid: userId,
@@ -56,6 +61,7 @@ export const ProfilePage = () => {
         profileName={profileName}
         bio={userBio}
         topics={interestedTopics}
+        editable={currentUser.uid === userId}
       />
 
       <div className={styles["profile-tab-container"]}>
@@ -68,12 +74,23 @@ export const ProfilePage = () => {
           centered
         >
           <TabPane
-            tab={<span className={styles["tab-title"]}>Bookmarked</span>}
+            tab={
+              <span className={styles["tab-title"]}>
+                {authorInfo ? "Stories" : "My Stories"}
+              </span>
+            }
             key="1"
           >
+            <Link to="/create-story">
+              <img
+                className={styles["add-post-card"]}
+                src={add_post}
+                alt="add post"
+              />
+            </Link>
             <div className={styles["card-container"]}>
-              {!!bookMarkedPostList.length &&
-                bookMarkedPostList.map((post, index) => (
+              {!!postedStoryList.length &&
+                postedStoryList.map((post, index) => (
                   <Card
                     key={index}
                     title={post.title}
@@ -87,23 +104,12 @@ export const ProfilePage = () => {
             </div>
           </TabPane>
           <TabPane
-            tab={
-              <span className={styles["tab-title"]}>
-                {authorInfo ? "Stories" : "My Stories"}
-              </span>
-            }
+            tab={<span className={styles["tab-title"]}>Bookmarked</span>}
             key="2"
           >
-            <Link to="/create-story">
-              <img
-                className={styles["add-post-card"]}
-                src={add_post}
-                alt="add post"
-              />
-            </Link>
             <div className={styles["card-container"]}>
-              {!!postedStoryList.length &&
-                postedStoryList.map((post, index) => (
+              {!!bookMarkedPostList.length &&
+                bookMarkedPostList.map((post, index) => (
                   <Card
                     key={index}
                     title={post.title}
