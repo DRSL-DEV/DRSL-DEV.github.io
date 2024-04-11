@@ -46,17 +46,14 @@ const CreateStory = () => {
 
     if (!recordedBlob || !recordedBlob.blob) {
       console.error('onStop received an invalid recordedBlob:', recordedBlob);
-      return; // 如果 recordedBlob 不是预期的形式，直接返回
+      return;
     }
 
     const audioUrl = URL.createObjectURL(recordedBlob.blob);
     const audioElement = new Audio(audioUrl);
     audioElement.onloadedmetadata = () => {
-      console.log("start time: ", recordedBlob.startTime);
-      console.log("stop time: ", recordedBlob.stopTime);
       const duration = (recordedBlob.stopTime - recordedBlob.startTime) / 1000;
-      console.log("Audio duration: ", duration);
-      if (duration > 10) {
+      if (duration > 180) {
         message.error({
           content: 'Audio length cannot exceed 3 minutes.',
           duration: 2
