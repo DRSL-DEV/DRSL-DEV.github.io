@@ -13,6 +13,7 @@ const initialState = {
   status: "idle",
   error: null,
   selectedPost: null,
+  bookmarkedStoryList: [],
 };
 
 // Subscribe to story list
@@ -25,10 +26,9 @@ export const subscribeToStoryList = () => (dispatch) => {
   return unsubscribe;
 };
 
-
 // export const filterStoryList = (selectedTag, selectedLocation, selectedAuthor, selectedDate) => (dispatch) => {
 //   let query = collection(db, "post");
-  
+
 //   // If a tag is selected, add a filter based on the selected tag
 //   if (selectedTag) {
 //     query = query.where("tags", "array-contains", selectedTag);
@@ -57,6 +57,20 @@ export const subscribeToStoryList = () => (dispatch) => {
 //   return unsubscribe;
 // };
 
+// Fetch story list by id list
+export const fetchStoryListByIdList = createAsyncThunk(
+  "items/fetchStoryListByIdList",
+  async (postIdList) => {
+    const storyList = await Promise.all(
+      postIdList.map(async (postId) => {
+        const docRef = doc(db, "post", postId);
+        const docSnap = await getDoc(docRef);
+        return { id: docSnap.id, ...docSnap.data() };
+      })
+    );
+    return storyList;
+  }
+);
 
 // Fetch story informtiaon by ID for Story Detail Page
 export const fetchStoryById = createAsyncThunk(
@@ -104,6 +118,17 @@ export const storyListSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
+      .addCase(fetchStoryListByIdList.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchStoryListByIdList.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.bookmarkedStoryList = action.payload;
+      })
+      .addCase(fetchStoryListByIdList.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 

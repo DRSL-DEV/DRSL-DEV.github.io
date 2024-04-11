@@ -1,20 +1,35 @@
 import styles from "./index.module.css";
 import profile from "../../assets/images/profile.png";
 import { convertTimeFormatMDY } from "../../utils/dateFormat";
+import { useNavigate } from "react-router-dom";
 
 const StoryInfo = ({
-  title,
-  author,
-  profileImg,
-  date,
-  content,
-  tags,
-  anonymous,
+  selectedPost: { title, date, content, tags },
+  authorInfo,
+  authorInfo: {
+    uid: authorId,
+    username: author,
+    profileImage: profileImg,
+    anonymousSubmissionCheck: anonymous,
+  },
 }) => {
+  const navigate = useNavigate();
   return (
     <div className={styles["story-info-container"]}>
       <div className={styles["post-info-top"]}>
-        <div className={styles["user-info"]}>
+        <div
+          className={styles["user-info"]}
+          onClick={() =>
+            !anonymous &&
+            navigate(
+              `/profile/${author
+                .toLowerCase()
+                .replace(/ /g, "-")
+                .replace(/[^\w-]+/g, "")}`,
+              { state: { authorInfo } }
+            )
+          }
+        >
           <img
             src={anonymous || !profileImg ? profile : profileImg}
             alt="profile"

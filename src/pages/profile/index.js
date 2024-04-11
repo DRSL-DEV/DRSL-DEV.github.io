@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { useEffect, useState } from "react";
 import ProfileHeader from "../../components/ProfileHeader";
 import profile_bg from "../../assets/images/profile_bg.png";
 import profile from "../../assets/images/profile.png";
@@ -6,30 +7,37 @@ import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from "antd";
 import Card from "../../components/Card";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { fetchStoryListByIdList } from "../../data/features/storyListSlice";
 
 export const ProfilePage = () => {
   const { TabPane } = Tabs;
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const authorInfo = location.state?.authorInfo;
+  const currentUser = useSelector((state) => state.userInfo.user);
+  const bookMarkedPostList = useSelector(
+    (state) => state.storyList.bookmarkedStoryList
+  );
+  const [activeTab, setActiveTab] = useState(
+    sessionStorage.getItem("profileTab") || "2"
+  );
 
-  const CurrentUser = useSelector((state) => state.userInfo.user);
+  const profileInfo = authorInfo || currentUser;
 
-  const userName = CurrentUser.username;
-  const profileName = CurrentUser.profileName || "Set a display name?";
-  const userBio =
-    CurrentUser.biography || "When you add a bio, it'll show up here";
-  const interestedTopics = CurrentUser.tagsOfInterest || [
-    "Communities & Livelihoods",
-    "Environment & Ecology",
-    "Indigenous History",
-  ];
+  const {
+    username: userName,
+    profileName = "Set a display name?",
+    biography: userBio = "When you add a bio, it'll show up here",
+    tagsOfInterest: interestedTopics = [],
+    bookmarks = [],
+    postedStoriesID: postedStories = [],
+  } = profileInfo;
 
-  const bookMarkedPostTitles = CurrentUser.bookmarks || [
-    "No Stories to show, yet",
-  ];
-  const postedStories = CurrentUser.postedStoriesID || [
-    "Start your first story, by clicking the plus sign above!",
-  ];
-  const friends = CurrentUser.friendsID || ["Time to make some friends!"];
+  useEffect(() => {
+    dispatch(fetchStoryListByIdList(bookmarks));
+  }, [dispatch, profileInfo.uid]);
 
   return (
     <div className="profile-page-container">
@@ -43,15 +51,31 @@ export const ProfilePage = () => {
       />
 
       <div className={styles["profile-tab-container"]}>
-        <Tabs defaultActiveKey="2" centered>
+        <Tabs
+          defaultActiveKey={activeTab}
+          onChange={(key) => {
+            setActiveTab(key);
+            sessionStorage.setItem("profileTab", key);
+          }}
+          centered
+        >
           <TabPane
             tab={<span className={styles["tab-title"]}>Bookmarked</span>}
             key="1"
           >
             <div className={styles["card-container"]}>
-              {bookMarkedPostTitles.map((title, index) => (
-                <Card key={index} title={title} type="lab-story" />
-              ))}
+              {!!bookMarkedPostList.length &&
+                bookMarkedPostList.map((post, index) => (
+                  <Card
+                    key={index}
+                    title={post.title}
+                    content={post.content}
+                    postId={post.id}
+                    author={post.userId}
+                    type={post.postType}
+                    imgSrc={post.media}
+                  />
+                ))}
             </div>
           </TabPane>
           <TabPane
@@ -66,19 +90,10 @@ export const ProfilePage = () => {
               />
             </Link>
             <div className={styles["card-container"]}>
-              {postedStories.map((story, index) => (
-                <Card key={index} title={story} type="user-story" />
-              ))}
-            </div>
-          </TabPane>
-          <TabPane
-            tab={<span className={styles["tab-title"]}>Connections</span>}
-            key="3"
-          >
-            <div className={styles["card-container"]}>
-              {friends.map((friend, index) => (
-                <Card key={index} title={friend} type="user-profile" />
-              ))}
+              {!!postedStories.length &&
+                postedStories.map((story, index) => (
+                  <Card key={index} title={story} type="user-story" />
+                ))}
             </div>
           </TabPane>
         </Tabs>
