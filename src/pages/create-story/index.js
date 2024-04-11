@@ -19,7 +19,6 @@ const CreateStory = () => {
   const [fileList, setFileList] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
-  const [audioFile, setAudioFile] = useState(null); // For storing and testing the recorded audio File object
 
   const startRecording = () => {
     setIsRecording(true);
@@ -36,7 +35,6 @@ const CreateStory = () => {
 
   const removeAudio = () => {
     setRecordedBlob(null);
-    setAudioFile(null);
     setFileList((prevFileList) =>
       prevFileList.filter((file) => file.uid !== "audio-file")
     );
@@ -44,31 +42,55 @@ const CreateStory = () => {
 
   // Finish record and store the audio file
   const onStop = (recordedBlob) => {
-    setRecordedBlob(recordedBlob);
-    setAudioFile(
-      new File([recordedBlob.blob], "voice-recording.wav", {
-        type: recordedBlob.blob.type,
-      })
-    );
-    // const mimeType = recordedBlob.blob.type || 'audio/wav';
+    console.log('Recorded Blob:', recordedBlob);
 
-    setFileList((prevFileList) => {
-      // Remove the previous audio if it exists
-      const updatedFileList = prevFileList.filter(
-        (file) => file.uid !== "audio-file"
-      );
+    if (!recordedBlob || !recordedBlob.blob) {
+      console.error('onStop received an invalid recordedBlob:', recordedBlob);
+      return; // 如果 recordedBlob 不是预期的形式，直接返回
+    }
+    // setRecordedBlob(recordedBlob);
+    // setAudioFile(
+    //   new File([recordedBlob.blob], "voice-recording.wav", {
+    //     type: recordedBlob.blob.type,
+    //   })
+    // );
 
-      // Create a representation for the fileList
-      const audioFileObject = {
-        uid: "audio-file", // identifier for the recorded file - removed if recording again
-        name: "voice-recording.wav",
-        status: "done",
-        originFileObj: recordedBlob.blob, // The file object itself
-        type: String(recordedBlob.blob.type),
-      };
+    const audioUrl = URL.createObjectURL(recordedBlob.blob);
+    const audioElement = new Audio(audioUrl);
+    audioElement.onloadedmetadata = () => {
+      const duration = audioElement.duration;
+      console.log("Audio duration: ", duration);
+      if (duration > 10) {
+        message.error({
+          content: 'Audio length cannot exceed 3 minutes.',
+          duration: 2
+        });
+        setRecordedBlob(null);
+      } else {
+        setRecordedBlob(recordedBlob);
 
-      return [...updatedFileList, audioFileObject];
-    });
+        setFileList((prevFileList) => {
+          // Remove the previous audio if it exists
+          const updatedFileList = prevFileList.filter(
+            (file) => file.uid !== "audio-file"
+          );
+
+          // Create a representation for the fileList
+          const audioFileObject = {
+            uid: "audio-file", // identifier for the recorded file - removed if recording again
+            name: "voice-recording.wav",
+            status: "done",
+            originFileObj: recordedBlob.blob, // The file object itself
+            type: String(recordedBlob.blob.type),
+          };
+
+          return [...updatedFileList, audioFileObject];
+        });
+      }
+      URL.revokeObjectURL(audioUrl);
+    }
+
+
   };
 
   const navigate = useNavigate();
@@ -85,64 +107,66 @@ const CreateStory = () => {
     option?.label.toLowerCase().includes(input.toLowerCase());
 
   const beforeUpload = (file) => {
-    // if (!allowedFileTypes.includes(file.type)) {
-    //   message.error({
-    //     content: "You can only upload image, video, or audio files!",
-    //     duration: 2,
-    //   });
-    //   return Upload.LIST_IGNORE;
-    // }
-    // const isVideo = file.type.startsWith('video/');
-    // const isAudio = file.type.startsWith('audio/');
-    // const isImage = file.type.startsWith('image/');
+    if (!allowedFileTypes.includes(file.type)) {
+      message.error({
+        content: "You can only upload image, video, or audio files!",
+        duration: 2,
+      });
+      return Upload.LIST_IGNORE;
+    }
+    const isVideo = file.type.startsWith('video/');
+    const isAudio = file.type.startsWith('audio/');
+    const isImage = file.type.startsWith('image/');
 
-    // if (isVideo || isAudio) {
-    //   return new Promise((resolve, reject) => {
-    //     const url = URL.createObjectURL(file);
-    //     const mediaElement = document.createElement(isVideo ? 'video' : 'audio');
-    //     mediaElement.addEventListener('loadedmetadata', () => {
-    //       const duration = mediaElement.duration;
+    if (isVideo || isAudio) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const mediaElement = document.createElement(isVideo ? 'video' : 'audio');
+        mediaElement.addEventListener('loadedmetadata', () => {
+          const duration = mediaElement.duration;
 
-    //       if (isVideo && duration > 30) {
-    //         message.error({
-    //           content: 'Video length cannot exceed 30 seconds.',
-    //           duration: 2
-    //         });
-    //         reject();
-    //       } else if (isAudio && duration > 180) {
-    //         message.error({
-    //           content: 'Audio length cannot exceed 3 minutes.',
-    //           duration: 2
-    //         });
-    //         reject();
-    //       } else {
-    //         resolve();
-    //       }
+          if (isVideo && duration > 30) {
+            message.error({
+              content: 'Video length cannot exceed 30 seconds.',
+              duration: 2
+            });
+            reject();
+          } else if (isAudio && duration > 180) {
+            message.error({
+              content: 'Audio length cannot exceed 3 minutes.',
+              duration: 2
+            });
+            reject();
+          } else {
+            resolve();
+          }
 
-    //       URL.revokeObjectURL(url);
-    //     });
+          URL.revokeObjectURL(url);
+        });
 
-    //     mediaElement.addEventListener('error', () => {
-    //       message.error({
-    //         content: 'Failed to load video/audio metadata.',
-    //         duration: 2
-    //       });
-    //       reject();
-    //     });
+        mediaElement.addEventListener('error', () => {
+          message.error({
+            content: 'Failed to load video/audio metadata.',
+            duration: 2
+          });
+          reject();
+        });
 
-    //     mediaElement.src = url;
-    //   }).catch(() => Upload.LIST_IGNORE);
-    // }
+        mediaElement.src = url;
+      })
+        .then(() => false)
+        .catch(() => Upload.LIST_IGNORE);
+    }
 
-    // const imageSizeLimit = 2 * 1024 * 1024;
+    const imageSizeLimit = 2 * 1024 * 1024;
 
-    // if (isImage && file.size > imageSizeLimit) {
-    //   message.error({
-    //     content: "Image must be smaller than 2MB!",
-    //     duration: 2,
-    //   });
-    //   return Upload.LIST_IGNORE;
-    // }
+    if (isImage && file.size > imageSizeLimit) {
+      message.error({
+        content: "Image must be smaller than 2MB!",
+        duration: 2,
+      });
+      return Upload.LIST_IGNORE;
+    }
 
     return false;
   };
