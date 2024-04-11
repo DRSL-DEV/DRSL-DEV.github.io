@@ -25,7 +25,6 @@ const SitePage = () => {
 
   useEffect(() => {
     dispatch(subscribeToStoryList());
-    // console.log(location)
   }, [dispatch]);
 
   const [isGridView, setIsGridView] = useState(true);

@@ -7,11 +7,13 @@ import Button from "../../components/Button";
 import CategoryHeader from "../../components/CategoryHeader";
 // import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
-import filter from "../../assets/icons/filter.svg";
+// import filter from "../../assets/icons/filter.svg";
 import location_pin from "../../assets/icons/location_pin.svg";
 import { useNavigate } from "react-router-dom";
 import { RightOutlined } from "@ant-design/icons";
 import { Carousel, Collapse } from "antd";
+import { tagList } from "../../constants/constants";
+import { Link } from "react-router-dom";
 const { Panel } = Collapse;
 
 const CustomCollapse = ({ items }) => (
@@ -39,11 +41,8 @@ const ExploreStory = () => {
 
   const dispatch = useDispatch();
 
-  const categories = [
-    "Communities & Livelihood",
-    "Indigenous History",
-    "Cultural Identities",
-  ];
+  const categories = tagList.map((tag) => tag.label);
+
   const mediaUrls = [
     gallery_placeholder,
     gallery_placeholder,
@@ -135,13 +134,18 @@ const ExploreStory = () => {
         </Carousel>
 
         <section className={styles["filter-section"]}>
-          <div className={styles["filter-container"]}>
+          {/* <div className={styles["filter-container"]}>
             <img src={filter} alt="filter" />
             <p>Filter by Category</p>
-          </div>
+          </div> */}
           <div className={styles["location-container"]}>
             <img src={location_pin} alt="location" />
-            <p>Explore Sites</p>
+            <Link 
+              to={"/explore-site"}
+              className={styles["explore-site-link"]}
+              >
+                Explore Sites
+            </Link>
           </div>
         </section>
         <section>

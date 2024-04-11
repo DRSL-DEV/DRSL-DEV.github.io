@@ -103,10 +103,11 @@
     border-radius: 0;
   }
 
-  /* .custom-collapse :global(.ant-collapse-content-box) {
-    padding: 0;
-  } */
-
   .custom-collapse{
     border-radius: 0;
+  }
+
+  .explore-site-link{
+    font-family: var(--font-family-body);
+    color: #000;
   }
