@@ -6,6 +6,9 @@ import {
   getDoc,
   addDoc,
   onSnapshot,
+  getDocs,
+  query,
+  where,
 } from "firebase/firestore";
 
 const initialState = {
@@ -14,6 +17,7 @@ const initialState = {
   error: null,
   selectedPost: null,
   bookmarkedStoryList: [],
+  authorStoryList: [],
 };
 
 // Subscribe to story list
@@ -57,9 +61,23 @@ export const subscribeToStoryList = () => (dispatch) => {
 //   return unsubscribe;
 // };
 
+// Fetch story list by author id
+export const fetchStorysByAuthorId = createAsyncThunk(
+  "items/fetchStorysByAuthorId",
+  async (authorId) => {
+    const q = query(collection(db, "post"), where("userId", "==", authorId));
+    const snapshot = await getDocs(q);
+    const authorStoryList = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return authorStoryList;
+  }
+);
+
 // Fetch story list by id list
-export const fetchStoryListByIdList = createAsyncThunk(
-  "items/fetchStoryListByIdList",
+export const fetchBookmarkedStorysByIds = createAsyncThunk(
+  "items/fetchBookmarkedStorysByIds",
   async (postIdList) => {
     const storyList = await Promise.all(
       postIdList.map(async (postId) => {
@@ -118,14 +136,25 @@ export const storyListSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchStoryListByIdList.pending, (state) => {
+      .addCase(fetchBookmarkedStorysByIds.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchStoryListByIdList.fulfilled, (state, action) => {
+      .addCase(fetchBookmarkedStorysByIds.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.bookmarkedStoryList = action.payload;
       })
-      .addCase(fetchStoryListByIdList.rejected, (state, action) => {
+      .addCase(fetchBookmarkedStorysByIds.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fetchStorysByAuthorId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchStorysByAuthorId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.authorStoryList = action.payload;
+      })
+      .addCase(fetchStorysByAuthorId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

@@ -9,7 +9,10 @@ import Card from "../../components/Card";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { fetchStoryListByIdList } from "../../data/features/storyListSlice";
+import {
+  fetchBookmarkedStorysByIds,
+  fetchStorysByAuthorId,
+} from "../../data/features/storyListSlice";
 
 export const ProfilePage = () => {
   const { TabPane } = Tabs;
@@ -19,6 +22,9 @@ export const ProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
   const bookMarkedPostList = useSelector(
     (state) => state.storyList.bookmarkedStoryList
+  );
+  const postedStoryList = useSelector(
+    (state) => state.storyList.authorStoryList
   );
   const [activeTab, setActiveTab] = useState(
     sessionStorage.getItem("profileTab") || "2"
@@ -32,12 +38,13 @@ export const ProfilePage = () => {
     biography: userBio = "When you add a bio, it'll show up here",
     tagsOfInterest: interestedTopics = [],
     bookmarks = [],
-    postedStoriesID: postedStories = [],
+    uid: userId,
   } = profileInfo;
 
   useEffect(() => {
-    dispatch(fetchStoryListByIdList(bookmarks));
-  }, [dispatch, profileInfo.uid]);
+    dispatch(fetchBookmarkedStorysByIds(bookmarks));
+    dispatch(fetchStorysByAuthorId(userId));
+  }, [dispatch, userId]);
 
   return (
     <div className="profile-page-container">
@@ -79,7 +86,11 @@ export const ProfilePage = () => {
             </div>
           </TabPane>
           <TabPane
-            tab={<span className={styles["tab-title"]}>My Stories</span>}
+            tab={
+              <span className={styles["tab-title"]}>
+                {authorInfo ? "Stories" : "My Stories"}
+              </span>
+            }
             key="2"
           >
             <Link to="/create-story">
@@ -90,9 +101,17 @@ export const ProfilePage = () => {
               />
             </Link>
             <div className={styles["card-container"]}>
-              {!!postedStories.length &&
-                postedStories.map((story, index) => (
-                  <Card key={index} title={story} type="user-story" />
+              {!!postedStoryList.length &&
+                postedStoryList.map((post, index) => (
+                  <Card
+                    key={index}
+                    title={post.title}
+                    content={post.content}
+                    postId={post.id}
+                    author={post.userId}
+                    type={post.postType}
+                    imgSrc={post.media}
+                  />
                 ))}
             </div>
           </TabPane>
