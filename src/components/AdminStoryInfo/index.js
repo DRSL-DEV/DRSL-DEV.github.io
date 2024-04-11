@@ -14,7 +14,10 @@ const AdminStoryInfo = ({
     <div className={styles["story-info-container"]}>
       <div className={styles["post-info-top"]}>
         <div className={styles["user-info"]}>
-          <img src={profileImage || profile} alt="profile" />
+          <img
+            src={anonymous || !profileImage ? profile : profileImage}
+            alt="profile"
+          />
           <div className={styles["user-info-text"]}>
             <h3>{anonymous ? "Anonymous" : username}</h3>
             <h5>{submitTime}</h5>

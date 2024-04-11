@@ -9,7 +9,7 @@ import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import LikeButton from "../../components/LikeButton"
+import LikeButton from "../../components/LikeButton";
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
@@ -81,15 +81,7 @@ const StoryDetailPage = () => {
       </div>
       <div className={styles["main-content"]}>
         {selectedPost && (
-          <StoryInfo
-            title={selectedPost.title}
-            author={authorInfo.username}
-            profileImg={authorInfo.profileImage}
-            anonymous={authorInfo.anonymousSubmissionCheck}
-            date={selectedPost.submitTime}
-            content={selectedPost.content}
-            tags={selectedPost.tags}
-          />
+          <StoryInfo selectedPost={selectedPost} authorInfo={authorInfo} />
         )}
       </div>
     </div>

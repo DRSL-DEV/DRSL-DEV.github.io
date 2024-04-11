@@ -91,7 +91,7 @@ function App() {
               }
             />
             <Route path="/story/:title" element={<StoryDetailPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/:username?" element={<ProfilePage />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />

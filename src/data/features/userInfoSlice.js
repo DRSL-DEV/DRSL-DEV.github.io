@@ -47,7 +47,7 @@ export const addUser = createAsyncThunk(
     try {
       const { uid, ...detailsWithoutUid } = userDetails;
       await setDoc(doc(db, "user", uid), detailsWithoutUid);
-      return { id: uid, ...detailsWithoutUid };
+      return { uid: uid, ...detailsWithoutUid };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -98,15 +98,15 @@ const userInfoSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(addUser.rejected, (state, action) => {
-        // Handle the state update when addUserDetails is rejected
-        // ...
+        state.status = "failed in adding user";
+        state.error = action.error.message;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "failed in updating user";
         state.error = action.error.message;
       })
       .addCase(fetchUserById.pending, (state) => {

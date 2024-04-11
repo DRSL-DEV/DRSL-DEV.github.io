@@ -81,7 +81,7 @@ const EditProfilePage = () => {
         navigate("/profile");
       } else {
         message.error({
-          content: `Broken: ${result.payload}`,
+          content: `There was an error: ${result.payload}`,
           duration: 8,
         });
       }
@@ -106,7 +106,6 @@ const EditProfilePage = () => {
           duration: 5,
         });
       });
-    console.log("Password change requested for: ", email);
   };
 
   return (
