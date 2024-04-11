@@ -25,11 +25,13 @@
   object-fit: cover;
 }
 
-.customized-card.user-story {
+.customized-card.user-story,
+.customized-card.user {
   background: var(--secondary-color-sky-blue-translucent);
 }
 
-.customized-card.lab-story {
+.customized-card.lab-story,
+.customized-card.lab {
   background: var(--secondary-color-dark-green-translucent);
 }
 

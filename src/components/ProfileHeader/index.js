@@ -9,9 +9,8 @@ const ProfileHeader = ({
   profileName,
   bio,
   topics,
+  editable,
 }) => {
-
-
   return (
     <div className={styles["user-profile-container"]}>
       <img
@@ -24,9 +23,15 @@ const ProfileHeader = ({
       </div>
       <div className={styles["profile-edit"]}>
         <h2 className={styles["profile-name"]}>{profileName}</h2>
-        <Link to="/profile/profile-edit">
-          <img className={styles["edit-profile-button"]} src={edit_profile} alt="edit profile" />
-        </Link>
+        {editable && (
+          <Link to="/profile/profile-edit">
+            <img
+              className={styles["edit-profile-button"]}
+              src={edit_profile}
+              alt="edit profile"
+            />
+          </Link>
+        )}
       </div>
       <p className={styles["user-name"]}>@{userName}</p>
       <p className={styles["user-bio"]}>{bio}</p>
@@ -38,4 +43,3 @@ const ProfileHeader = ({
   );
 };
 export default ProfileHeader;
-

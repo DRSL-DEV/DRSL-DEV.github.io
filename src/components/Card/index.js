@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 
 const Card = ({ title, content, userId, type, imgSrc, postId }) => {
   const [hasError, setHasError] = useState(false);
-
   return (
     <>
       {type === "lab-story" ? (
