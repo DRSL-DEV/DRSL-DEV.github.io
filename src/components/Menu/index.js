@@ -9,7 +9,7 @@ import { message } from "antd";
 // Menu items
 const menuItems = [
   { name: "Share Your Story", link: "/create-story" },
-  { name: "Explore Regional Stories", link: "/site-page" },
+  { name: "Explore Regional Stories", link: "/explore-site" },
   { name: "Station Map", link: "/map" },
 ];
 

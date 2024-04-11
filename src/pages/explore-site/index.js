@@ -1,17 +1,10 @@
-import { useSelector, useDispatch } from "react-redux";
 import styles from "./index.module.css";
-import CategoryHeader from "../../components/CategoryHeader";
 import { siteLocationList } from "../../constants/constants";
 import Title from "../../components/PageHeader";
 import { Link } from "react-router-dom";
 
 
 const ExploreSite = () => {
-  const panelStyle = {
-    marginBottom: "1%",
-    border: "none",
-    backgroundColor: "var(--secondary-color-sky-blue-dark)",
-  };
 
   const titlePage = "Explore Sites";
 
@@ -32,6 +25,7 @@ const ExploreSite = () => {
                   .replace(/ /g, "-")
                   .replace(/[^\w-]+/g, "")}`}
                 state={{ siteLocationId: site.id }}
+                className={styles["site-link"]}
               >
                 {site.name}
               </Link>

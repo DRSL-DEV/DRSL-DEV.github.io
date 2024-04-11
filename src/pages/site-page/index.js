@@ -28,7 +28,7 @@ const SitePage = () => {
 
   useEffect(() => {
     dispatch(subscribeToStoryList());
-    console.log(location)
+    // console.log(location)
   }, [dispatch]);
 
   const [isGridView, setIsGridView] = useState(true);
@@ -68,11 +68,12 @@ const SitePage = () => {
             ))
           ) : (
             <div className={styles["grid-view"]}>
-              {storyList.map((story) => (
+              {filteredStoryList.map((story) => (
                 <GridCard
                   key={story.id}
                   title={story.title}
-                  imgSrc={story.imgSrc}
+                  imgSrc={story.media[0]}
+                  postId={story.id}
                 />
               ))}
             </div>
