@@ -4,9 +4,6 @@ import Card from "../../components/Card";
 import GridCard from "../../components/GridCard";
 import grid_view from "../../assets/icons/grid_view.svg";
 import list_view from "../../assets/icons/list_view.svg";
-import imgSrc from "../../assets/images/card_img.png";
-import TextCard from "../../components/TextCard";
-import Button from "../../components/Button";
 import Title from "../../components/PageHeader";
 import { useNavigate, useLocation} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -36,7 +33,6 @@ const SitePage = () => {
   const handleViewChange = () => {
     setIsGridView(!isGridView);
   };
-
 
   return (
     <div className="page-container">
@@ -78,14 +74,14 @@ const SitePage = () => {
               ))}
             </div>
           )}
-          <div className={styles["button-container"]}>
+          {/* <div className={styles["button-container"]}>
             <Button
               text="View More"
               handleOnClick={() => navigate("/site-page")}
             />
-          </div>
+          </div> */}
         </section>
-        <hr />
+        {/* <hr />
         <section className={styles["user-content"]}>
           <h2>Posts</h2>
           <TextCard
@@ -101,7 +97,7 @@ const SitePage = () => {
               handleOnClick={() => navigate("/site-page")}
             />
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );
