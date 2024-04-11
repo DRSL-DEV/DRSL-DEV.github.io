@@ -11,7 +11,9 @@ import { updateUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { tagList } from "../../constants/constants";
-import { uploadUserImg } from "../../data/features/fileUploadSlice";
+import { uploadFile } from "../../data/features/fileUploadSlice";
+// import defaultProfile from "../../assets/images/profile.png"
+// import defaultBanner from "../../assets/images/default_banner.png"
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
@@ -34,35 +36,59 @@ const EditProfilePage = () => {
     },
   };
 
-  const [file, setFile] = useState(null);
-  const onChange = (info) => {
-    setFile(info.fileList[0]); // Only keep the first file in the list
+  const defaultProfile = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057"
+  const defaultBanner = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fbanner%2Fdefault_banner.png?alt=media&token=75a934a6-ea7f-4ecc-a1f4-54e3290206db"
+  // const [profile, setProfile] = useState(currentUser.profileImage ? currentUser.profileImage : defaultProfile);
+  // const [banner, setBanner] = useState(currentUser.bannerImage ? currentUser.bannerImage : defaultBanner);
+  const [profile, setProfile] = useState([]);
+  const [banner, setBanner] = useState([]);
+  const onChangeProfile = (info) => {
+    setProfile(info.fileList[0]);
+  };
+  const onChangeBanner = (info) => {
+    setBanner(info.fileList[0]);
   };
 
   const onPreview = async () => {
-    if (file) {
-      const src = file.url || await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-      const image = new Image();
-      image.src = src;
-      image.className = styles["circular-image"];
-      const imgWindow = window.open(src);
-      imgWindow?.document.write(image.outerHTML);
+    //const profileURL = profile === null || profile === defaultProfile ? defaultProfile : profile;
+    const imgWindow = window.open(defaultProfile);
+    if (imgWindow) {
+      imgWindow.document.write(`<img src="${defaultProfile}" alt="Profile Preview"/>`);
+    } else {
+      console.error("Failed to open image preview window.");
     }
   };
 
 
 
-  //TODO: Add the ability to upload profile and banner images
-  //TODO: Vaidate phone number input
-
-  //TODO: Discuss: Should we display anonymous submission details on profile page - Yes
-  //TODO: Discuss: Handle password change - Work with Ceceil.
-  //TODO: Discuss: Add a delete account button on this page and a confirmation dialogue - confirmed - Also ask confirmation about deeting posts
-  //TODO: Discuss: Unlinking Social Profile? - Low Priority
+  // const fileUploadProps = {
+  //   beforeUpload: (file) => {
+  //     if (allowedImgTypes.includes(file.type)) {
+  //     } else {
+  //       message.error({
+  //         content: "You can only upload image, video, or audio files!",
+  //         duration: 2,
+  //       });
+  //       return Upload.LIST_IGNORE;
+  //     }
+  //     return false;
+  //   },
+  //   onChange: (info) => {
+  //     setFile(info.fileList[0]);
+  //     // Log details if the file is successfully read
+  //     if (info.file.status === "done") {
+  //       message.success({
+  //         content: `${info.file.name} file uploaded successfully`,
+  //         duration: 2,
+  //       });
+  //     } else if (info.file.status === "error") {
+  //       message.error({
+  //         content: `${info.file.name} file upload failed.`,
+  //         duration: 2,
+  //       });
+  //     }
+  //   },
+  // };
 
   const handleSave = (values) => {
     const userDetails = {
@@ -93,6 +119,24 @@ const EditProfilePage = () => {
         });
       }
     });
+    // const handleFileUpload = async () => {
+    //   try {
+    //     if (!file) {
+    //       throw new Error("No file selected.");
+    //     }
+    //     const fileName = file.name;
+    //     const folderPath = "user/profile"; // Replace with the desired folder path
+  
+    //     // Dispatch the uploadFile action
+    //     await dispatch(uploadFile({ fileName, file, folderPath }));
+  
+    //     // The upload is successful
+    //     console.log("File uploaded successfully!");
+    //   } catch (error) {
+    //     // Handle errors
+    //     console.error("Error uploading file:", error);
+    //   }
+    // };
   };
 
   const handlePasswordChange = (email) => {
@@ -172,44 +216,40 @@ const EditProfilePage = () => {
             />
           </Form.Item>
         </div>
-
         <div className={styles["profile-images-input"]}>
           <div>
             <h3>Profile Photo</h3>
             <div className={styles["profile-upload"]}>
-              <ImgCrop rotationSlider>
+              {/* <ImgCrop rotationSlider> */}
                 <Upload
-                
-                  customRequest={({ file }) => {
-                    dispatch(uploadUserImg({ file, userId: currentUser.uid }));
-                  }}
+                  // action={handleFileUpload}
                   listType="picture-card"
-                  fileList={file ? [file] : []}
-                  onChange={onChange}
+                  fileList={profile ? [profile] : []}
+                  onChange={onChangeProfile}
                   onPreview={onPreview}
-                  beforeUpload={() => false} // Prevent file from being uploaded automatically
+                  beforeUpload={() => false}
+                  // {...fileUploadProps}
                 >
-                  {!file && '+ Upload'}
+                  {!profile && '+ Upload'}
                 </Upload>
-              </ImgCrop>
+              {/* </ImgCrop> */}
             </div>
           </div>
           <div>
             <h3>Profile Banner</h3>
-            <div className={styles["profile-upload"]}>
-            
-            {/* <ImgCrop rotationSlider>
+            <div className={styles["banner-upload"]}>
+            <ImgCrop rotationSlider>
                 <Upload
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   listType="picture-card"
-                  fileList={file ? [file] : []}
-                  onChange={onChange}
+                  fileList={banner ? [banner] : []}
+                  onChange={onChangeBanner}
                   onPreview={onPreview}
-                  beforeUpload={() => false} // Prevent file from being uploaded automatically
+                  // {...fileUploadProps}
                 >
-                  {!file && '+ Upload'}
+                  {!banner && '+ Upload'}
                 </Upload>
-              </ImgCrop> */}
+              </ImgCrop>
             </div>
           </div>
         </div>

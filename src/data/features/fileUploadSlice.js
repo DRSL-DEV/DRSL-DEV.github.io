@@ -48,7 +48,6 @@ export const uploadUserImg = createAsyncThunk(
         storage,
         `${folderPath}/${userId}_profile_${new Date().getTime()}_${file.name}`
       );
-      console.log({storageRef})
       const uploadTask = uploadBytesResumable(storageRef, file);
       const downloadURL = await new Promise((resolve, reject) => {
         uploadTask.on(
@@ -88,6 +87,17 @@ const fileUploadSlice = createSlice({
         state.uploadStatus = "succeeded";
       })
       .addCase(uploadFile.rejected, (state, action) => {
+        state.uploadStatus = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(uploadUserImg.pending, (state) => {
+        state.uploadStatus = "uploading";
+        state.error = null;
+      })
+      .addCase(uploadUserImg.fulfilled, (state) => {
+        state.uploadStatus = "succeeded";
+      })
+      .addCase(uploadUserImg.rejected, (state, action) => {
         state.uploadStatus = "failed";
         state.error = action.error.message;
       });

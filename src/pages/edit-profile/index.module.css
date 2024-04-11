@@ -3,6 +3,10 @@
   gap: 35px;
 }
 
+.profile-images-input h3{
+  padding-bottom: 5%;
+}
+
 .long-input {
   display: flex;
   margin-bottom: 3%;
@@ -11,7 +15,7 @@
 .profile-images-input {
   display: flex;
   margin: 3% 0;
-  gap: 20%;
+  gap: 13%;
 }
 
 .profile-image-left {
@@ -71,4 +75,28 @@
 
 .profile-upload :global(.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item) {
   border-radius: 50% !important;
+}
+
+.profile-upload :global(.ant-modal-root .ant-modal .ant-modal .ant-modal-content .ant-modal .ant-modal-body .reactEasyCrop_Container .reactEasyCrop_CropArea){
+  border-radius: 50% !important;
+}
+
+.profile-upload :global(.ant-modal .ant-modal-root .ant-modal-wrap .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-thumbnail) {
+  border-radius: 50%;
+}
+
+.banner-upload :global(.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select) {
+  min-width: 170px !important;
+}
+
+.banner-upload :global(.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item) {
+  min-width: 170px !important;
+}
+
+.banner-upload :global(.ant-modal-root .ant-modal .ant-modal .ant-modal-content .ant-modal .ant-modal-body .reactEasyCrop_Container .reactEasyCrop_CropArea){
+  min-width: 170px !important;
+}
+
+.banner-upload :global(.ant-modal .ant-modal-root .ant-modal-wrap .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-thumbnail) {
+  min-width: 170px !important;
 }
