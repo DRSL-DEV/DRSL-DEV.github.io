@@ -35,6 +35,7 @@ export const ProfilePage = () => {
   const {
     username: userName,
     profileName = "Set a display name?",
+    profileImage = profile,
     biography: userBio = "When you add a bio, it'll show up here",
     tagsOfInterest: interestedTopics = [],
     bookmarks = [],
@@ -50,7 +51,7 @@ export const ProfilePage = () => {
     <div className="profile-page-container">
       <ProfileHeader
         profileBanner={profile_bg}
-        profileImg={profile}
+        profileImg={profileImage}
         userName={userName}
         profileName={profileName}
         bio={userBio}
