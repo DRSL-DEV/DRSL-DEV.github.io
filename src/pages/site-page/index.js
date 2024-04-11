@@ -8,38 +8,28 @@ import imgSrc from "../../assets/images/card_img.png";
 import TextCard from "../../components/TextCard";
 import Button from "../../components/Button";
 import Title from "../../components/PageHeader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
-import { fetchSiteLocation } from "../../data/features/siteLocationSlice";
 import { useEffect } from "react";
 import { siteLocationList } from "../../constants/constants";
 
 const SitePage = () => {
-  const numberOfStories = 10;
   const contentTitle = "Support + Industry";
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const siteLocationId = location.state?.siteLocationId;
   const storyList = useSelector((state) => state.storyList.storyList);
-  const siteLocation = useSelector((state) => state.siteLocation.siteLocation);
+  const siteLocation = siteLocationList.find((site) => site.id === siteLocationId);
+  const filteredStoryList = storyList.filter((story) => story.site === siteLocationId);
+  const numberOfStories = filteredStoryList.length;
+  const siteTitle = siteLocation.name;
 
   useEffect(() => {
-    const unsubscribeStory = dispatch(subscribeToStoryList());
-    return () => {
-      unsubscribeStory();
-    };
+    dispatch(subscribeToStoryList());
+    console.log(location)
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(fetchSiteLocation("sitelocationid")); // Pass your site location ID here
-  // }, [dispatch]);
-
-  useEffect(() => {
-    siteLocationList.forEach((site) => {
-      dispatch(fetchSiteLocation(site.id));
-    });
-    console.log("Site Location List: ", siteLocation);
-  }, [dispatch, siteLocation]);
 
   const [isGridView, setIsGridView] = useState(true);
 
@@ -47,11 +37,10 @@ const SitePage = () => {
     setIsGridView(!isGridView);
   };
 
-  const siteTitle = siteLocation.siteName;
 
   return (
     <div className="page-container">
-      <div className="content">
+      <div className={styles["content"]}>
         <Title title={siteTitle} />
         <section className={styles["site-section"]}>
           <h5>{numberOfStories} Stories</h5>
@@ -65,9 +54,8 @@ const SitePage = () => {
         </section>
         <section className={styles["user-content"]}>
           <h2>Posts and Photos</h2>
-
           {isGridView ? (
-            storyList.map((story) => (
+            filteredStoryList.map((story) => (
               <Card
                 key={story.id}
                 postId={story.id}
