@@ -48,17 +48,13 @@ const CreateStory = () => {
       console.error('onStop received an invalid recordedBlob:', recordedBlob);
       return; // 如果 recordedBlob 不是预期的形式，直接返回
     }
-    // setRecordedBlob(recordedBlob);
-    // setAudioFile(
-    //   new File([recordedBlob.blob], "voice-recording.wav", {
-    //     type: recordedBlob.blob.type,
-    //   })
-    // );
 
     const audioUrl = URL.createObjectURL(recordedBlob.blob);
     const audioElement = new Audio(audioUrl);
     audioElement.onloadedmetadata = () => {
-      const duration = audioElement.duration;
+      console.log("start time: ", recordedBlob.startTime);
+      console.log("stop time: ", recordedBlob.stopTime);
+      const duration = (recordedBlob.stopTime - recordedBlob.startTime) / 1000;
       console.log("Audio duration: ", duration);
       if (duration > 10) {
         message.error({
