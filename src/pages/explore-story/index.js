@@ -90,9 +90,9 @@ const ExploreStory = () => {
                 imgSrc={story.media[0]}
               />
             ))}
-          <div className={styles["button-container"]}>
+          {/* <div className={styles["button-container"]}>
             <Button text="View More" handleOnClick={() => {}} />
-          </div>
+          </div> */}
         </div>
       ),
       style: panelStyle,

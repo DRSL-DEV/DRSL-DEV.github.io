@@ -21,7 +21,8 @@ const SitePage = () => {
   const siteLocation = siteLocationList.find((site) => site.id === siteLocationId);
   const filteredStoryList = storyList.filter((story) => story.site === siteLocationId);
   const numberOfStories = filteredStoryList.length;
-  const siteTitle = siteLocation.name;
+  // const siteTitle = siteLocation.name;
+  const siteTitle = siteLocation ? siteLocation.name : 'Default Title';
 
   useEffect(() => {
     dispatch(subscribeToStoryList());
@@ -32,6 +33,11 @@ const SitePage = () => {
   const handleViewChange = () => {
     setIsGridView(!isGridView);
   };
+
+  if (!siteLocation) {
+    navigate('*');
+    return null;
+  }
 
   return (
     <div className="page-container">
