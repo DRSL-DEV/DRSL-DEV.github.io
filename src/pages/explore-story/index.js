@@ -83,6 +83,7 @@ const ExploreStory = () => {
             .map((story) => (
               <Card
                 key={story.id}
+                postId={story.id}
                 title={story.title}
                 content={story.content.substring(0, 65) + "..."}
                 author={story.userId}
