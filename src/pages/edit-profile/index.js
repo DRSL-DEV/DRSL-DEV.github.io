@@ -38,22 +38,20 @@ const EditProfilePage = () => {
 
   const defaultProfile = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057"
   const defaultBanner = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fbanner%2Fdefault_banner.png?alt=media&token=75a934a6-ea7f-4ecc-a1f4-54e3290206db"
-  // const [profile, setProfile] = useState(currentUser.profileImage ? currentUser.profileImage : defaultProfile);
+  const [profileImg, setProfileImg] = useState(currentUser.profileImage ? [{url:currentUser.profileImage,uid:1}] : []);
   // const [banner, setBanner] = useState(currentUser.bannerImage ? currentUser.bannerImage : defaultBanner);
-  const [profile, setProfile] = useState([]);
+  // const [profileImg, setProfileImg] = useState([]);
   const [banner, setBanner] = useState([]);
-  const onChangeProfile = (info) => {
-    setProfile(info.fileList[0]);
-  };
+
   const onChangeBanner = (info) => {
-    setBanner(info.fileList[0]);
+    setBanner(info.fileList.slice(-1));
   };
 
   const onPreview = async () => {
-    //const profileURL = profile === null || profile === defaultProfile ? defaultProfile : profile;
+    //const profileURL = profileImg === null || profileImg === defaultProfile ? defaultProfile : profileImg;
     const imgWindow = window.open(defaultProfile);
     if (imgWindow) {
-      imgWindow.document.write(`<img src="${defaultProfile}" alt="Profile Preview"/>`);
+      imgWindow.document.write(`<img src="${profileImg}" alt="Profile Preview"/>`);
     } else {
       console.error("Failed to open image preview window.");
     }
@@ -90,7 +88,15 @@ const EditProfilePage = () => {
   //   },
   // };
 
-  const handleSave = (values) => {
+  const handleSave = async (values) => {
+    const profileImage = await dispatch(
+      uploadFile({
+        fileName: profileImg[0].name,
+        file: profileImg[0].originFileObj,
+        folderPath: `user/profile`,
+      })
+    ).unwrap()
+
     const userDetails = {
       email: values.email,
       username: values.userName,
@@ -99,6 +105,7 @@ const EditProfilePage = () => {
       phoneNumber: values.phoneNumber,
       anonymousSubmissionCheck: values.anonySubChk,
       tagsOfInterest: selectedTags,
+      profileImage,
     };
     const userWithoutNullValues = Object.fromEntries(
       Object.entries(userDetails).filter(([key, value]) => value !== undefined)
@@ -119,24 +126,7 @@ const EditProfilePage = () => {
         });
       }
     });
-    // const handleFileUpload = async () => {
-    //   try {
-    //     if (!file) {
-    //       throw new Error("No file selected.");
-    //     }
-    //     const fileName = file.name;
-    //     const folderPath = "user/profile"; // Replace with the desired folder path
-  
-    //     // Dispatch the uploadFile action
-    //     await dispatch(uploadFile({ fileName, file, folderPath }));
-  
-    //     // The upload is successful
-    //     console.log("File uploaded successfully!");
-    //   } catch (error) {
-    //     // Handle errors
-    //     console.error("Error uploading file:", error);
-    //   }
-    // };
+
   };
 
   const handlePasswordChange = (email) => {
@@ -222,17 +212,15 @@ const EditProfilePage = () => {
             <div className={styles["profile-upload"]}>
               {/* <ImgCrop rotationSlider> */}
                 <Upload
-                  // action={handleFileUpload}
                   listType="picture-card"
-                  fileList={profile ? [profile] : []}
-                  onChange={onChangeProfile}
+                  fileList={profileImg}
+                  onChange={(info)=>setProfileImg(info.fileList)}
                   onPreview={onPreview}
                   beforeUpload={() => false}
-                  // {...fileUploadProps}
                 >
-                  {!profile && '+ Upload'}
+                  {!profileImg.length && 'Upload'}
                 </Upload>
-              {/* </ImgCrop> */}
+
             </div>
           </div>
           <div>

@@ -1,7 +1,6 @@
 import styles from "./index.module.css";
 import ProfileHeader from "../../components/ProfileHeader";
 import profile_bg from "../../assets/images/profile_bg.png";
-import profile from "../../assets/images/profile.png";
 import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from "antd";
 import Card from "../../components/Card";
@@ -14,6 +13,8 @@ export const ProfilePage = () => {
   const CurrentUser = useSelector((state) => state.userInfo.user);
 
   const userName = CurrentUser.username;
+  const profileImg = CurrentUser.profileImage;
+  const profileBannerImg = CurrentUser.profileBanner;
   const profileName = CurrentUser.profileName || "Set a display name?";
   const userBio =
     CurrentUser.biography || "When you add a bio, it'll show up here";
@@ -34,8 +35,8 @@ export const ProfilePage = () => {
   return (
     <div className="profile-page-container">
       <ProfileHeader
-        profileBanner={profile_bg}
-        profileImg={profile}
+        profileBanner={profileBannerImg}
+        profileImg={profileImg}
         userName={userName}
         profileName={profileName}
         bio={userBio}
