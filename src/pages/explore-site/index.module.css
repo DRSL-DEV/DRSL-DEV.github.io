@@ -1,0 +1,40 @@
+.homepage-container {
+    padding: 0;
+  }
+
+  .page-header{
+    margin: 5%;
+    display: flex;
+    justify-content: center;
+    margin-top: 38px;
+  }
+
+  .site-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .site-name {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--secondary-color-sky-blue);
+    margin-top: 5%;
+    width: 100%;
+    font-size: 1.5em;
+    font-family: var(--font-family-heading);
+  }
+
+  .site-link {
+    color: black;
+    text-decoration: none;
+    font-size: var(--font-size-h1);
+    font-family: var(--font-family-heading);
+    font-weight: 300;
+  }
+  
+  .site-link:hover {
+    color: black;
+  }

@@ -62,12 +62,17 @@ const MapPage = () => {
   };
 
   const handleSelectSite = (selectedSiteId) => {
-    const selectedSite = siteLocationList.find(
-      (site) => site.id === selectedSiteId
-    );
-    if (selectedSite) {
-      setMapCenter({ lat: selectedSite.lat, lng: selectedSite.lng });
-      setZoom(15); // 或者您希望的其他缩放级别
+    if (selectedSiteId === "all") {
+      setMapCenter(center);
+      setZoom(10);
+    } else {
+      const selectedSite = siteLocationList.find(
+        (site) => site.id === selectedSiteId
+      );
+      if (selectedSite) {
+        setMapCenter({ lat: selectedSite.lat, lng: selectedSite.lng });
+        setZoom(15);
+      }
     }
   };
 
@@ -77,7 +82,8 @@ const MapPage = () => {
   };
 
   const handleViewStories = () => {
-    navigate("/site-page");
+    const formattedSiteName = selectedSite.label.toLowerCase().replace(/\s+/g, '-');
+    navigate(`/site/${formattedSiteName}`, { state: { siteLocationId: selectedSite.id } });
     setModalOpen(false);
   };
 
@@ -108,10 +114,13 @@ const MapPage = () => {
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
             suffixIcon={<img src={location_red} alt="location" />}
-            options={siteLocationList.map((site) => ({
-              value: site.id,
-              label: site.name,
-            }))}
+            options={[
+              { value: "all", label: "View All Sites" },
+              ...siteLocationList.map((site) => ({
+                value: site.id,
+                label: site.name,
+              }))
+            ]}
             onSelect={handleSelectSite}
           />
         </div>

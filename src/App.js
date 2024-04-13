@@ -30,6 +30,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UnauthorizedPage from "./pages/unauthorized";
 import MapPage from "./pages/map";
 import AuthListener from "./components/AuthListener";
+import ExploreSite from "./pages/explore-site";
 
 const FooterWithCondition = () =>
   ["/login", "/signup", "/map"].includes(useLocation().pathname) ? null : (
@@ -90,16 +91,17 @@ function App() {
               }
             />
             <Route path="/story/:title" element={<StoryDetailPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/:username?" element={<ProfilePage />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/site-page" element={<SitePage />} />
+            <Route path="/site/:title" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
+            <Route path="/explore-site" element={<ExploreSite />} />
             <Route
               path="/admin-page"
               element={
