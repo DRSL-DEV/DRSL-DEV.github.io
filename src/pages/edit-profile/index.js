@@ -220,25 +220,25 @@ const EditProfilePage = () => {
           <div>
             <h3>Profile Photo</h3>
             <div className={styles["profile-upload"]}>
-              {/* <ImgCrop rotationSlider> */}
+              <ImgCrop rotationSlider aspectSlider showReset>
                 <Upload
                   // action={handleFileUpload}
                   listType="picture-card"
                   fileList={profile ? [profile] : []}
                   onChange={onChangeProfile}
                   onPreview={onPreview}
-                  beforeUpload={() => false}
+                  beforeUpload={() => false} // need more function in validating the uploaded file
                   // {...fileUploadProps}
                 >
                   {!profile && '+ Upload'}
                 </Upload>
-              {/* </ImgCrop> */}
+              </ImgCrop>
             </div>
           </div>
           <div>
             <h3>Profile Banner</h3>
             <div className={styles["banner-upload"]}>
-            <ImgCrop rotationSlider>
+            <ImgCrop rotationSlider aspectSlider showReset>
                 <Upload
                   // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   listType="picture-card"
