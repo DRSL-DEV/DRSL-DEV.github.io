@@ -39,7 +39,8 @@ export const ProfilePage = () => {
   const {
     username: userName,
     profileName,
-    profileImage = profile,
+    profileImg = currentUser.profileImage,
+    profileBanner = currentUser.ProfileBanner,
     biography: userBio,
     tagsOfInterest: interestedTopics = [],
     bookmarks = [],
