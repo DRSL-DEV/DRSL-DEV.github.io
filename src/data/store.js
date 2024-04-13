@@ -7,6 +7,7 @@ import userInfoSlice from "./features/userInfoSlice";
 import storyAuthorSlice from "./features/storyAuthorSlice";
 import adminCommentSlice from "./features/adminCommentSlice";
 import bookmarkSlice from "./features/bookmarkSlice";
+import siteLocationSlice from "./features/siteLocationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     storyAuthor: storyAuthorSlice,
     adminComment: adminCommentSlice,
     bookmark: bookmarkSlice,
+    siteLocation: siteLocationSlice,
     // Add other reducers here
   },
 });

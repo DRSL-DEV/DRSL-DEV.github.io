@@ -82,7 +82,8 @@ const MapPage = () => {
   };
 
   const handleViewStories = () => {
-    navigate("/site-page");
+    const formattedSiteName = selectedSite.label.toLowerCase().replace(/\s+/g, '-');
+    navigate(`/site/${formattedSiteName}`, { state: { siteLocationId: selectedSite.id } });
     setModalOpen(false);
   };
 
