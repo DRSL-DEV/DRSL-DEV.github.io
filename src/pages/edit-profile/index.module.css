@@ -100,3 +100,9 @@
 .banner-upload :global(.ant-modal .ant-modal-root .ant-modal-wrap .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-thumbnail) {
   min-width: 170px !important;
 }
+
+.banner-upload :global(.ant-upload-list-item-container){
+  width: 100% !important;
+}
+
+
