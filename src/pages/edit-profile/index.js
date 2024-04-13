@@ -238,7 +238,9 @@ const EditProfilePage = () => {
           <div>
             <h3>Profile Banner</h3>
             <div className={styles["banner-upload"]}>
-            <ImgCrop rotationSlider aspectSlider showReset>
+            <ImgCrop rotationSlider aspectSlider showReset
+              aspect={2}>
+
                 <Upload
                   // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   listType="picture-card"
