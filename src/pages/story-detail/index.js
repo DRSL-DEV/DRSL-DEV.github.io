@@ -41,12 +41,14 @@ const StoryDetailPage = () => {
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
       <div className={styles["story-icons"]}>
         <LikeButton postId={postId} />
-        <img
-          className={styles["share-icon"]}
-          onClick={handleShare}
-          src={link_icon}
-          alt="share"
-        />
+        {selectedPost.status === "approved" && (
+          <img
+            className={styles["share-icon"]}
+            onClick={handleShare}
+            src={link_icon}
+            alt="share"
+          />
+        )}
       </div>
       <div className={styles["story-title"]}>
         <PageHeader title={siteTitle} />
