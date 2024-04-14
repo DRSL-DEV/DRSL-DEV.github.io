@@ -11,7 +11,7 @@ const LikeButton = ({ postId }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.userInfo.user);
   const [isFilled, setIsFilled] = useState(
-    currentUser.bookmarks?.includes(postId) || false
+    (currentUser && currentUser.bookmarks?.includes(postId)) || false
   );
 
   const handleBookmark = async () => {
