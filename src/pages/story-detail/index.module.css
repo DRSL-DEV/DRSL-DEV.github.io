@@ -6,14 +6,15 @@
   left: 5%;
 }
 
-.story-icons{
+.story-icons {
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: flex-start;
+  margin: 16px 16px 0;
+  gap: 16px;
 }
 
 .share-icon {
-  margin: 16px 5% 1% 5%;
   float: right;
 }
 

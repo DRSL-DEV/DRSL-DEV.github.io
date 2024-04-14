@@ -37,6 +37,11 @@ export const ProfilePage = () => {
       currentUser.biography || "When you add a bio, it'll show up here",
   };
 
+  useEffect(() => {
+    location.state = {};
+    console.log(location.state);
+  }, []);
+
   const {
     username: userName,
     profileName,

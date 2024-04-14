@@ -4,10 +4,9 @@ import { convertTimeFormatMDY } from "../../utils/dateFormat";
 import { useNavigate } from "react-router-dom";
 
 const StoryInfo = ({
-  selectedPost: { title, date, content, tags },
+  selectedPost: { title, submitTime: date, content, tags },
   authorInfo,
   authorInfo: {
-    uid: authorId,
     username: author,
     profileImage: profileImg,
     anonymousSubmissionCheck: anonymous,

@@ -41,7 +41,7 @@ const StoryDetailPage = () => {
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
       <div className={styles["story-icons"]}>
         <LikeButton postId={postId} />
-        {selectedPost.status === "approved" && (
+        {selectedPost && selectedPost.status === "approved" && (
           <img
             className={styles["share-icon"]}
             onClick={handleShare}
