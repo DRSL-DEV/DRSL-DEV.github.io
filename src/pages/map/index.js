@@ -168,7 +168,7 @@ const MapPage = () => {
           </Button>,
         ]}
       >
-        <p>Latitude: {selectedSite?.lat}</p>
+        <p>{selectedSite?.intro}</p>
       </Modal>
       <div onClick={handleLocateUser}>
         <img
