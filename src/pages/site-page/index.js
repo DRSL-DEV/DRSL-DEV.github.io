@@ -1,32 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import GridCard from "../../components/GridCard";
 import grid_view from "../../assets/icons/grid_view.svg";
 import list_view from "../../assets/icons/list_view.svg";
 import Title from "../../components/PageHeader";
-import { useNavigate, useLocation} from "react-router-dom";
+import Button from "../../components/Button";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { subscribeToStoryList } from "../../data/features/storyListSlice";
-import { useEffect } from "react";
+import { fetchPostsBySite, subscribeToStoryList } from "../../data/features/storyListSlice";
 import { siteLocationList } from "../../constants/constants";
 
 const SitePage = () => {
-  const contentTitle = "Support + Industry";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const siteLocationId = location.state?.siteLocationId;
-  const storyList = useSelector((state) => state.storyList.storyList);
+
+  const posts = useSelector((state) => state.storyList.postsBySite[siteLocationId] || []);
   const siteLocation = siteLocationList.find((site) => site.id === siteLocationId);
-  const filteredStoryList = storyList.filter((story) => story.site === siteLocationId);
-  const numberOfStories = filteredStoryList.length;
-  // const siteTitle = siteLocation.name;
+  const lastVisibleDocId = useSelector((state) => state.storyList.lastVisibleDocIdBySite[siteLocationId]);
   const siteTitle = siteLocation ? siteLocation.name : 'Default Title';
+  const numberOfStories = posts.length;
 
   useEffect(() => {
-    dispatch(subscribeToStoryList());
-  }, [dispatch]);
+    if (siteLocationId) {
+      dispatch(fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId: null }));
+    }
+  }, [dispatch, siteLocationId]);
+
+  const handleViewMore = () => {
+    if (lastVisibleDocId) {
+      dispatch(fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId }));
+    }
+  }
 
   const [isGridView, setIsGridView] = useState(true);
 
@@ -38,6 +45,8 @@ const SitePage = () => {
     navigate('*');
     return null;
   }
+
+  console.log(isGridView);
 
   return (
     <div className="page-container">
@@ -55,8 +64,8 @@ const SitePage = () => {
         </section>
         <section className={styles["user-content"]}>
           <h2>Posts and Photos</h2>
-          {isGridView ? (
-            filteredStoryList.map((story) => (
+          <div className={isGridView ? styles["card-container"] : styles["grid-view"]}>
+            {posts.map((story) => isGridView ? (
               <Card
                 key={story.id}
                 postId={story.id}
@@ -66,17 +75,18 @@ const SitePage = () => {
                 type="user-story"
                 imgSrc={story.media[0]}
               />
-            ))
-          ) : (
-            <div className={styles["grid-view"]}>
-              {filteredStoryList.map((story) => (
-                <GridCard
-                  key={story.id}
-                  title={story.title}
-                  imgSrc={story.media[0]}
-                  postId={story.id}
-                />
-              ))}
+            ) : (
+              <GridCard
+                key={story.id}
+                title={story.title}
+                imgSrc={story.media[0]}
+                postId={story.id}
+              />
+            ))}
+          </div>
+          {isGridView && lastVisibleDocId && posts.length > 0 && posts.length % 3 === 0 && (
+            <div className={styles["button-container"]}>
+              <Button text="View More" handleOnClick={handleViewMore} />
             </div>
           )}
           {/* <div className={styles["button-container"]}>
