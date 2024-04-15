@@ -7,14 +7,20 @@
 }
 
 .story-icons{
-  display: flex;
+  display: inline-flex;
   justify-content: flex-end;
   align-items: flex-end;
+  width: 100%;
 }
 
 .share-icon {
   margin: 16px 5% 1% 5%;
   float: right;
+}
+
+.admin-comments-icon{
+  float: right;
+  margin-right: 4%;
 }
 
 .carousel img,
