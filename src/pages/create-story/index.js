@@ -13,30 +13,21 @@ import { uploadFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
-import { ReactMic } from "react-mic";
 import AudioReactRecorder, { RecordState } from "../../components/ReactAudio"
 
 
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  const [isRecording, setIsRecording] = useState(false);
   const [recordState, setrecordState] = useState(null); //second record state
   const [audioData, setaudioData] = useState(null); //second audio data
 
-  const [recordedBlob, setRecordedBlob] = useState(null);
-
-  const startRecording = () => {
-    setIsRecording(true);
-  };
   const start = () => { 
     setrecordState(RecordState.START);
-    setIsRecording(true);
   }
 
   const stop = () => { 
     setrecordState(RecordState.STOP);
-    setIsRecording(false);
   }
 
   const onStopSecond = (data) => {
@@ -92,63 +83,6 @@ const CreateStory = () => {
     setFileList((prevFileList) =>
       prevFileList.filter((file) => file.uid !== "audio-file")
     );
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-  };
-
-  const removeAudio = () => {
-    setRecordedBlob(null);
-    setFileList((prevFileList) =>
-      prevFileList.filter((file) => file.uid !== "audio-file")
-    );
-  };
-
-  // Finish record and store the audio file
-  const onStop = (recordedBlob) => {
-    console.log('Recorded Blob:', recordedBlob);
-
-    if (!recordedBlob || !recordedBlob.blob) {
-      console.error('onStop received an invalid recordedBlob:', recordedBlob);
-      return;
-    }
-
-    const audioUrl = URL.createObjectURL(recordedBlob.blob);
-    const audioElement = new Audio(audioUrl);
-    audioElement.onloadedmetadata = () => {
-      const duration = (recordedBlob.stopTime - recordedBlob.startTime) / 1000;
-      if (duration > 180) {
-        message.error({
-          content: 'Audio length cannot exceed 3 minutes.',
-          duration: 2
-        });
-        setRecordedBlob(null);
-      } else {
-        setRecordedBlob(recordedBlob);
-
-        setFileList((prevFileList) => {
-          // Remove the previous audio if it exists
-          const updatedFileList = prevFileList.filter(
-            (file) => file.uid !== "audio-file"
-          );
-
-          // Create a representation for the fileList
-          const audioFileObject = {
-            uid: "audio-file", // identifier for the recorded file - removed if recording again
-            name: "voice-recording.wav",
-            status: "done",
-            originFileObj: recordedBlob.blob, // The file object itself
-            type: String(recordedBlob.blob.type),
-          };
-          console.log('audioFileObject type:', audioFileObject.type); //audio/webm;codecs=opus
-          console.log('audioFileObject mimetype:', audioFileObject.mimetype); //undefined  
-
-          return [...updatedFileList, audioFileObject];
-        });
-      }
-      URL.revokeObjectURL(audioUrl);
-    }
   };
 
   const navigate = useNavigate();
