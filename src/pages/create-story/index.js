@@ -263,7 +263,7 @@ const CreateStory = () => {
 
   return (
     <div className="page-container">
-      <PageHeader title="Create Story" />
+      <PageHeader title="Contribute Your Story" />
       <Form
         form={form}
         name="create_story"

@@ -255,6 +255,10 @@ export const tagList = [
     value: "Modern-Day Detroit",
     label: "Modern-Day Detroit",
   },
+  {
+    value: "Ecology and Sustainability",
+    label: "Ecology and Sustainability",
+  }
 ];
 
 export const allowedFileTypes = [
