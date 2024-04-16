@@ -7,8 +7,11 @@ import userMarker from "../../assets/icons/user_marker.svg";
 import locateUser from "../../assets/icons/locate_user.svg";
 import location_red from "../../assets/icons/location_red.svg";
 import { siteLocationList } from "../../constants/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPostCountBySite } from "../../data/features/storyListSlice";
 
 const MapPage = () => {
+  const dispatch = useDispatch();
   const center = siteLocationList.reduce(
     (acc, site) => {
       acc.lat += site.lat;
@@ -31,6 +34,8 @@ const MapPage = () => {
   useEffect(() => {
     getUserLocation();
   }, []);
+
+  const storycount = useSelector((state) => state.storyList.storyCountsBySite[selectedSite?.id] || 0);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -78,12 +83,17 @@ const MapPage = () => {
 
   const handleMarkerClick = (site) => {
     setSelectedSite(site);
+    dispatch(fetchPostCountBySite(site.id));
     setModalOpen(true);
   };
 
   const handleViewStories = () => {
-    const formattedSiteName = selectedSite.label.toLowerCase().replace(/\s+/g, '-');
-    navigate(`/site/${formattedSiteName}`, { state: { siteLocationId: selectedSite.id } });
+    if (storycount === 0) {
+      navigate("/create-story", { state: { site: selectedSite } });
+    } else {
+      const formattedSiteName = selectedSite.label.toLowerCase().replace(/\s+/g, '-');
+      navigate(`/site/${formattedSiteName}`, { state: { siteLocationId: selectedSite.id } });
+    }
     setModalOpen(false);
   };
 
@@ -157,7 +167,7 @@ const MapPage = () => {
             onClick={handleViewStories}
             className={styles["primary-modal-button"]}
           >
-            View Stories
+            {storycount === 0 ? "Contribute 1st Story" : `View ${storycount} Stories`}
           </Button>,
           <Button
             key="direct"
