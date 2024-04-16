@@ -80,6 +80,39 @@ export const deleteFile = createAsyncThunk(
   }
 );
 
+//upload User Image
+export const uploadUserImg = createAsyncThunk(
+  "fileUpload/uploadUserImg",
+  async ({ file, userId }) => {
+    try {
+      const folderPath = `user/profile/${userId}`;
+      const storageRef = ref(
+        storage,
+        `${folderPath}/${userId}_profile_${new Date().getTime()}_${file.name}`
+      );
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      const downloadURL = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          null,
+          (error) => reject(error),
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+              .then((url) => resolve(url))
+              .catch((error) => reject(error));
+          }
+        );
+      });
+      return (
+        downloadURL
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
 const fileUploadSlice = createSlice({
   name: "fileUpload",
   initialState: {
@@ -106,6 +139,17 @@ const fileUploadSlice = createSlice({
         state.uploadStatus = "succeeded";
       })
       .addCase(deleteFile.rejected, (state, action) => {
+        state.uploadStatus = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(uploadUserImg.pending, (state) => {
+        state.uploadStatus = "uploading";
+        state.error = null;
+      })
+      .addCase(uploadUserImg.fulfilled, (state) => {
+        state.uploadStatus = "succeeded";
+      })
+      .addCase(uploadUserImg.rejected, (state, action) => {
         state.uploadStatus = "failed";
         state.error = action.error.message;
       });
