@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import { useEffect, useState } from "react";
+import * as React from 'react';
 import { Form, Input, Upload, Select, message } from "antd";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
@@ -13,16 +14,54 @@ import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
 import { ReactMic } from "react-mic";
+// import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
+import AudioReactRecorder, { RecordState } from "../../components/ReactAudio"
+import { AudioRecorder } from 'react-audio-voice-recorder';
+
 
 const CreateStory = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
+  const [recordState, setrecordState] = useState(null); //second record state
+  const [audioData, setaudioData] = useState(null); //second audio data
+
   const [recordedBlob, setRecordedBlob] = useState(null);
 
   const startRecording = () => {
     setIsRecording(true);
   };
+  const start = () => { 
+    setrecordState(RecordState.START);
+  }
+
+  const pause = () => { 
+    setrecordState(RecordState.PAUSE);
+  }
+
+  const stop = () => { 
+    setrecordState(RecordState.STOP);
+  }
+
+  const onStopSecond = (data) => {
+    console.log('New audioData', data)
+    setaudioData(data);
+  }
+
+  const removeAudioSecond = () => {
+    setaudioData(null);
+    setFileList((prevFileList) =>
+      prevFileList.filter((file) => file.uid !== "audio-file")
+    );
+  };
+  const addAudioElement = (blob) => {
+    const url = URL.createObjectURL(blob);
+    const audio = document.createElement('audio');
+    audio.src = url;
+    audio.controls = true;
+    document.body.appendChild(audio);
+  };
+
 
   const stopRecording = () => {
     setIsRecording(false);
@@ -371,6 +410,59 @@ const CreateStory = () => {
               />
             </>
           )}
+        </div>
+
+        <div className={styles["audio-container"]}>
+          {/* //second audio recorder */}
+          <AudioReactRecorder 
+            state={recordState} 
+            onStop={onStopSecond} 
+            backgroundColor="rgb(255,255,255)"
+          />
+
+          {audioData && (<>
+              <audio 
+                id="recorded audio"
+                src={audioData ? audioData.url : null}
+                controls />
+              <Button
+                text="Remove Audio"
+                handleOnClick={removeAudioSecond}
+                customStyles={{
+                  backgroundColor: "rgba(255, 156, 150, 0.75)",
+                }}
+              />
+            </>)}
+          <Button 
+            text="Start"
+            handleOnClick={start}/> 
+
+          <Button 
+            text="Stop"
+            handleOnClick={stop}/>
+        </div>
+
+        <div className={styles["audio-container"]}>
+          <AudioRecorder
+          onRecordingComplete={addAudioElement}
+          audioTrackConstraints={{
+            noiseSuppression: true,
+            echoCancellation: true,
+            // autoGainControl,
+            // channelCount,
+            // deviceId,
+            // groupId,
+            // sampleRate,
+            // sampleSize,
+          }}
+          onNotAllowedOrFound={(err) => console.table(err)}
+          downloadOnSavePress={true}
+          downloadFileExtension="webm"
+          mediaRecorderOptions={{
+            audioBitsPerSecond: 128000,
+          }}
+          // showVisualizer={true}
+          />
         </div>
         <br />
         <Form.Item>
