@@ -74,7 +74,12 @@ export const subscribeToStoryList = () => (dispatch) => {
 export const fetchLatestPartnerPost = createAsyncThunk(
   "storyList/fetchLatestPartnerPost",
   async () => {
-    const q = query(collection(db, "post"), where("postType", "==", "partner"), orderBy("submitTime", "desc"), limit(1));
+    const q = query(
+      collection(db, "post"),
+      where("postType", "==", "partner"),
+      orderBy("submitTime", "desc"),
+      limit(1)
+    );
     const snapshot = await getDocs(q);
     const latestPartnerPost = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -88,7 +93,13 @@ export const fetchLatestPartnerPost = createAsyncThunk(
 export const fetchLatestUserPost = createAsyncThunk(
   "storyList/fetchLatestUserPost",
   async () => {
-    const q = query(collection(db, "post"), where("postType", "==", "user"), where("status", "==", "approved"), orderBy("submitTime", "desc"), limit(2));
+    const q = query(
+      collection(db, "post"),
+      where("postType", "==", "user"),
+      where("status", "==", "approved"),
+      orderBy("submitTime", "desc"),
+      limit(2)
+    );
     const snapshot = await getDocs(q);
     const latestUserPost = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -111,8 +122,10 @@ export const fetchPostsByTag = createAsyncThunk(
     );
 
     if (lastVisibleDocId) {
-      const lastVisibleSnapshot = await getDoc(doc(db, "post", lastVisibleDocId));
-      q = query(q, startAfter(lastVisibleSnapshot), limit(3))
+      const lastVisibleSnapshot = await getDoc(
+        doc(db, "post", lastVisibleDocId)
+      );
+      q = query(q, startAfter(lastVisibleSnapshot), limit(3));
     }
     const snapshot = await getDocs(q);
     const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -120,7 +133,7 @@ export const fetchPostsByTag = createAsyncThunk(
     return {
       tag,
       posts,
-      lastVisibleDocId: lastDoc ? lastDoc.id : null
+      lastVisibleDocId: lastDoc ? lastDoc.id : null,
     };
   }
 );
@@ -148,7 +161,7 @@ export const fetchPostsBySite = createAsyncThunk(
     return {
       siteId,
       posts,
-      lastVisibleDocId: lastDoc ? lastDoc.id : null
+      lastVisibleDocId: lastDoc ? lastDoc.id : null,
     };
   }
 );
@@ -257,10 +270,10 @@ export const storyListSlice = createSlice({
         state.latestUserPost = action.payload;
       })
       .addCase(fetchLatestPartnerPost.pending, (state) => {
-        console.log("Fetching latest partner post...");
+        // console.log("Fetching latest partner post...");
       })
       .addCase(fetchLatestUserPost.pending, (state) => {
-        console.log("Fetching latest user posts...");
+        // console.log("Fetching latest user posts...");
       })
       .addCase(fetchLatestPartnerPost.rejected, (state, action) => {
         console.error("Failed to fetch latest partner post:", action.error);
@@ -271,12 +284,15 @@ export const storyListSlice = createSlice({
       .addCase(fetchPostsByTag.fulfilled, (state, action) => {
         const { tag, posts, lastVisibleDocId } = action.payload;
         const existingPosts = state.taggedPosts[tag] || [];
-        const newPosts = posts.filter(p => !existingPosts.some(ep => ep.id === p.id));
+        const newPosts = posts.filter(
+          (p) => !existingPosts.some((ep) => ep.id === p.id)
+        );
         state.taggedPosts[tag] = [...existingPosts, ...newPosts];
-        state.lastVisibleDocIdByTag[tag] = posts.length === 3 ? lastVisibleDocId : null;
+        state.lastVisibleDocIdByTag[tag] =
+          posts.length === 3 ? lastVisibleDocId : null;
       })
       .addCase(fetchPostsByTag.pending, (state) => {
-        console.log("Fetching posts by tag...");
+        // console.log("Fetching posts by tag...");
       })
       .addCase(fetchPostsByTag.rejected, (state, action) => {
         console.error("Failed to fetch posts by tag:", action.error);
@@ -284,12 +300,14 @@ export const storyListSlice = createSlice({
       .addCase(fetchPostsBySite.fulfilled, (state, action) => {
         const { siteId, posts, lastVisibleDocId } = action.payload;
         const existingPosts = state.postsBySite[siteId] || [];
-        const newPosts = posts.filter(p => !existingPosts.some(ep => ep.id === p.id));
+        const newPosts = posts.filter(
+          (p) => !existingPosts.some((ep) => ep.id === p.id)
+        );
         state.postsBySite[siteId] = [...existingPosts, ...newPosts];
         state.lastVisibleDocIdBySite[siteId] = lastVisibleDocId;
       })
       .addCase(fetchPostsBySite.pending, (state) => {
-        console.log("Fetching posts by site...");
+        // console.log("Fetching posts by site...");
       })
       .addCase(fetchPostsBySite.rejected, (state, action) => {
         console.error("Failed to fetch posts by site:", action.error);

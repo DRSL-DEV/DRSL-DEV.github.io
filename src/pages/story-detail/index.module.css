@@ -41,3 +41,28 @@
 .story-image-gallery {
   width: 100%;
 }
+
+.rejection-info-container,
+.rejection-action-section {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8%;
+  gap: 16px;
+}
+
+.rejection-action-section {
+  margin: 16px 0;
+  padding: 0;
+  gap: 8px;
+  align-items: center;
+}
+
+.rejection-action-section h5 {
+  color: var(--primary-warning-color-red);
+}
+
+.delete-action {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}

@@ -7,14 +7,20 @@ import { Carousel } from "antd";
 import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { subscribeToStoryList, fetchLatestPartnerPost, fetchLatestUserPost } from "../../data/features/storyListSlice";
+import {
+  subscribeToStoryList,
+  fetchLatestPartnerPost,
+  fetchLatestUserPost,
+} from "../../data/features/storyListSlice";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // const storyList = useSelector((state) => state.storyList.storyList);
-  const latestPartnerPost = useSelector((state) => state.storyList.latestPartnerPost);
+  const latestPartnerPost = useSelector(
+    (state) => state.storyList.latestPartnerPost
+  );
   const latestUserPost = useSelector((state) => state.storyList.latestUserPost);
 
   // const approvedUserStoryList = storyList.filter(
@@ -31,9 +37,6 @@ const HomePage = () => {
     dispatch(fetchLatestPartnerPost());
     dispatch(fetchLatestUserPost());
   }, [dispatch]);
-
-  console.log("latestPartnerPost", latestPartnerPost);
-  console.log("latestUserPost", latestUserPost);
 
   const mediaUrls = [
     gallery_placeholder,
@@ -88,27 +91,30 @@ const HomePage = () => {
         <section className={styles["user-stories-section"]}>
           <h2 className={styles["story-h2"]}> User Stories</h2>
           <div className={styles["cards-container"]}>
-            {latestUserPost && latestUserPost.map((story) => (
-              <Card
-                key={story.id}
-                postId={story.id}
-                title={story.title}
-                content={story.content}
-                author={story.userId}
-                type="user-story"
-                imgSrc={story.media[0]}
-              />
-            ))}
+            {latestUserPost &&
+              latestUserPost.map((story) => (
+                <Card
+                  key={story.id}
+                  postId={story.id}
+                  title={story.title}
+                  content={story.content}
+                  author={story.userId}
+                  type="user-story"
+                  imgSrc={story.media[0]}
+                />
+              ))}
             <div className={styles["button-container"]}>
               <Button
                 text="Share Your Story"
                 handleOnClick={() => navigate("/create-story")}
               />
-              <Button text="View More" handleOnClick={() => navigate("/explore-story")} />
+              <Button
+                text="View More"
+                handleOnClick={() => navigate("/explore-story")}
+              />
             </div>
           </div>
         </section>
-
       </main>
     </div>
   );

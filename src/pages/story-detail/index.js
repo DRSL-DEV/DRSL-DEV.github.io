@@ -1,28 +1,25 @@
+import styles from "./index.module.css";
+import React, { useEffect } from "react";
 import PageHeader from "../../components/PageHeader";
 import StoryInfo from "../../components/StoryInfo";
 import link_icon from "../../assets/icons/link_icon.svg";
-import admin_comments_icon from "../../assets/icons/admin-comments.svg";
-
-import { Carousel } from "antd";
-import styles from "./index.module.css";
+import LikeButton from "../../components/LikeButton";
 import "firebase/firestore";
+import { Carousel } from "antd";
 import { fetchStoryById } from "../../data/features/storyListSlice";
 import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import LikeButton from "../../components/LikeButton";
-import { useNavigate } from "react-router-dom";
+import { convertTimeFormatMDY } from "../../utils/dateFormat";
+import Button from "../../components/Button";
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const postId = location.state?.postId;
   const { selectedPost } = useSelector((state) => state.storyList);
   const { authorInfo } = useSelector((state) => state.storyAuthor);
-  const currentUser = useSelector((state) => state.userInfo.user);
 
   useEffect(() => {
     dispatch(fetchStoryById(postId)).then((result) => {
@@ -42,17 +39,6 @@ const StoryDetailPage = () => {
       });
   };
 
-  const handleAdminCommentsDisplay = () => {
-    if (!currentUser) {
-      navigate("/login");
-    } else {
-      console.log(selectedPost);
-      //TODO: Go to Admin Comments Page
-      //TODO: Print the admin comment and latest review time in console
-      //TODO: Figure out how to pass the admin comment and latest review time to the Admin Comments Page
-    }
-  };
-
   return (
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
       <div className={styles["story-icons"]}>
@@ -65,18 +51,34 @@ const StoryDetailPage = () => {
             alt="share"
           />
         )}
-        {selectedPost && selectedPost.status === "rejected" ? (
-          <img
-            className={styles["admin-comments-icon"]}
-            onClick={handleAdminCommentsDisplay}
-            src={admin_comments_icon}
-            alt="admin-comments"
-          />
-        ) : null}
       </div>
       <div className={styles["story-title"]}>
         <PageHeader title={siteTitle} />
       </div>
+      {selectedPost && selectedPost.status === "rejected" && (
+        <div className={styles["rejection-info-container"]}>
+          <h2 className={styles["rejection-comment-title"]}>
+            {`Admin Comment on ${convertTimeFormatMDY(
+              selectedPost.latestReviewTime
+            )}:`}
+          </h2>
+          <p className={styles["rejection-comment-content"]}>
+            {selectedPost.adminComment.at(-1).comment}
+          </p>
+          <div className={styles["rejection-action-section"]}>
+            <h5>Please edit your story and re-submit</h5>
+            <Button
+              text="EDIT"
+              customStyles={{
+                width: "310px",
+                height: "45px",
+                borderRadius: "30px",
+                fontSize: "16px",
+              }}
+            />
+          </div>
+        </div>
+      )}
       <div>
         {selectedPost && (
           <Carousel className={styles.carousel} autoplay>
@@ -109,6 +111,17 @@ const StoryDetailPage = () => {
         {selectedPost && (
           <StoryInfo selectedPost={selectedPost} authorInfo={authorInfo} />
         )}
+      </div>
+      <div className={styles["delete-action"]}>
+        <Button
+          text="DELETE"
+          customStyles={{
+            width: "310px",
+            height: "45px",
+            borderRadius: "30px",
+            fontSize: "16px",
+          }}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPostsByTag, subscribeToStoryList } from "../../data/features/storyListSlice";
+import {
+  fetchPostsByTag,
+  subscribeToStoryList,
+} from "../../data/features/storyListSlice";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Card from "../../components/Card";
@@ -41,9 +44,9 @@ const ExploreStory = () => {
   const dispatch = useDispatch();
   const [activeKey, setActiveKey] = useState(null);
   const taggedPosts = useSelector((state) => state.storyList.taggedPosts);
-  const lastVisibleDocIdByTag = useSelector((state) => state.storyList.lastVisibleDocIdByTag);
-
-  console.log(taggedPosts);
+  const lastVisibleDocIdByTag = useSelector(
+    (state) => state.storyList.lastVisibleDocIdByTag
+  );
 
   const mediaUrls = [
     gallery_placeholder,
@@ -74,25 +77,29 @@ const ExploreStory = () => {
       label: <CategoryHeader title={tag.label} style={panelStyle} />,
       children: (
         <div className={styles["cards-container"]}>
-          {taggedPosts[tag.label] && taggedPosts[tag.label].map((story) => (
-            <Card
-              key={story.id}
-              postId={story.id}
-              title={story.title}
-              content={story.content.substring(0, 65) + "..."}
-              author={story.userId}
-              type={story.postType === "user" ? "user-story" : "lab-story"}
-              imgSrc={story.media[0]}
-            />
-          ))}
-          {taggedPosts[tag.label] && taggedPosts[tag.label].length > 0 && taggedPosts[tag.label].length % 3 === 0 && lastVisibleDocIdByTag[tag.label] && (
-            <div className={styles["button-container"]}>
-              <Button
-                text="View More"
-                handleOnClick={() => handleViewMore(tag.label)}
+          {taggedPosts[tag.label] &&
+            taggedPosts[tag.label].map((story) => (
+              <Card
+                key={story.id}
+                postId={story.id}
+                title={story.title}
+                content={story.content.substring(0, 65) + "..."}
+                author={story.userId}
+                type={story.postType === "user" ? "user-story" : "lab-story"}
+                imgSrc={story.media[0]}
               />
-            </div>
-          )}
+            ))}
+          {taggedPosts[tag.label] &&
+            taggedPosts[tag.label].length > 0 &&
+            taggedPosts[tag.label].length % 3 === 0 &&
+            lastVisibleDocIdByTag[tag.label] && (
+              <div className={styles["button-container"]}>
+                <Button
+                  text="View More"
+                  handleOnClick={() => handleViewMore(tag.label)}
+                />
+              </div>
+            )}
 
           {/* <div className={styles["button-container"]}>
             <Button text="View More" handleOnClick={() => {}} />
@@ -144,10 +151,7 @@ const ExploreStory = () => {
           </div> */}
           <div className={styles["location-container"]}>
             <img src={location_pin} alt="location" />
-            <Link
-              to={"/explore-site"}
-              className={styles["explore-site-link"]}
-            >
+            <Link to={"/explore-site"} className={styles["explore-site-link"]}>
               Explore Sites
             </Link>
           </div>

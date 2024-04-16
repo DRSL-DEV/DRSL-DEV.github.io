@@ -8,7 +8,10 @@ import Title from "../../components/PageHeader";
 import Button from "../../components/Button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPostsBySite, subscribeToStoryList } from "../../data/features/storyListSlice";
+import {
+  fetchPostsBySite,
+  subscribeToStoryList,
+} from "../../data/features/storyListSlice";
 import { siteLocationList } from "../../constants/constants";
 
 const SitePage = () => {
@@ -17,15 +20,23 @@ const SitePage = () => {
   const location = useLocation();
   const siteLocationId = location.state?.siteLocationId;
 
-  const posts = useSelector((state) => state.storyList.postsBySite[siteLocationId] || []);
-  const siteLocation = siteLocationList.find((site) => site.id === siteLocationId);
-  const lastVisibleDocId = useSelector((state) => state.storyList.lastVisibleDocIdBySite[siteLocationId]);
-  const siteTitle = siteLocation ? siteLocation.name : 'Default Title';
+  const posts = useSelector(
+    (state) => state.storyList.postsBySite[siteLocationId] || []
+  );
+  const siteLocation = siteLocationList.find(
+    (site) => site.id === siteLocationId
+  );
+  const lastVisibleDocId = useSelector(
+    (state) => state.storyList.lastVisibleDocIdBySite[siteLocationId]
+  );
+  const siteTitle = siteLocation ? siteLocation.name : "Default Title";
   const numberOfStories = posts.length;
 
   useEffect(() => {
     if (siteLocationId) {
-      dispatch(fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId: null }));
+      dispatch(
+        fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId: null })
+      );
     }
   }, [dispatch, siteLocationId]);
 
@@ -33,7 +44,7 @@ const SitePage = () => {
     if (lastVisibleDocId) {
       dispatch(fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId }));
     }
-  }
+  };
 
   const [isGridView, setIsGridView] = useState(true);
 
@@ -42,11 +53,9 @@ const SitePage = () => {
   };
 
   if (!siteLocation) {
-    navigate('*');
+    navigate("*");
     return null;
   }
-
-  console.log(isGridView);
 
   return (
     <div className="page-container">
@@ -64,31 +73,40 @@ const SitePage = () => {
         </section>
         <section className={styles["user-content"]}>
           <h2>Posts and Photos</h2>
-          <div className={isGridView ? styles["card-container"] : styles["grid-view"]}>
-            {posts.map((story) => isGridView ? (
-              <Card
-                key={story.id}
-                postId={story.id}
-                title={story.title}
-                content={story.content}
-                author={story.userId}
-                type="user-story"
-                imgSrc={story.media[0]}
-              />
-            ) : (
-              <GridCard
-                key={story.id}
-                title={story.title}
-                imgSrc={story.media[0]}
-                postId={story.id}
-              />
-            ))}
+          <div
+            className={
+              isGridView ? styles["card-container"] : styles["grid-view"]
+            }
+          >
+            {posts.map((story) =>
+              isGridView ? (
+                <Card
+                  key={story.id}
+                  postId={story.id}
+                  title={story.title}
+                  content={story.content}
+                  author={story.userId}
+                  type="user-story"
+                  imgSrc={story.media[0]}
+                />
+              ) : (
+                <GridCard
+                  key={story.id}
+                  title={story.title}
+                  imgSrc={story.media[0]}
+                  postId={story.id}
+                />
+              )
+            )}
           </div>
-          {isGridView && lastVisibleDocId && posts.length > 0 && posts.length % 3 === 0 && (
-            <div className={styles["button-container"]}>
-              <Button text="View More" handleOnClick={handleViewMore} />
-            </div>
-          )}
+          {isGridView &&
+            lastVisibleDocId &&
+            posts.length > 0 &&
+            posts.length % 3 === 0 && (
+              <div className={styles["button-container"]}>
+                <Button text="View More" handleOnClick={handleViewMore} />
+              </div>
+            )}
           {/* <div className={styles["button-container"]}>
             <Button
               text="View More"
