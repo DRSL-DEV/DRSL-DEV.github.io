@@ -29,6 +29,7 @@ const initialState = {
   postsBySite: {},
   lastVisibleDocIdBySite: {},
   deleting: false,
+  storyCountsBySite: {},
 };
 
 // Subscribe to story list
@@ -165,6 +166,43 @@ export const fetchPostsBySite = createAsyncThunk(
       posts,
       lastVisibleDocId: lastDoc ? lastDoc.id : null,
     };
+  }
+);
+
+// Fetch count of posts by site
+export const fetchPostCountBySite = createAsyncThunk(
+  "storyList/fetchPostCountBySite",
+  async (siteId, { getState, rejectWithValue }) => {
+    try {
+      const approvedQuery = query(
+        collection(db, "post"),
+        where("site", "==", siteId),
+        where("postType", "==", "user"),
+        where("status", "==", "approved")
+      );
+      const partnerQuery = query(
+        collection(db, "post"),
+        where("site", "==", siteId),
+        where("postType", "==", "partner"),
+      );
+      const [approvedSnapshot, partnerSnapshot] = await Promise.all([
+        getDocs(approvedQuery),
+        getDocs(partnerQuery),
+      ]);
+      const uniqueDocIds = new Set();
+      approvedSnapshot.forEach(doc => {
+        uniqueDocIds.add(doc.id);
+      });
+      partnerSnapshot.forEach(doc => {
+        if (!uniqueDocIds.has(doc.id)) {
+          uniqueDocIds.add(doc.id);
+        }
+      });
+
+      return { siteId, count: uniqueDocIds.size };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -342,7 +380,11 @@ export const storyListSlice = createSlice({
       .addCase(deletePostById.rejected, (state, action) => {
         state.deleting = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(fetchPostCountBySite.fulfilled, (state, action) => {
+        const { siteId, count } = action.payload;
+        state.storyCountsBySite[siteId] = count;
+      })
   },
 });
 

@@ -37,7 +37,12 @@ const CreateStory = () => {
     if (!user) {
       navigate("/login");
     }
-  }, [navigate, user]);
+    if (location.state?.site) {
+      form.setFieldsValue({
+        site: location.state.site.id,
+      });
+    }
+  }, [navigate, user, form, location.state]);
 
   const filterOption = (input, option) =>
     option?.label.toLowerCase().includes(input.toLowerCase());
