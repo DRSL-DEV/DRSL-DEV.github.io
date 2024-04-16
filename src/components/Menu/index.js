@@ -5,13 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { signOutUser } from "../../data/features/userInfoSlice";
 import { message } from "antd";
 
-// Menu items
-const menuItems = [
-  { name: "Contribute Your Story", link: "/create-story" },
-  { name: "Explore Regional Stories", link: "/explore-story" },
-  { name: "Station Map", link: "/map" },
-];
-
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const location = useLocation(); // Get current location (routing location)
   // const user = useSelector((state) => state.userInfo.user);
@@ -23,13 +16,12 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   );
 
   //Signout button functionality
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Menu items
   const basicMenuItems = [
-    { name: "Share Your Story", link: "/create-story" },
+    { name: "Contribute Your Story", link: "/create-story" },
     { name: "Explore Regional Stories", link: "/explore-story" },
     { name: "Station Map", link: "/map" },
   ];
@@ -44,8 +36,6 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
     }
     setMenuItems(items);
   }, [user]);
-
-  console.log(menuItems);
 
   const handleLogOut = () => {
     setIsMenuOpen(false);
