@@ -76,6 +76,8 @@ const CreateStory = () => {
             originFileObj: recordedBlob.blob, // The file object itself
             type: String(recordedBlob.blob.type),
           };
+          console.log('audioFileObject type:', audioFileObject.type); //audio/webm;codecs=opus
+          console.log('audioFileObject mimetype:', audioFileObject.mimetype); //undefined  
 
           return [...updatedFileList, audioFileObject];
         });
