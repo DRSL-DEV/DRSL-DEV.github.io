@@ -2,14 +2,14 @@ import styles from "./index.module.css";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Checkbox, Upload, Select, message } from "antd";
+import { Form, Input, Checkbox, Upload, Select, message, Modal, Button } from "antd";
 import googleIcon from "../../assets/icons/Google icon.svg";
-import Button from "../../components/Button";
+// import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
 import PrimaryButton from "../../components/PrimaryButton";
-import { updateUser } from "../../data/features/userInfoSlice";
+import { updateUser, clearUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
-import { getAuth, sendPasswordResetEmail, deleteUser } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail, deleteUser, signOut } from "firebase/auth";
 import { tagList } from "../../constants/constants";
 import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import defaultProfile from "../../assets/images/profile.png";
@@ -19,8 +19,9 @@ const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
+  const [selectedTags, setSelectedTags] = useState(currentUser ? currentUser.tagsOfInterest : []);
   const allowedImgTypes = ["image/jpeg", "image/png"];
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const validateMessages = {
     required: "${label} is required!",
@@ -198,26 +199,38 @@ const EditProfilePage = () => {
       });
   };
 
-  const handleDeleteAccount = () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      deleteUser(user)
-        .then(() => {
-          message.success({
-            content: `We are sad to loose you :'( Your account is successfully deleted`,
-            duration: 6,
-          });
-          navigate("/");
-        })
-        .catch((error) => {
-          // An error occurred while deleting the user's authentication
-          console.error("Error deleting user authentication:", error.message);
-        });
-    } else {
-      // No user is currently authenticated
-      console.error("No user is currently authenticated.");
-    }
+  // const handleDeleteAccount = () => {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+  
+  //   if (user) {
+  //     deleteUser(user)
+  //       .then(() => {
+  //         dispatch(clearUser());
+  //         signOut(auth)
+  //           .then(() => {
+  //             // User successfully logged out
+  //             navigate("/");
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error signing out:", error.message);
+  //           });
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error deleting user account:", error.message);
+  //       });
+  //   } else {
+  //     console.error("No user is currently authenticated.");
+  //   }
+  // };
+
+  const handleCancelDelete = () => {
+    setDeleteModalVisible(false);
+  };
+
+  const handleConfirmDelete = () => {
+    handleDeleteAccount();
+    setDeleteModalVisible(false);
   };
 
   return (
@@ -344,9 +357,27 @@ const EditProfilePage = () => {
 
         <Form.Item>
           <PrimaryButton text="Save" htmlType="submit" />
-          <PrimaryButton text="Delete Account" onClick={handleDeleteAccount} />
         </Form.Item>
       </Form>
+      <div className={styles["delete-account-btn"]}>
+          <PrimaryButton text="Delete Account" onClick={() => setDeleteModalVisible(true)} />
+          <Modal
+            open={deleteModalVisible}
+            title="Delete Account"
+            onCancel={handleCancelDelete}
+            footer={[
+              <Button key="cancel" type="default" onClick={handleCancelDelete} className={styles["primary-modal-button"]}>
+                Cancel
+              </Button>,
+              <Button key="confirm" type="default" onClick={handleConfirmDelete} className={styles["primary-modal-button"]}>
+                Confirm
+              </Button>,
+            ]}
+          >
+            <p>Are you sure you want to delete your account?</p>
+            <p>All your stories will be <strong>removed</strong> and this action cannot be undone.</p>
+          </Modal>
+        </div>
 
       <div className={styles["link-account-section"]}>
         <h3>Linked Accounts</h3>
@@ -358,9 +389,10 @@ const EditProfilePage = () => {
           />
           <h4>Google</h4>
           <Button
-            customStyles={{ fontSize: "14px", width: "100px", height: "30px" }}
-            text="Unlink"
-          />
+            className={styles["primary-modal-button"]}
+          >
+            Unlink
+          </Button>
         </div>
       </div>
     </div>

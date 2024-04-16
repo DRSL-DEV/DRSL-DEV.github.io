@@ -105,4 +105,25 @@
   width: 100% !important;
 }
 
+.delete-account-btn {
+  margin-top: -18px;
+  margin-bottom: 30px !important;
+}
+
+.primary-modal-button :global(.ant-btn-link) {
+  background-color: #F6DFA4;
+  font-family: var(--font-family-heading);
+  font-size: 10px;
+  border-radius: 50%;
+}
+
+.primary-modal-button {
+  background-color: #f6dfa4;
+  font-family: var(--font-family-heading);
+  margin: 4px 0;
+}
+
+.delete-account-btn :global(.ant-modal .ant-modal-footer) {
+  text-align: center !important;
+}
 
