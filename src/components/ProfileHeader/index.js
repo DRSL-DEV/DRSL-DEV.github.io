@@ -1,6 +1,8 @@
 import styles from "./index.module.css";
 import edit_profile from "../../assets/icons/edit_icon.svg";
 import { Link } from "react-router-dom";
+import defaultProfile from "../../assets/images/profile.png"
+import defaultBanner from "../../assets/images/default_banner.png"
 
 const ProfileHeader = ({
   profileBanner,
@@ -15,11 +17,11 @@ const ProfileHeader = ({
     <div className={styles["user-profile-container"]}>
       <img
         className={styles["profile-banner"]}
-        src={profileBanner}
+        src={profileBanner || defaultBanner}
         alt="background"
       />
       <div className={styles["profile-top"]}>
-        <img className={styles["profile-img"]} src={profileImg} alt="profile" />
+        <img className={styles["profile-img"]} src={profileImg || defaultProfile} alt="profile" />
       </div>
       <div className={styles["profile-edit"]}>
         <h2 className={styles["profile-name"]}>{profileName}</h2>

@@ -9,11 +9,11 @@ import PageHeader from "../../components/PageHeader";
 import PrimaryButton from "../../components/PrimaryButton";
 import { updateUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail, deleteUser } from "firebase/auth";
 import { tagList } from "../../constants/constants";
 import { uploadFile } from "../../data/features/fileUploadSlice";
-// import defaultProfile from "../../assets/images/profile.png"
-// import defaultBanner from "../../assets/images/default_banner.png"
+import defaultProfile from "../../assets/images/profile.png"
+import defaultBanner from "../../assets/images/default_banner.png"
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
@@ -36,16 +36,10 @@ const EditProfilePage = () => {
     },
   };
 
-  const defaultProfile = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057"
-  const defaultBanner = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fbanner%2Fdefault_banner.png?alt=media&token=75a934a6-ea7f-4ecc-a1f4-54e3290206db"
-  const [profileImg, setProfileImg] = useState(currentUser.profileImage ? [{url:currentUser.profileImage,uid:1}] : []);
-  // const [banner, setBanner] = useState(currentUser.bannerImage ? currentUser.bannerImage : defaultBanner);
-  // const [profileImg, setProfileImg] = useState([]);
-  const [banner, setBanner] = useState([]);
-
-  const onChangeBanner = (info) => {
-    setBanner(info.fileList.slice(-1));
-  };
+  // const defaultProfile = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057"
+  // const defaultBanner = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fbanner%2Fdefault_banner.png?alt=media&token=75a934a6-ea7f-4ecc-a1f4-54e3290206db"
+  const [profileImg, setProfileImg] = useState(currentUser.profileImage ? [{url:currentUser.profileImage,uid:1}] : [{url:defaultProfile,uid:1}]);
+  const [banner, setBanner] = useState(currentUser.profileBanner ? [{url:currentUser.profileBanner,uid:1}] : [{url:defaultBanner,uid:1}]);
 
   const onPreview = async () => {
     //const profileURL = profileImg === null || profileImg === defaultProfile ? defaultProfile : profileImg;
@@ -57,45 +51,42 @@ const EditProfilePage = () => {
     }
   };
 
-
-
-  // const fileUploadProps = {
-  //   beforeUpload: (file) => {
-  //     if (allowedImgTypes.includes(file.type)) {
-  //     } else {
-  //       message.error({
-  //         content: "You can only upload image, video, or audio files!",
-  //         duration: 2,
-  //       });
-  //       return Upload.LIST_IGNORE;
-  //     }
-  //     return false;
-  //   },
-  //   onChange: (info) => {
-  //     setFile(info.fileList[0]);
-  //     // Log details if the file is successfully read
-  //     if (info.file.status === "done") {
-  //       message.success({
-  //         content: `${info.file.name} file uploaded successfully`,
-  //         duration: 2,
-  //       });
-  //     } else if (info.file.status === "error") {
-  //       message.error({
-  //         content: `${info.file.name} file upload failed.`,
-  //         duration: 2,
-  //       });
-  //     }
-  //   },
-  // };
+  const fileUploadProps = {
+    beforeUpload: (file) => {
+      if (allowedImgTypes.includes(file.type)) {
+      } else {
+        message.error({
+          content: "You can only upload image, video, or audio files!",
+          duration: 2,
+        });
+        return Upload.LIST_IGNORE;
+      }
+      return false;
+    },
+  };
 
   const handleSave = async (values) => {
-    const profileImage = await dispatch(
-      uploadFile({
-        fileName: profileImg[0].name,
-        file: profileImg[0].originFileObj,
-        folderPath: `user/profile`,
-      })
-    ).unwrap()
+    let profileImage = currentUser.profileImage;
+    let profileBanner = currentUser.profileBanner;
+    if (profileImg.length > 0) {
+      profileImage = await dispatch(
+        uploadFile({
+          fileName: profileImg[0]?.name,
+          file: profileImg[0]?.originFileObj,
+          folderPath: `user/profile`,
+        })
+      ).unwrap();
+    }
+  
+    if (banner.length > 0) {
+      profileBanner = await dispatch(
+        uploadFile({
+          fileName: banner[0]?.name,
+          file: banner[0]?.originFileObj,
+          folderPath: `user/banner`,
+        })
+      ).unwrap();
+    }
 
     const userDetails = {
       email: values.email,
@@ -106,6 +97,7 @@ const EditProfilePage = () => {
       anonymousSubmissionCheck: values.anonySubChk,
       tagsOfInterest: selectedTags,
       profileImage,
+      profileBanner,
     };
     const userWithoutNullValues = Object.fromEntries(
       Object.entries(userDetails).filter(([key, value]) => value !== undefined)
@@ -147,6 +139,28 @@ const EditProfilePage = () => {
           duration: 5,
         });
       });
+  };
+
+  const handleDeleteAccount = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      deleteUser(user)
+        .then(() => {
+          message.success({
+            content: `We are sad to loose you :'( Your account is successfully deleted`,
+            duration: 6,
+          });
+          navigate("/");
+        })
+        .catch((error) => {
+          // An error occurred while deleting the user's authentication
+          console.error("Error deleting user authentication:", error.message);
+        });
+    } else {
+      // No user is currently authenticated
+      console.error("No user is currently authenticated.");
+    }
   };
 
   return (
@@ -215,8 +229,8 @@ const EditProfilePage = () => {
                   fileList={profileImg}
                   onChange={(info)=>setProfileImg(info.fileList)}
                   onPreview={onPreview}
-                  beforeUpload={() => false} // need more function in validating the uploaded file
-                  // {...fileUploadProps}
+                  // beforeUpload={() => false} // need more function in validating the uploaded file
+                  {...fileUploadProps}
                 >
                   {!profileImg.length && 'Upload'}
                 </Upload>
@@ -228,16 +242,14 @@ const EditProfilePage = () => {
             <div className={styles["banner-upload"]}>
             <ImgCrop rotationSlider aspectSlider showReset
               aspect={2}>
-
                 <Upload
-                  // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   listType="picture-card"
-                  fileList={banner ? [banner] : []}
-                  onChange={onChangeBanner}
+                  fileList={banner}
+                  onChange={(info)=>setBanner(info.fileList)}
                   onPreview={onPreview}
-                  // {...fileUploadProps}
+                  {...fileUploadProps}
                 >
-                  {!banner && '+ Upload'}
+                  {!banner.length && 'Upload'}
                 </Upload>
               </ImgCrop>
             </div>
@@ -276,7 +288,7 @@ const EditProfilePage = () => {
 
         <Form.Item>
           <PrimaryButton text="Save" htmlType="submit" />
-          <PrimaryButton text="Delete Account" />
+          <PrimaryButton text="Delete Account" onClick={handleDeleteAccount}/>
         </Form.Item>
       </Form>
 
