@@ -81,42 +81,55 @@ const EditProfilePage = () => {
     let newBanner = null;
 
     try {
-      if (profileImg.length && !profileImg[0].uploaded) {
-        newProfileImg = await dispatch(
-          uploadFile({
-            fileName: profileImg[0]?.name,
-            file: profileImg[0]?.originFileObj,
-            folderPath: `user/profile`,
-          })
-        ).unwrap();
-      }
+      if (profileImg.length) {
+        // if profileImg is not empty
+        if (!profileImg[0].uploaded) {
+          // if profileImg is not uploaded
+          newProfileImg = await dispatch(
+            uploadFile({
+              fileName: profileImg[0]?.name,
+              file: profileImg[0]?.originFileObj,
+              folderPath: `user/profile`,
+            })
+          ).unwrap();
+        } else if (profileImg[0].uploaded === 1) {
+          // if profileImg is already uploaded
+          newProfileImg = prevProfileImg;
+        }
 
-      if (prevProfileImg && newProfileImg && newProfileImg !== prevProfileImg) {
+        if (
+          // if user uploaded a new profile image, delete the previous one
+          prevProfileImg &&
+          newProfileImg &&
+          newProfileImg !== prevProfileImg
+        ) {
+          dispatch(deleteFile(prevProfileImg));
+          newProfileImg = null;
+        }
+      } else if (prevProfileImg) {
+        // if user delete the current image, delete from firestore storage
         dispatch(deleteFile(prevProfileImg));
-        newProfileImg = null;
       }
 
-      if (profileImg.length && profileImg[0].uploaded === 1) {
-        newProfileImg = prevProfileImg;
-      }
+      if (banner.length) {
+        if (!banner[0].uploaded) {
+          newBanner = await dispatch(
+            uploadFile({
+              fileName: banner[0]?.name,
+              file: banner[0]?.originFileObj,
+              folderPath: `user/banner`,
+            })
+          ).unwrap();
+        } else if (banner[0].uploaded === 1) {
+          newBanner = prevBanner;
+        }
 
-      if (banner.length && !banner[0].uploaded) {
-        newBanner = await dispatch(
-          uploadFile({
-            fileName: banner[0]?.name,
-            file: banner[0]?.originFileObj,
-            folderPath: `user/banner`,
-          })
-        ).unwrap();
-      }
-
-      if (prevBanner && newBanner && newBanner !== prevBanner) {
+        if (prevBanner && newBanner && newBanner !== prevBanner) {
+          dispatch(deleteFile(prevBanner));
+          newBanner = null;
+        }
+      } else if (prevBanner) {
         dispatch(deleteFile(prevBanner));
-        newBanner = null;
-      }
-
-      if (banner.length && banner[0].uploaded === 1) {
-        newBanner = prevBanner;
       }
 
       const userDetails = {
