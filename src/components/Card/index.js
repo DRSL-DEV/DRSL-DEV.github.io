@@ -4,7 +4,7 @@ import arrow_right from "../../assets/icons/arrow_right.svg";
 import defaultImg from "../../assets/images/default_media.png";
 import { Link } from "react-router-dom";
 
-const Card = ({ title, content, userId, type, imgSrc, postId }) => {
+const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
   const [hasError, setHasError] = useState(false);
   return (
     <>
@@ -31,7 +31,7 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
       ) : (
         <Link
           to={`/story/${title
-            .toLowerCase()
+            ?.toLowerCase()
             .replace(/ /g, "-")
             .replace(/[^\w-]+/g, "")}`}
           state={{ postId: postId }}
@@ -51,6 +51,13 @@ const Card = ({ title, content, userId, type, imgSrc, postId }) => {
               <p>{content}</p>
               <div className={styles["customized-card-footer"]}>
                 <div>{userId}</div>
+                {status ? (
+                  <span
+                    className={`${styles["story-status"]} ${styles[status]}`}
+                  >
+                    {status.toUpperCase()}
+                  </span>
+                ) : null}
                 <button>
                   <img src={arrow_right} alt="right arrow" />
                 </button>

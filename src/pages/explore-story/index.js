@@ -1,6 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { subscribeToStoryList } from "../../data/features/storyListSlice";
-import { useEffect } from "react";
+import {
+  fetchPostsByTag,
+  subscribeToStoryList,
+} from "../../data/features/storyListSlice";
+import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -38,10 +41,12 @@ const CustomCollapse = ({ items }) => (
 
 const ExploreStory = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
-  const categories = tagList.map((tag) => tag.label);
+  const [activeKey, setActiveKey] = useState(null);
+  const taggedPosts = useSelector((state) => state.storyList.taggedPosts);
+  const lastVisibleDocIdByTag = useSelector(
+    (state) => state.storyList.lastVisibleDocIdByTag
+  );
 
   const mediaUrls = [
     gallery_placeholder,
@@ -56,31 +61,24 @@ const ExploreStory = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = dispatch(subscribeToStoryList());
-
-    return () => {
-      unsubscribe();
-    };
+    tagList.forEach((tag) => {
+      dispatch(fetchPostsByTag({ tag: tag.label, lastVisibleDocId: null }));
+    });
   }, [dispatch]);
 
-  const stories = useSelector((state) => state.storyList.storyList);
-  //add selection of stories based on status and user type
-  const approvedUserStoryList = stories.filter(
-    (story) => story.status === "approved"
-  );
+  const handleViewMore = (tag) => {
+    const lastVisibleDocId = lastVisibleDocIdByTag[tag];
+    dispatch(fetchPostsByTag({ tag, lastVisibleDocId }));
+  };
 
   const items = (panelStyle) =>
-    categories.map((category, index) => ({
-      key: index,
-      label: <CategoryHeader title={category} style={panelStyle} />,
+    tagList.map((tag, index) => ({
+      key: index.toString(),
+      label: <CategoryHeader title={tag.label} style={panelStyle} />,
       children: (
         <div className={styles["cards-container"]}>
-          {approvedUserStoryList
-            .filter(
-              (story) =>
-                Array.isArray(story.tags) && story.tags.includes(category)
-            )
-            .map((story) => (
+          {taggedPosts[tag.label] &&
+            taggedPosts[tag.label].map((story) => (
               <Card
                 key={story.id}
                 postId={story.id}
@@ -91,6 +89,18 @@ const ExploreStory = () => {
                 imgSrc={story.media[0]}
               />
             ))}
+          {taggedPosts[tag.label] &&
+            taggedPosts[tag.label].length > 0 &&
+            taggedPosts[tag.label].length % 3 === 0 &&
+            lastVisibleDocIdByTag[tag.label] && (
+              <div className={styles["button-container"]}>
+                <Button
+                  text="View More"
+                  handleOnClick={() => handleViewMore(tag.label)}
+                />
+              </div>
+            )}
+
           {/* <div className={styles["button-container"]}>
             <Button text="View More" handleOnClick={() => {}} />
           </div> */}
@@ -141,11 +151,8 @@ const ExploreStory = () => {
           </div> */}
           <div className={styles["location-container"]}>
             <img src={location_pin} alt="location" />
-            <Link 
-              to={"/explore-site"}
-              className={styles["explore-site-link"]}
-              >
-                Explore Sites
+            <Link to={"/explore-site"} className={styles["explore-site-link"]}>
+              Explore Sites
             </Link>
           </div>
         </section>

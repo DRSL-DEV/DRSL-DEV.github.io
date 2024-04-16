@@ -8,17 +8,45 @@ import upload_icon from "../../assets/icons/upload_icon.svg";
 import location_red from "../../assets/icons/location_red.svg";
 import tag_blue from "../../assets/icons/tag_blue.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewStory } from "../../data/features/storyListSlice";
-import { uploadFile } from "../../data/features/fileUploadSlice";
+import { addOrUpdateStory } from "../../data/features/storyListSlice";
+import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
 import AudioReactRecorder, { RecordState } from "../../components/ReactAudio"
 
 
 const CreateStory = () => {
+  const location = useLocation();
+  const { selectedPost } = location.state || {};
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userInfo.user);
+  
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+    if (location.state?.site) {
+      form.setFieldsValue({
+        site: location.state.site.id,
+      });
+    }
+  }, [navigate, user, form, location.state]);
+
+  const filterOption = (input, option) =>
+    option?.label.toLowerCase().includes(input.toLowerCase());
+  
+  const [fileList, setFileList] = useState(
+    selectedPost?.media.map((media, index) => ({
+      uid: `${selectedPost.title}-media${index}`,
+      name: ``,
+      uploaded: true,
+      url: media,
+    })) || []
+  );
+  
   const [recordState, setrecordState] = useState(null); //second record state
   const [audioData, setaudioData] = useState(null); //second audio data
 
@@ -35,7 +63,7 @@ const CreateStory = () => {
     setaudioData(data);
     if (!data || !data.blob) {
       console.error('onStop received an invalid audio:', data);
-      return; // trying to change again
+      return;
     }
 
     //prepare audio element
@@ -47,8 +75,8 @@ const CreateStory = () => {
       const duration = (data.stopTime - data.startTime) / 1000;
       if (duration > 180) {
         message.error({
-          content: 'Audio length cannot exceed 3 minutes.',
-          duration: 2
+          content: "Audio length cannot exceed 3 minutes.",
+          duration: 2,
         });
         setaudioData(null);
       } else {
@@ -85,19 +113,6 @@ const CreateStory = () => {
     );
   };
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.userInfo.user);
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [navigate, user]);
-
-  const filterOption = (input, option) =>
-    option?.label.toLowerCase().includes(input.toLowerCase());
-
   const beforeUpload = (file) => {
     if (!allowedFileTypes.includes(file.type)) {
       message.error({
@@ -106,27 +121,29 @@ const CreateStory = () => {
       });
       return Upload.LIST_IGNORE;
     }
-    const isVideo = file.type.startsWith('video/');
-    const isAudio = file.type.startsWith('audio/');
-    const isImage = file.type.startsWith('image/');
+    const isVideo = file.type.startsWith("video/");
+    const isAudio = file.type.startsWith("audio/");
+    const isImage = file.type.startsWith("image/");
 
     if (isVideo || isAudio) {
       return new Promise((resolve, reject) => {
         const url = URL.createObjectURL(file);
-        const mediaElement = document.createElement(isVideo ? 'video' : 'audio');
-        mediaElement.addEventListener('loadedmetadata', () => {
+        const mediaElement = document.createElement(
+          isVideo ? "video" : "audio"
+        );
+        mediaElement.addEventListener("loadedmetadata", () => {
           const duration = mediaElement.duration;
 
           if (isVideo && duration > 30) {
             message.error({
-              content: 'Video length cannot exceed 30 seconds.',
-              duration: 2
+              content: "Video length cannot exceed 30 seconds.",
+              duration: 2,
             });
             reject();
           } else if (isAudio && duration > 180) {
             message.error({
-              content: 'Audio length cannot exceed 3 minutes.',
-              duration: 2
+              content: "Audio length cannot exceed 3 minutes.",
+              duration: 2,
             });
             reject();
           } else {
@@ -136,10 +153,10 @@ const CreateStory = () => {
           URL.revokeObjectURL(url);
         });
 
-        mediaElement.addEventListener('error', () => {
+        mediaElement.addEventListener("error", () => {
           message.error({
-            content: 'Failed to load video/audio metadata.',
-            duration: 2
+            content: "Failed to load video/audio metadata.",
+            duration: 2,
           });
           reject();
         });
@@ -183,21 +200,40 @@ const CreateStory = () => {
   };
 
   const handleSubmission = async (values) => {
-    const uploadPromises = fileList.map((fileInfo) =>
-      dispatch(
-        uploadFile({
-          fileName: fileInfo.name,
-          file: fileInfo.originFileObj,
-          folderPath: `post/${fileInfo.type.split("/")[0]}`,
-        })
-      ).unwrap()
-    );
+    const uploadPromises = fileList
+      .filter((file) => !file.uploaded)
+      .map((fileInfo) =>
+        dispatch(
+          uploadFile({
+            fileName: fileInfo.name,
+            file: fileInfo.originFileObj,
+            folderPath: `post/${fileInfo.type.split("/")[0]}`,
+          })
+        ).unwrap()
+      );
+
+    const deletePromises =
+      selectedPost?.media
+        .filter(
+          (mediaUrl) =>
+            !fileList
+              .filter((file) => file.uploaded)
+              .map((file) => file.url)
+              .includes(mediaUrl)
+        )
+        .map((mediaUrl) => dispatch(deleteFile(mediaUrl)).unwrap()) || [];
 
     try {
-      const fileURLs = await Promise.all(uploadPromises);
+      const fileURLs = [
+        ...fileList.filter((file) => file.uploaded).map((file) => file.url),
+        ...(await Promise.all(uploadPromises)),
+      ];
+
+      await Promise.all(deletePromises);
 
       dispatch(
-        addNewStory({
+        addOrUpdateStory({
+          id: selectedPost?.id || null,
           userId: user.uid,
           title: values.title,
           content: values.content,
@@ -229,13 +265,21 @@ const CreateStory = () => {
 
   return (
     <div className="page-container">
-      <PageHeader title="Create Story" />
+      <PageHeader title="Contribute Your Story" />
       <Form
         form={form}
         name="create_story"
         onFinish={handleSubmission}
         layout="vertical"
         className={styles["create-story-form"]}
+        initialValues={{
+          title: selectedPost?.title || "",
+          content: selectedPost?.content || "",
+          site: selectedPost?.site || "",
+          tags: selectedPost?.tags || [],
+          media: selectedPost?.media || [],
+          postType: selectedPost?.postType || "",
+        }}
       >
         <div className="form-fields">
           <Form.Item

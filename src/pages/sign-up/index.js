@@ -77,8 +77,6 @@ const SignUpPage = () => {
             isAdmin: false,
           };
 
-          console.log("userInfo:", userInfo);
-
           dispatch(addUser(userInfo));
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
         }
@@ -187,8 +185,12 @@ const SignUpPage = () => {
               ]}
               getValueFromEvent={(e) => e.target.checked}
             >
-                <CheckBox checkboxText="I read and agree to the " linkText="privacy policy, terms of service, and community guidelines" linkToDestination="https://docs.google.com/document/d/e/2PACX-1vQCpe7Kw_qVOrNVIPSJdAPOiCfQCD9t4JLhIE-Y9a7jyohiH8fOGii-aW0kpDQAHYE9vYHlHnVq0dsb/pub"/>
-              </Form.Item>
+              <CheckBox
+                checkboxText="I read and agree to the "
+                linkText="privacy policy, terms of service, and community guidelines"
+                linkToDestination="https://docs.google.com/document/d/e/2PACX-1vQCpe7Kw_qVOrNVIPSJdAPOiCfQCD9t4JLhIE-Y9a7jyohiH8fOGii-aW0kpDQAHYE9vYHlHnVq0dsb/pub"
+              />
+            </Form.Item>
             <Form.Item>
               <PrimaryButton text="Sign Up" htmlType="submit" />
             </Form.Item>

@@ -2,7 +2,6 @@ import styles from "./index.module.css";
 import { useEffect, useState } from "react";
 import ProfileHeader from "../../components/ProfileHeader";
 import profile_bg from "../../assets/images/profile_bg.png";
-import profile from "../../assets/images/profile.png";
 import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from "antd";
 import Card from "../../components/Card";
@@ -40,7 +39,8 @@ export const ProfilePage = () => {
   const {
     username: userName,
     profileName,
-    profileImage = profile,
+    profileImg = currentUser.profileImage,
+    profileBanner = currentUser.profileBanner,
     biography: userBio,
     tagsOfInterest: interestedTopics = [],
     bookmarks = [],
@@ -55,8 +55,8 @@ export const ProfilePage = () => {
   return (
     <div className="profile-page-container">
       <ProfileHeader
-        profileBanner={profile_bg}
-        profileImg={profileImage}
+        profileBanner={currentUser.profileBanner}
+        profileImg={currentUser.profileImage}
         userName={userName}
         profileName={profileName}
         bio={userBio}
@@ -99,6 +99,7 @@ export const ProfilePage = () => {
                     author={post.userId}
                     type={post.postType}
                     imgSrc={post.media}
+                    status={post.status}
                   />
                 ))}
             </div>
@@ -118,6 +119,7 @@ export const ProfilePage = () => {
                     author={post.userId}
                     type={post.postType}
                     imgSrc={post.media}
+                    status={post.status}
                   />
                 ))}
             </div>

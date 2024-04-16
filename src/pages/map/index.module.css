@@ -13,12 +13,6 @@
   right: 60px;
 }
 
-/* .primary-modal-button :global(.ant-modal .ant-modal-footer >.ant-btn+.ant-btn) {
-  background-color: #F6DFA4;
-  font-family: var(--font-family-heading);
-  font-size: 10px;
-} */
-
 .primary-modal-button :global(.ant-btn-link) {
   background-color: #F6DFA4;
   font-family: var(--font-family-heading);
@@ -28,6 +22,7 @@
 .primary-modal-button {
   background-color: #f6dfa4;
   font-family: var(--font-family-heading);
+  margin: 4px 0;
 }
 
 .select-container {
@@ -40,6 +35,7 @@
   box-sizing: border-box;
   display: flex;
   justify-content: center;
+
 }
 
 @media (max-width: 480px) {

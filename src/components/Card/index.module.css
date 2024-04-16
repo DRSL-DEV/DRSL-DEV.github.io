@@ -94,3 +94,23 @@
   border: none;
   cursor: pointer;
 }
+
+.story-status {
+  display: flex;
+  font-size: 12px;
+  background-color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  height: fit-content;
+}
+.story-status.approved {
+  background-color: var(--secondary-color-light-green);
+  color: rgb(20, 59, 20)
+}
+.story-status.rejected {
+  background-color: var(--secondary-color-red-accent);
+  color: rgb(123, 14, 14);
+}
+.story-status.pending {
+  background-color: gray;
+}

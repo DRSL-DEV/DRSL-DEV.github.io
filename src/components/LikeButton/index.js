@@ -1,52 +1,58 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import like_unfilled from "../../assets/icons/like_unfilled.svg";
 import like_filled from "../../assets/icons/like_filled.svg";
 import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
-import { toggleBookmark } from "../../data/features/bookmarkSlice";
-import { useDispatch } from "react-redux";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../data/features/userInfoSlice";
 
-const LikeButton = ({postId}) => {
-  const [isFilled, setIsFilled] = useState(false);
+const LikeButton = ({ postId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
+  const currentUser = useSelector((state) => state.userInfo.user);
+  const [isFilled, setIsFilled] = useState(
+    (currentUser && currentUser.bookmarks?.includes(postId)) || false
+  );
 
-  useEffect(() => {
-    const fetchUserBookmarks = async () => {
-      if (currentUser) {
-        try {
-          const userDocRef = doc(db, "user", currentUser.uid);
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (userDocSnap.exists()) {
-            const userData = userDocSnap.data();
-            const userBookmarks = userData.bookmarks || [];
-
-            if (userBookmarks.includes(postId)) {
-              setIsFilled(true);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching user bookmarks:", error);
-        }
-      }
-    };
-    fetchUserBookmarks();
-  }, [currentUser, postId]);
-
-  const handleBookmark = useCallback(() => {
+  const handleBookmark = async () => {
     if (!currentUser) {
       navigate("/login");
-    } else {
-      setIsFilled(!isFilled);
-      dispatch(toggleBookmark(postId));
+      return;
     }
-  }, [currentUser, navigate, isFilled, dispatch, postId]);
+
+    try {
+      let newBookmarks = [];
+      if (currentUser.bookmarks) {
+        if (currentUser.bookmarks.includes(postId)) {
+          newBookmarks = currentUser.bookmarks.filter((id) => id !== postId);
+        } else {
+          newBookmarks = [...currentUser.bookmarks, postId];
+        }
+      } else {
+        newBookmarks = [postId];
+      }
+
+      dispatch(
+        updateUser({
+          userDetails: { bookmarks: newBookmarks },
+          uid: currentUser.uid,
+        })
+      ).then((result) => {
+        if (result.meta.requestStatus === "fulfilled") {
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify({
+              ...JSON.parse(localStorage.getItem("userInfo")),
+              bookmarks: newBookmarks,
+            })
+          );
+          setIsFilled(!isFilled);
+        }
+      });
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
+  };
 
   return (
     <button onClick={handleBookmark} className={styles.button}>
