@@ -99,6 +99,7 @@ export const ProfilePage = () => {
                     author={post.userId}
                     type={post.postType}
                     imgSrc={post.media}
+                    status={post.status}
                   />
                 ))}
             </div>
@@ -118,6 +119,7 @@ export const ProfilePage = () => {
                     author={post.userId}
                     type={post.postType}
                     imgSrc={post.media}
+                    status={post.status}
                   />
                 ))}
             </div>

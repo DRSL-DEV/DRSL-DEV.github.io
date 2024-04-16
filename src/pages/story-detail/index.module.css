@@ -6,16 +6,29 @@
   left: 5%;
 }
 
+<<<<<<< HEAD
 .story-icons {
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
   margin: 16px 16px 0;
   gap: 16px;
+=======
+.story-icons{
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 100%;
+>>>>>>> origin/dev
 }
 
 .share-icon {
   float: right;
+}
+
+.admin-comments-icon{
+  float: right;
+  margin-right: 4%;
 }
 
 .carousel img,

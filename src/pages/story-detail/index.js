@@ -1,6 +1,8 @@
 import PageHeader from "../../components/PageHeader";
 import StoryInfo from "../../components/StoryInfo";
 import link_icon from "../../assets/icons/link_icon.svg";
+import admin_comments_icon from "../../assets/icons/admin-comments.svg";
+
 import { Carousel } from "antd";
 import styles from "./index.module.css";
 import "firebase/firestore";
@@ -10,14 +12,17 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import LikeButton from "../../components/LikeButton";
+import { useNavigate } from "react-router-dom";
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const postId = location.state?.postId;
   const { selectedPost } = useSelector((state) => state.storyList);
   const { authorInfo } = useSelector((state) => state.storyAuthor);
+  const currentUser = useSelector((state) => state.userInfo.user);
 
   useEffect(() => {
     dispatch(fetchStoryById(postId)).then((result) => {
@@ -37,6 +42,17 @@ const StoryDetailPage = () => {
       });
   };
 
+  const handleAdminCommentsDisplay = () => {
+    if (!currentUser) {
+      navigate("/login");
+    } else {
+      console.log(selectedPost);
+      //TODO: Go to Admin Comments Page
+      //TODO: Print the admin comment and latest review time in console
+      //TODO: Figure out how to pass the admin comment and latest review time to the Admin Comments Page
+    }
+  };
+
   return (
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
       <div className={styles["story-icons"]}>
@@ -49,6 +65,14 @@ const StoryDetailPage = () => {
             alt="share"
           />
         )}
+        {selectedPost && selectedPost.status === "rejected" ? (
+          <img
+            className={styles["admin-comments-icon"]}
+            onClick={handleAdminCommentsDisplay}
+            src={admin_comments_icon}
+            alt="admin-comments"
+          />
+        ) : null}
       </div>
       <div className={styles["story-title"]}>
         <PageHeader title={siteTitle} />

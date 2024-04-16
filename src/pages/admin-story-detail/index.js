@@ -123,9 +123,8 @@ const AdminStoryDetailPage = () => {
                 )
               }
               customStyles={{
-                backgroundColor: "rgba(255, 156, 150, 0.75)",
+                backgroundColor: 'var(--secondary-color-red-accent)',
               }}
-              className={styles["reject-button"]}
             />
             <Button
               text="Approve"
@@ -146,7 +145,7 @@ const AdminStoryDetailPage = () => {
                 }, 2000);
               }}
               customStyles={{
-                backgroundColor: "rgba(146, 187, 95, 0.75)",
+                backgroundColor: 'var(--secondary-color-light-green)',
               }}
             />
           </>
@@ -165,9 +164,8 @@ const AdminStoryDetailPage = () => {
               )
             }
             customStyles={{
-              backgroundColor: "rgba(255, 156, 150, 0.75)",
+              backgroundColor: 'var(--secondary-color-red-accent)',
             }}
-            className={styles["reject-button"]}
           />
         )}
 
@@ -206,7 +204,7 @@ const AdminStoryDetailPage = () => {
                 }, 2000);
               }}
               customStyles={{
-                backgroundColor: "rgba(146, 187, 95, 0.75)",
+                backgroundColor: 'var(--secondary-color-light-green)',
               }}
             />
           </>
