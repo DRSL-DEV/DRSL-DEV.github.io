@@ -118,6 +118,7 @@ export default class AudioReactRecorder extends React.Component {
       } else {
         console.log("The connection is not secure");
       }
+
     try {
         const stream = navigator.mediaDevices.getUserMedia(constraints)
         return stream
@@ -140,7 +141,12 @@ export default class AudioReactRecorder extends React.Component {
     this.volume = this.context.createGain()
 
     // creates an audio node from the microphone incoming stream
-    this.audioInput = this.context.createMediaStreamSource(this.stream)
+    try{
+        this.audioInput = this.context.createMediaStreamSource(this.stream)
+    }
+    catch(err){
+        console.log("Error creating media stream source: ", err)
+    }
 
     // Create analyser
     this.analyser = this.context.createAnalyser()

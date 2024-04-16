@@ -14,7 +14,6 @@ import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
 import { ReactMic } from "react-mic";
-// import AudioReactRecorder, { RecordState } from 'audio-react-recorder'
 import AudioReactRecorder, { RecordState } from "../../components/ReactAudio"
 import { AudioRecorder } from 'react-audio-voice-recorder';
 
@@ -373,7 +372,6 @@ const CreateStory = () => {
             backgroundColor="#cae8fa"
             styles={{ width: "100%", height: "20%" }}
           />
-
           <div className={styles["audio-recording-buttons"]}>
             <Button
               text="Start Recording"
@@ -385,7 +383,6 @@ const CreateStory = () => {
                   : "rgba(146, 187, 95, 0.75)",
               }}
             />
-
             <Button
               text="Stop Recording"
               handleOnClick={stopRecording}
