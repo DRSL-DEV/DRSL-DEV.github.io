@@ -11,19 +11,16 @@ import { updateUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
 import { getAuth, sendPasswordResetEmail, deleteUser } from "firebase/auth";
 import { tagList } from "../../constants/constants";
-import { uploadFile } from "../../data/features/fileUploadSlice";
-import defaultProfile from "../../assets/images/profile.png"
-import defaultBanner from "../../assets/images/default_banner.png"
+import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
+import defaultProfile from "../../assets/images/profile.png";
+import defaultBanner from "../../assets/images/default_banner.png";
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState(currentUser.tagsOfInterest);
-  const allowedImgTypes = [
-    "image/jpeg",
-    "image/png",
-  ];
+  const allowedImgTypes = ["image/jpeg", "image/png"];
 
   const validateMessages = {
     required: "${label} is required!",
@@ -36,16 +33,27 @@ const EditProfilePage = () => {
     },
   };
 
-  // const defaultProfile = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fprofile%2Fprofile.png?alt=media&token=9014aaaf-8bd4-4d71-99bf-383c74961057"
-  // const defaultBanner = "https://firebasestorage.googleapis.com/v0/b/detroit-river-story.appspot.com/o/user%2Fbanner%2Fdefault_banner.png?alt=media&token=75a934a6-ea7f-4ecc-a1f4-54e3290206db"
-  const [profileImg, setProfileImg] = useState(currentUser.profileImage ? [{url:currentUser.profileImage,uid:1}] : [{url:defaultProfile,uid:1}]);
-  const [banner, setBanner] = useState(currentUser.profileBanner ? [{url:currentUser.profileBanner,uid:1}] : [{url:defaultBanner,uid:1}]);
+  const [profileImg, setProfileImg] = useState(
+    // uploaded:  0 or this field not exist (null): image is not uploaded yet, need to be uploaded
+    //            1 image is already uploaded, may need to be removed
+    //            2 default image, do not need to upload/remove
+    currentUser.profileImage
+      ? [{ url: currentUser.profileImage, uid: 1, uploaded: 1 }]
+      : [{ url: defaultProfile, uid: 1, uploaded: 2 }]
+  );
+  const [banner, setBanner] = useState(
+    currentUser.profileBanner
+      ? [{ url: currentUser.profileBanner, uid: 1, uploaded: 1 }]
+      : [{ url: defaultBanner, uid: 1, uploaded: 2 }]
+  );
 
   const onPreview = async () => {
     //const profileURL = profileImg === null || profileImg === defaultProfile ? defaultProfile : profileImg;
     const imgWindow = window.open(defaultProfile);
     if (imgWindow) {
-      imgWindow.document.write(`<img src="${profileImg}" alt="Profile Preview"/>`);
+      imgWindow.document.write(
+        `<img src="${profileImg}" alt="Profile Preview"/>`
+      );
     } else {
       console.error("Failed to open image preview window.");
     }
@@ -66,59 +74,95 @@ const EditProfilePage = () => {
   };
 
   const handleSave = async (values) => {
-    let profileImage = currentUser.profileImage;
-    let profileBanner = currentUser.profileBanner;
-    if (profileImg.length > 0) {
-      profileImage = await dispatch(
-        uploadFile({
-          fileName: profileImg[0]?.name,
-          file: profileImg[0]?.originFileObj,
-          folderPath: `user/profile`,
-        })
-      ).unwrap();
-    }
-  
-    if (banner.length > 0) {
-      profileBanner = await dispatch(
-        uploadFile({
-          fileName: banner[0]?.name,
-          file: banner[0]?.originFileObj,
-          folderPath: `user/banner`,
-        })
-      ).unwrap();
-    }
+    const prevProfileImg = currentUser.profileImage;
+    const prevBanner = currentUser.profileBanner;
 
-    const userDetails = {
-      email: values.email,
-      username: values.userName,
-      profileName: values.profileName,
-      biography: values.userBio,
-      phoneNumber: values.phoneNumber,
-      anonymousSubmissionCheck: values.anonySubChk,
-      tagsOfInterest: selectedTags,
-      profileImage,
-      profileBanner,
-    };
-    const userWithoutNullValues = Object.fromEntries(
-      Object.entries(userDetails).filter(([key, value]) => value !== undefined)
-    );
-    dispatch(
-      updateUser({ userDetails: userWithoutNullValues, uid: currentUser.uid })
-    ).then((result) => {
-      if (result.meta.requestStatus === "fulfilled") {
-        localStorage.setItem(
-          "userInfo",
-          JSON.stringify({ uid: currentUser.uid, ...userDetails })
-        );
-        navigate("/profile");
-      } else {
-        message.error({
-          content: `There was an error: ${result.payload}`,
-          duration: 8,
-        });
+    let newProfileImg = null;
+    let newBanner = null;
+
+    try {
+      if (profileImg.length && !profileImg[0].uploaded) {
+        newProfileImg = await dispatch(
+          uploadFile({
+            fileName: profileImg[0]?.name,
+            file: profileImg[0]?.originFileObj,
+            folderPath: `user/profile`,
+          })
+        ).unwrap();
       }
-    });
 
+      if (prevProfileImg && newProfileImg && newProfileImg !== prevProfileImg) {
+        dispatch(deleteFile(prevProfileImg));
+        newProfileImg = null;
+      }
+
+      if (profileImg.length && profileImg[0].uploaded === 1) {
+        newProfileImg = prevProfileImg;
+      }
+
+      if (banner.length && !banner[0].uploaded) {
+        newBanner = await dispatch(
+          uploadFile({
+            fileName: banner[0]?.name,
+            file: banner[0]?.originFileObj,
+            folderPath: `user/banner`,
+          })
+        ).unwrap();
+      }
+
+      if (prevBanner && newBanner && newBanner !== prevBanner) {
+        dispatch(deleteFile(prevBanner));
+        newBanner = null;
+      }
+
+      if (banner.length && banner[0].uploaded === 1) {
+        newBanner = prevBanner;
+      }
+
+      const userDetails = {
+        email: values.email,
+        username: values.userName,
+        profileName: values.profileName,
+        biography: values.userBio,
+        phoneNumber: values.phoneNumber,
+        anonymousSubmissionCheck: values.anonySubChk,
+        tagsOfInterest: selectedTags,
+        profileImage: newProfileImg,
+        profileBanner: newBanner,
+      };
+      const userWithoutNullValues = Object.fromEntries(
+        Object.entries(userDetails).filter(
+          ([key, value]) => value !== undefined
+        )
+      );
+      dispatch(
+        updateUser({
+          userDetails: userWithoutNullValues,
+          uid: currentUser.uid,
+        })
+      ).then((result) => {
+        if (result.meta.requestStatus === "fulfilled") {
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify({ uid: currentUser.uid, ...userDetails })
+          );
+
+          message.success({
+            content:
+              "Profile updated successfully! You will be redirected back to the profile page shortly",
+            duration: 2,
+          });
+          setTimeout(() => {
+            navigate("/profile");
+          }, 2000);
+        } else {
+          message.error({
+            content: "Failed to update profile.",
+            duration: 2,
+          });
+        }
+      });
+    } catch (error) {}
   };
 
   const handlePasswordChange = (email) => {
@@ -227,12 +271,12 @@ const EditProfilePage = () => {
                 <Upload
                   listType="picture-card"
                   fileList={profileImg}
-                  onChange={(info)=>setProfileImg(info.fileList)}
+                  onChange={(info) => setProfileImg(info.fileList)}
                   onPreview={onPreview}
                   // beforeUpload={() => false} // need more function in validating the uploaded file
                   {...fileUploadProps}
                 >
-                  {!profileImg.length && 'Upload'}
+                  {!profileImg.length && "Upload"}
                 </Upload>
               </ImgCrop>
             </div>
@@ -240,16 +284,15 @@ const EditProfilePage = () => {
           <div>
             <h3>Profile Banner</h3>
             <div className={styles["banner-upload"]}>
-            <ImgCrop rotationSlider aspectSlider showReset
-              aspect={2}>
+              <ImgCrop rotationSlider aspectSlider showReset aspect={2}>
                 <Upload
                   listType="picture-card"
                   fileList={banner}
-                  onChange={(info)=>setBanner(info.fileList)}
+                  onChange={(info) => setBanner(info.fileList)}
                   onPreview={onPreview}
                   {...fileUploadProps}
                 >
-                  {!banner.length && 'Upload'}
+                  {!banner.length && "Upload"}
                 </Upload>
               </ImgCrop>
             </div>
@@ -288,7 +331,7 @@ const EditProfilePage = () => {
 
         <Form.Item>
           <PrimaryButton text="Save" htmlType="submit" />
-          <PrimaryButton text="Delete Account" onClick={handleDeleteAccount}/>
+          <PrimaryButton text="Delete Account" onClick={handleDeleteAccount} />
         </Form.Item>
       </Form>
 
