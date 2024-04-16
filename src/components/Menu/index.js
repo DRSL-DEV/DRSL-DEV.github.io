@@ -1,26 +1,41 @@
-import { useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutUser } from "../../data/features/userInfoSlice";
-import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-
-// Menu items
-const menuItems = [
-  { name: "Share Your Story", link: "/create-story" },
-  { name: "Explore Regional Stories", link: "/explore-story" },
-  { name: "Station Map", link: "/map" },
-];
 
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const location = useLocation(); // Get current location (routing location)
-  const user = useSelector((state) => state.userInfo.user);
+  // const user = useSelector((state) => state.userInfo.user);
+  const user = useSelector(state => state.userInfo.user, (left, right) => {
+    return left?.id === right?.id && left?.isAdmin === right?.isAdmin;
+  });
 
   //Signout button functionality
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Menu items
+  const basicMenuItems = [
+    { name: "Share Your Story", link: "/create-story" },
+    { name: "Explore Regional Stories", link: "/explore-story" },
+    { name: "Station Map", link: "/map" },
+  ];
+
+  const [menuItems, setMenuItems] = useState(basicMenuItems);
+
+  useEffect(() => {
+    // Initialize menu items with basic items and add admin console if applicable
+    const items = [...basicMenuItems];
+    if (user && user.isAdmin) {
+      items.push({ name: "Admin Console", link: "/admin-page" });
+    }
+    setMenuItems(items);
+  }, [user]);
+
+  console.log(menuItems);
 
   const handleLogOut = () => {
     setIsMenuOpen(false);
@@ -81,9 +96,8 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
         <div key={item.name}>
           <Link
             to={item.link}
-            className={`${styles["menu-item"]} ${
-              isActiveMenuItem(item) ? styles["active-menu-item"] : ""
-            }`}
+            className={`${styles["menu-item"]} ${isActiveMenuItem(item) ? styles["active-menu-item"] : ""
+              }`}
             onClick={() => setIsMenuOpen(false)} // Close the menu
           >
             <h1>{item.name}</h1>
@@ -97,6 +111,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
