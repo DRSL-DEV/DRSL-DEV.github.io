@@ -25,6 +25,7 @@ const StoryDetailPage = () => {
   const postId = location.state?.postId;
   const { selectedPost } = useSelector((state) => state.storyList);
   const { authorInfo } = useSelector((state) => state.storyAuthor);
+  const currentUser = useSelector((state) => state.userInfo.user);
 
   useEffect(() => {
     dispatch(fetchStoryById(postId)).then((result) => {
@@ -144,36 +145,41 @@ const StoryDetailPage = () => {
           <StoryInfo selectedPost={selectedPost} authorInfo={authorInfo} />
         )}
       </div>
-      {!selectedPost ||
-        (selectedPost.status !== "rejected" && (
-          <div className={styles["edit-section"]}>
+      {currentUser?.uid === selectedPost.userId && (
+        <>
+          {" "}
+          {!selectedPost ||
+            (selectedPost.status !== "rejected" && (
+              <div className={styles["edit-section"]}>
+                <Button
+                  text="EDIT"
+                  customStyles={{
+                    width: "310px",
+                    height: "45px",
+                    borderRadius: "30px",
+                    fontSize: "16px",
+                  }}
+                  handleOnClick={() => {
+                    navigate("/create-story", { state: { selectedPost } });
+                  }}
+                />
+              </div>
+            ))}
+          <div className={styles["delete-action"]}>
             <Button
-              text="EDIT"
+              text="DELETE"
               customStyles={{
                 width: "310px",
                 height: "45px",
                 borderRadius: "30px",
                 fontSize: "16px",
+                backgroundColor: "var( --secondary-color-red-accent)",
               }}
-              handleOnClick={() => {
-                navigate("/create-story", { state: { selectedPost } });
-              }}
+              handleOnClick={() => handleDeleteStory()}
             />
           </div>
-        ))}
-      <div className={styles["delete-action"]}>
-        <Button
-          text="DELETE"
-          customStyles={{
-            width: "310px",
-            height: "45px",
-            borderRadius: "30px",
-            fontSize: "16px",
-            backgroundColor: "var( --secondary-color-red-accent)",
-          }}
-          handleOnClick={() => handleDeleteStory()}
-        />
-      </div>
+        </>
+      )}
     </div>
   );
 };

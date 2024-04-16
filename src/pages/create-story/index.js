@@ -205,15 +205,16 @@ const CreateStory = () => {
         ).unwrap()
       );
 
-    const deletePromises = selectedPost?.media
-      .filter(
-        (mediaUrl) =>
-          !fileList
-            .filter((file) => file.uploaded)
-            .map((file) => file.url)
-            .includes(mediaUrl)
-      )
-      .map((mediaUrl) => dispatch(deleteFile(mediaUrl)).unwrap());
+    const deletePromises =
+      selectedPost?.media
+        .filter(
+          (mediaUrl) =>
+            !fileList
+              .filter((file) => file.uploaded)
+              .map((file) => file.url)
+              .includes(mediaUrl)
+        )
+        .map((mediaUrl) => dispatch(deleteFile(mediaUrl)).unwrap()) || [];
 
     try {
       const fileURLs = [
