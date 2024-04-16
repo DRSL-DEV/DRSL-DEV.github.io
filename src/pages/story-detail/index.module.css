@@ -61,6 +61,7 @@
   color: var(--primary-warning-color-red);
 }
 
+.edit-section,
 .delete-action {
   display: flex;
   justify-content: center;

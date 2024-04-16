@@ -5,17 +5,22 @@ import StoryInfo from "../../components/StoryInfo";
 import link_icon from "../../assets/icons/link_icon.svg";
 import LikeButton from "../../components/LikeButton";
 import "firebase/firestore";
-import { Carousel } from "antd";
-import { fetchStoryById } from "../../data/features/storyListSlice";
+import { Carousel, message } from "antd";
+import {
+  fetchStoryById,
+  deletePostById,
+} from "../../data/features/storyListSlice";
 import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
+import { deleteFile } from "../../data/features/fileUploadSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { convertTimeFormatMDY } from "../../utils/dateFormat";
 import Button from "../../components/Button";
 
 const StoryDetailPage = () => {
   const siteTitle = "Story Page";
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const postId = location.state?.postId;
   const { selectedPost } = useSelector((state) => state.storyList);
@@ -37,6 +42,30 @@ const StoryDetailPage = () => {
       .catch((error) => {
         console.error("Error copying link to clipboard: ", error);
       });
+  };
+
+  const handleDeleteStory = async () => {
+    const deleteMediaPromises = selectedPost?.media.map((mediaUrl) =>
+      dispatch(deleteFile(mediaUrl)).unwrap()
+    );
+
+    try {
+      await Promise.all(deleteMediaPromises);
+      dispatch(deletePostById(postId));
+      message.success({
+        content:
+          "Story deleted successfully! You will be redirected back to the previous page shortly",
+        duration: 2,
+      });
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    } catch (error) {
+      message.error({
+        content: "Failed to delete the story.",
+        duration: 2,
+      });
+    }
   };
 
   return (
@@ -75,6 +104,9 @@ const StoryDetailPage = () => {
                 borderRadius: "30px",
                 fontSize: "16px",
               }}
+              handleOnClick={() => {
+                navigate("/create-story", { state: { selectedPost } });
+              }}
             />
           </div>
         </div>
@@ -112,6 +144,23 @@ const StoryDetailPage = () => {
           <StoryInfo selectedPost={selectedPost} authorInfo={authorInfo} />
         )}
       </div>
+      {!selectedPost ||
+        (selectedPost.status !== "rejected" && (
+          <div className={styles["edit-section"]}>
+            <Button
+              text="EDIT"
+              customStyles={{
+                width: "310px",
+                height: "45px",
+                borderRadius: "30px",
+                fontSize: "16px",
+              }}
+              handleOnClick={() => {
+                navigate("/create-story", { state: { selectedPost } });
+              }}
+            />
+          </div>
+        ))}
       <div className={styles["delete-action"]}>
         <Button
           text="DELETE"
@@ -120,7 +169,9 @@ const StoryDetailPage = () => {
             height: "45px",
             borderRadius: "30px",
             fontSize: "16px",
+            backgroundColor: "var( --secondary-color-red-accent)",
           }}
+          handleOnClick={() => handleDeleteStory()}
         />
       </div>
     </div>

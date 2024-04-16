@@ -4,7 +4,7 @@ import {
   collection,
   doc,
   getDoc,
-  addDoc,
+  setDoc,
   onSnapshot,
   getDocs,
   query,
@@ -12,6 +12,7 @@ import {
   orderBy,
   limit,
   startAfter,
+  deleteDoc,
 } from "firebase/firestore";
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
   lastVisibleDocIdByTag: {},
   postsBySite: {},
   lastVisibleDocIdBySite: {},
+  deleting: false,
 };
 
 // Subscribe to story list
@@ -205,12 +207,31 @@ export const fetchStoryById = createAsyncThunk(
   }
 );
 
-// Add new story
-export const addNewStory = createAsyncThunk(
-  "storyList/addNewStory",
-  async (newStory) => {
-    const response = await addDoc(collection(db, "post"), newStory);
-    return { id: response.id, ...newStory };
+// Add a new story or update an existing story
+export const addOrUpdateStory = createAsyncThunk(
+  "storyList/addOrUpdateStory",
+  async ({ id, ...storyData }, { rejectWithValue }) => {
+    try {
+      const storyRef = id ? doc(db, "post", id) : doc(collection(db, "post"));
+      await setDoc(storyRef, storyData, { merge: true });
+      return { id: storyRef.id, ...storyData };
+    } catch (error) {
+      return rejectWithValue(error.toString());
+    }
+  }
+);
+
+// Delete a story by ID
+export const deletePostById = createAsyncThunk(
+  "posts/deletePost",
+  async (postId, { rejectWithValue }) => {
+    try {
+      const postRef = doc(db, "post", postId);
+      await deleteDoc(postRef);
+      return postId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -225,8 +246,8 @@ export const storyListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle addNewStory
-      .addCase(addNewStory.fulfilled, (state, action) => {
+      // Handle addOrUpdateStory
+      .addCase(addOrUpdateStory.fulfilled, (state, action) => {
         state.storyList.push(action.payload); // Add the new story to the storyList
       })
 
@@ -311,6 +332,16 @@ export const storyListSlice = createSlice({
       })
       .addCase(fetchPostsBySite.rejected, (state, action) => {
         console.error("Failed to fetch posts by site:", action.error);
+      })
+      .addCase(deletePostById.pending, (state) => {
+        state.deleting = true;
+      })
+      .addCase(deletePostById.fulfilled, (state, action) => {
+        state.deleting = false;
+      })
+      .addCase(deletePostById.rejected, (state, action) => {
+        state.deleting = false;
+        state.error = action.payload;
       });
   },
 });
