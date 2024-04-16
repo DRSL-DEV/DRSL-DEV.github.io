@@ -96,8 +96,8 @@ export default class AudioReactRecorder extends React.Component {
     this.analyser = null
     this.canvas = this.canvasRef.current
     this.canvasCtx = this.canvas.getContext('2d')
-    // this.stream = null 
-    this.stream = new MediaStream()
+    this.stream = null 
+    // this.stream = new MediaStream()
     this.tested = false
 
     navigator.getUserMedia =
@@ -111,8 +111,25 @@ export default class AudioReactRecorder extends React.Component {
     if (!constraints) {
       constraints = { audio: true, video: false }
     }
+    // console.log("return value", navigator.mediaDevices.getUserMedia(constraints))
 
-    return navigator.mediaDevices.getUserMedia(constraints)
+    if (window.location.protocol === "https:") {
+        console.log("The connection is secure");
+      } else {
+        console.log("The connection is not secure");
+      }
+    try {
+        const stream = navigator.mediaDevices.getUserMedia(constraints)
+        return stream
+    }
+    catch (err) {
+        if (err.name != "OverconstrainedError") {
+            throw err;
+        }
+        throw new OverconstrainedError(constraints, "Not supported OverconstrainedError");
+        // throw err;
+    }
+    // return navigator.mediaDevices.getUserMedia(constraints)
   }
 
   setUpRecording = () => {
