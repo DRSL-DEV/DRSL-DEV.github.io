@@ -31,7 +31,7 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
       ) : (
         <Link
           to={`/story/${title
-            .toLowerCase()
+            ?.toLowerCase()
             .replace(/ /g, "-")
             .replace(/[^\w-]+/g, "")}`}
           state={{ postId: postId }}
@@ -51,9 +51,13 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
               <p>{content}</p>
               <div className={styles["customized-card-footer"]}>
                 <div>{userId}</div>
-               {status? (<span className={`${styles["story-status"]} ${styles[status]}`}>
-                {status.toUpperCase()}
-              </span>):null}
+                {status ? (
+                  <span
+                    className={`${styles["story-status"]} ${styles[status]}`}
+                  >
+                    {status.toUpperCase()}
+                  </span>
+                ) : null}
                 <button>
                   <img src={arrow_right} alt="right arrow" />
                 </button>

@@ -105,7 +105,7 @@ const HomePage = () => {
               ))}
             <div className={styles["button-container"]}>
               <Button
-                text="Share Your Story"
+                text="Contribute Story"
                 handleOnClick={() => navigate("/create-story")}
               />
               <Button

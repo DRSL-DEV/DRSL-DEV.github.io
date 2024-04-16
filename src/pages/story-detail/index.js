@@ -1,16 +1,17 @@
 import styles from "./index.module.css";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import StoryInfo from "../../components/StoryInfo";
 import link_icon from "../../assets/icons/link_icon.svg";
 import LikeButton from "../../components/LikeButton";
 import "firebase/firestore";
-import { Carousel, message } from "antd";
+import { Carousel, Modal, message } from "antd";
 import {
   fetchStoryById,
   deletePostById,
 } from "../../data/features/storyListSlice";
 import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
+import { removeFromBookmarks } from "../../data/features/userInfoSlice";
 import { deleteFile } from "../../data/features/fileUploadSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,6 +27,7 @@ const StoryDetailPage = () => {
   const { selectedPost } = useSelector((state) => state.storyList);
   const { authorInfo } = useSelector((state) => state.storyAuthor);
   const currentUser = useSelector((state) => state.userInfo.user);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchStoryById(postId)).then((result) => {
@@ -53,6 +55,18 @@ const StoryDetailPage = () => {
     try {
       await Promise.all(deleteMediaPromises);
       dispatch(deletePostById(postId));
+      dispatch(removeFromBookmarks(postId));
+
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({
+          ...userInfo,
+          bookmarks: userInfo.bookmarks.filter(
+            (bookmark) => bookmark !== postId
+          ),
+        })
+      );
       message.success({
         content:
           "Story deleted successfully! You will be redirected back to the previous page shortly",
@@ -67,19 +81,22 @@ const StoryDetailPage = () => {
         duration: 2,
       });
     }
+    setIsModalOpen(false);
   };
 
   return (
     <div className={`page-container ${styles["story-detail-page-container"]}`}>
       <div className={styles["story-icons"]}>
-        <LikeButton postId={postId} />
         {selectedPost && selectedPost.status === "approved" && (
-          <img
-            className={styles["share-icon"]}
-            onClick={handleShare}
-            src={link_icon}
-            alt="share"
-          />
+          <>
+            <LikeButton postId={postId} />
+            <img
+              className={styles["share-icon"]}
+              onClick={handleShare}
+              src={link_icon}
+              alt="share"
+            />
+          </>
         )}
       </div>
       <div className={styles["story-title"]}>
@@ -145,9 +162,8 @@ const StoryDetailPage = () => {
           <StoryInfo selectedPost={selectedPost} authorInfo={authorInfo} />
         )}
       </div>
-      {currentUser?.uid === selectedPost.userId && (
+      {currentUser?.uid === selectedPost?.userId && (
         <>
-          {" "}
           {!selectedPost ||
             (selectedPost.status !== "rejected" && (
               <div className={styles["edit-section"]}>
@@ -175,11 +191,40 @@ const StoryDetailPage = () => {
                 fontSize: "16px",
                 backgroundColor: "var( --secondary-color-red-accent)",
               }}
-              handleOnClick={() => handleDeleteStory()}
+              handleOnClick={() => setIsModalOpen(true)}
             />
           </div>
         </>
       )}
+
+      <Modal
+        title="Delete Story"
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={
+          <div
+            style={{
+              display: "flex",
+              marginTop: "32px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button text="CANCEL" handleOnClick={() => setIsModalOpen(false)} />
+            <Button
+              text="DELETE"
+              customStyles={{
+                backgroundColor: "var( --secondary-color-red-accent)",
+              }}
+              handleOnClick={() => handleDeleteStory()}
+            />
+          </div>
+        }
+      >
+        <p>
+          Are you ready to delete this story?
+          <br /> Just making sure!
+        </p>
+      </Modal>
     </div>
   );
 };

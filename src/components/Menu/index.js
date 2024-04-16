@@ -5,12 +5,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { signOutUser } from "../../data/features/userInfoSlice";
 import { message } from "antd";
 
+// Menu items
+const menuItems = [
+  { name: "Contribute Your Story", link: "/create-story" },
+  { name: "Explore Regional Stories", link: "/explore-story" },
+  { name: "Station Map", link: "/map" },
+];
+
 const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
   const location = useLocation(); // Get current location (routing location)
   // const user = useSelector((state) => state.userInfo.user);
-  const user = useSelector(state => state.userInfo.user, (left, right) => {
-    return left?.id === right?.id && left?.isAdmin === right?.isAdmin;
-  });
+  const user = useSelector(
+    (state) => state.userInfo.user,
+    (left, right) => {
+      return left?.id === right?.id && left?.isAdmin === right?.isAdmin;
+    }
+  );
 
   //Signout button functionality
 
@@ -96,8 +106,9 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
         <div key={item.name}>
           <Link
             to={item.link}
-            className={`${styles["menu-item"]} ${isActiveMenuItem(item) ? styles["active-menu-item"] : ""
-              }`}
+            className={`${styles["menu-item"]} ${
+              isActiveMenuItem(item) ? styles["active-menu-item"] : ""
+            }`}
             onClick={() => setIsMenuOpen(false)} // Close the menu
           >
             <h1>{item.name}</h1>
@@ -111,7 +122,6 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
