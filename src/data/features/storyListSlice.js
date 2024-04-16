@@ -4,11 +4,15 @@ import {
   collection,
   doc,
   getDoc,
-  addDoc,
+  setDoc,
   onSnapshot,
   getDocs,
   query,
   where,
+  orderBy,
+  limit,
+  startAfter,
+  deleteDoc,
 } from "firebase/firestore";
 
 const initialState = {
@@ -18,6 +22,13 @@ const initialState = {
   selectedPost: null,
   bookmarkedStoryList: [],
   authorStoryList: [],
+  latestPartnerPost: null,
+  latestUserPost: [],
+  taggedPosts: {},
+  lastVisibleDocIdByTag: {},
+  postsBySite: {},
+  lastVisibleDocIdBySite: {},
+  deleting: false,
 };
 
 // Subscribe to story list
@@ -61,6 +72,102 @@ export const subscribeToStoryList = () => (dispatch) => {
 //   return unsubscribe;
 // };
 
+// Fetch latest partner post
+export const fetchLatestPartnerPost = createAsyncThunk(
+  "storyList/fetchLatestPartnerPost",
+  async () => {
+    const q = query(
+      collection(db, "post"),
+      where("postType", "==", "partner"),
+      orderBy("submitTime", "desc"),
+      limit(1)
+    );
+    const snapshot = await getDocs(q);
+    const latestPartnerPost = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return latestPartnerPost.length > 0 ? latestPartnerPost[0] : null;
+  }
+);
+
+// Fetch latest user post
+export const fetchLatestUserPost = createAsyncThunk(
+  "storyList/fetchLatestUserPost",
+  async () => {
+    const q = query(
+      collection(db, "post"),
+      where("postType", "==", "user"),
+      where("status", "==", "approved"),
+      orderBy("submitTime", "desc"),
+      limit(2)
+    );
+    const snapshot = await getDocs(q);
+    const latestUserPost = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return latestUserPost.length > 0 ? latestUserPost : null;
+  }
+);
+
+// Fetch posts by tag with pagination
+export const fetchPostsByTag = createAsyncThunk(
+  "storyList/fetchPostsByTag",
+  async ({ tag, lastVisibleDocId }) => {
+    let q = query(
+      collection(db, "post"),
+      where("tags", "array-contains", tag),
+      where("status", "==", "approved"),
+      orderBy("submitTime", "desc"),
+      limit(3)
+    );
+
+    if (lastVisibleDocId) {
+      const lastVisibleSnapshot = await getDoc(
+        doc(db, "post", lastVisibleDocId)
+      );
+      q = query(q, startAfter(lastVisibleSnapshot), limit(3));
+    }
+    const snapshot = await getDocs(q);
+    const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+    return {
+      tag,
+      posts,
+      lastVisibleDocId: lastDoc ? lastDoc.id : null,
+    };
+  }
+);
+
+// Fetch posts by site with pagination
+export const fetchPostsBySite = createAsyncThunk(
+  "storyList/fetchPostsBySite",
+  async ({ siteId, lastVisibleDocId = null }) => {
+    let q = query(
+      collection(db, "post"),
+      where("site", "==", siteId),
+      where("status", "==", "approved"),
+      orderBy("submitTime", "desc"),
+      limit(3)
+    );
+
+    if (lastVisibleDocId) {
+      const lastDoc = await getDoc(doc(db, "post", lastVisibleDocId));
+      q = query(q, startAfter(lastDoc), limit(3));
+    }
+
+    const snapshot = await getDocs(q);
+    const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+    return {
+      siteId,
+      posts,
+      lastVisibleDocId: lastDoc ? lastDoc.id : null,
+    };
+  }
+);
+
 // Fetch story list by author id
 export const fetchStorysByAuthorId = createAsyncThunk(
   "items/fetchStorysByAuthorId",
@@ -100,12 +207,31 @@ export const fetchStoryById = createAsyncThunk(
   }
 );
 
-// Add new story
-export const addNewStory = createAsyncThunk(
-  "storyList/addNewStory",
-  async (newStory) => {
-    const response = await addDoc(collection(db, "post"), newStory);
-    return { id: response.id, ...newStory };
+// Add a new story or update an existing story
+export const addOrUpdateStory = createAsyncThunk(
+  "storyList/addOrUpdateStory",
+  async ({ id, ...storyData }, { rejectWithValue }) => {
+    try {
+      const storyRef = id ? doc(db, "post", id) : doc(collection(db, "post"));
+      await setDoc(storyRef, storyData, { merge: true });
+      return { id: storyRef.id, ...storyData };
+    } catch (error) {
+      return rejectWithValue(error.toString());
+    }
+  }
+);
+
+// Delete a story by ID
+export const deletePostById = createAsyncThunk(
+  "posts/deletePost",
+  async (postId, { rejectWithValue }) => {
+    try {
+      const postRef = doc(db, "post", postId);
+      await deleteDoc(postRef);
+      return postId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -120,8 +246,8 @@ export const storyListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle addNewStory
-      .addCase(addNewStory.fulfilled, (state, action) => {
+      // Handle addOrUpdateStory
+      .addCase(addOrUpdateStory.fulfilled, (state, action) => {
         state.storyList.push(action.payload); // Add the new story to the storyList
       })
 
@@ -157,6 +283,65 @@ export const storyListSlice = createSlice({
       .addCase(fetchStorysByAuthorId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchLatestPartnerPost.fulfilled, (state, action) => {
+        state.latestPartnerPost = action.payload;
+      })
+      .addCase(fetchLatestUserPost.fulfilled, (state, action) => {
+        state.latestUserPost = action.payload;
+      })
+      .addCase(fetchLatestPartnerPost.pending, (state) => {
+        // console.log("Fetching latest partner post...");
+      })
+      .addCase(fetchLatestUserPost.pending, (state) => {
+        // console.log("Fetching latest user posts...");
+      })
+      .addCase(fetchLatestPartnerPost.rejected, (state, action) => {
+        console.error("Failed to fetch latest partner post:", action.error);
+      })
+      .addCase(fetchLatestUserPost.rejected, (state, action) => {
+        console.error("Failed to fetch latest user posts:", action.error);
+      })
+      .addCase(fetchPostsByTag.fulfilled, (state, action) => {
+        const { tag, posts, lastVisibleDocId } = action.payload;
+        const existingPosts = state.taggedPosts[tag] || [];
+        const newPosts = posts.filter(
+          (p) => !existingPosts.some((ep) => ep.id === p.id)
+        );
+        state.taggedPosts[tag] = [...existingPosts, ...newPosts];
+        state.lastVisibleDocIdByTag[tag] =
+          posts.length === 3 ? lastVisibleDocId : null;
+      })
+      .addCase(fetchPostsByTag.pending, (state) => {
+        // console.log("Fetching posts by tag...");
+      })
+      .addCase(fetchPostsByTag.rejected, (state, action) => {
+        console.error("Failed to fetch posts by tag:", action.error);
+      })
+      .addCase(fetchPostsBySite.fulfilled, (state, action) => {
+        const { siteId, posts, lastVisibleDocId } = action.payload;
+        const existingPosts = state.postsBySite[siteId] || [];
+        const newPosts = posts.filter(
+          (p) => !existingPosts.some((ep) => ep.id === p.id)
+        );
+        state.postsBySite[siteId] = [...existingPosts, ...newPosts];
+        state.lastVisibleDocIdBySite[siteId] = lastVisibleDocId;
+      })
+      .addCase(fetchPostsBySite.pending, (state) => {
+        // console.log("Fetching posts by site...");
+      })
+      .addCase(fetchPostsBySite.rejected, (state, action) => {
+        console.error("Failed to fetch posts by site:", action.error);
+      })
+      .addCase(deletePostById.pending, (state) => {
+        state.deleting = true;
+      })
+      .addCase(deletePostById.fulfilled, (state, action) => {
+        state.deleting = false;
+      })
+      .addCase(deletePostById.rejected, (state, action) => {
+        state.deleting = false;
+        state.error = action.payload;
       });
   },
 });

@@ -6,6 +6,7 @@ export const siteLocationList = [
     name: "Windmill Point Lighthouse",
     lat: 42.35763611177103,
     lng: -82.92987003173083,
+    intro: "A historic lighthouse known for its picturesque setting on the shore, offering panoramic views of the surrounding water.",
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ export const siteLocationList = [
     name: "Reid Memorial Park",
     lat: 42.3577332736847,
     lng: -82.96636629573561,
+    intro: "A serene park with expansive green lawns, perfect for family picnics and recreational activities.",
   },
   {
     id: 3,
@@ -22,6 +24,7 @@ export const siteLocationList = [
     name: "Sunset Point",
     lat: 42.33344335820095,
     lng: -83.00397390289613,
+    intro: "A prime location for witnessing spectacular sunsets, with unobstructed views over the horizon.",
   },
   {
     id: 4,
@@ -30,6 +33,7 @@ export const siteLocationList = [
     name: "Detroit Lighthouse Depot",
     lat: 42.3411091617928,
     lng: -83.0088519740599,
+    intro: "An important historical site that houses maritime artifacts and exhibits about the region's nautical history.",
   },
   {
     id: 5,
@@ -38,6 +42,7 @@ export const siteLocationList = [
     name: "Detroit Dry Dock #2",
     lat: 42.332540042036584,
     lng: -83.02413945499701,
+    intro: "Features remnants of a once-busy shipbuilding industry, now a point of interest for history enthusiasts.",
   },
   {
     id: 6,
@@ -46,6 +51,7 @@ export const siteLocationList = [
     name: "International Memorial to the Underground Railroad",
     lat: 42.326435967345134,
     lng: -83.04397927406063,
+    intro: "A poignant memorial that honors the brave souls who sought freedom via the Underground Railroad.",
   },
   {
     id: 7,
@@ -54,6 +60,7 @@ export const siteLocationList = [
     name: "Ralph Wilson Centennial Park",
     lat: 42.322021303863366,
     lng: -83.06083154311723,
+    intro: "A modern park with a variety of sports facilities and walking trails, celebrating 100 years of community spirit.",
   },
   {
     id: 8,
@@ -62,6 +69,7 @@ export const siteLocationList = [
     name: "Riverside Park",
     lat: 42.31186277442822,
     lng: -83.07964521315563,
+    intro: "A tranquil riverside retreat with abundant wildlife, perfect for nature walks and bird watching.",
   },
   {
     id: 9,
@@ -70,6 +78,7 @@ export const siteLocationList = [
     name: "Historic Fort Wayne",
     lat: 42.300209961330744,
     lng: -83.09796806266627,
+    intro: "A well-preserved military fort with rich history, offering tours and educational programs.",
   },
   {
     id: 10,
@@ -78,6 +87,7 @@ export const siteLocationList = [
     name: "Belanger Park",
     lat: 42.270632474132505,
     lng: -83.1128155188545,
+    intro: "Known for its beautiful riverfront views, ideal for fishing and water sports.",
   },
   {
     id: 11,
@@ -86,6 +96,7 @@ export const siteLocationList = [
     name: "John Dingell Park",
     lat: 42.23944790986766,
     lng: -83.14533673066406,
+    intro: "A community park with sports fields, playgrounds, and picnic areas, named after a local political figure.",
   },
   {
     id: 12,
@@ -94,6 +105,7 @@ export const siteLocationList = [
     name: "Bishop Park",
     lat: 42.206084471006974,
     lng: -83.14608775749032,
+    intro: "A lively urban park with a bustling waterfront, children’s play area, and community events.",
   },
   {
     id: 13,
@@ -102,6 +114,7 @@ export const siteLocationList = [
     name: "BASF Waterfront Park",
     lat: 42.196424815054115,
     lng: -83.15022302007054,
+    intro: "Offers a scenic walk along the waterfront, featuring modern art installations and peaceful sitting areas.",
   },
   {
     id: 14,
@@ -110,6 +123,7 @@ export const siteLocationList = [
     name: "Meyer Ellias Park",
     lat: 42.152090717219394,
     lng: -83.17403650105368,
+    intro: "A small local park known for its quiet atmosphere and well-maintained gardens.",
   },
   {
     id: 15,
@@ -118,6 +132,7 @@ export const siteLocationList = [
     name: "Rotary Park",
     lat: 42.146811052590685,
     lng: -83.17408750290454,
+    intro: "Sponsored by the local Rotary Club, this park features outdoor fitness equipment and open spaces for public gatherings.",
   },
   {
     id: 16,
@@ -126,6 +141,7 @@ export const siteLocationList = [
     name: "Cherry Street Pocket Park",
     lat: 42.14445872616757,
     lng: -83.17418740290462,
+    intro: "A tiny urban green space on Cherry Street, offering a quick respite from the urban hustle.",
   },
   {
     id: 17,
@@ -134,6 +150,7 @@ export const siteLocationList = [
     name: "Elm Street Pocket Park",
     lat: 42.1431881814417,
     lng: -83.17462463174046,
+    intro: "A small urban park, designed to provide a peaceful spot for downtown workers and residents.",
   },
   {
     id: 18,
@@ -142,6 +159,7 @@ export const siteLocationList = [
     name: "West Road Pocket Park",
     lat: 42.14055977121426,
     lng: -83.17543667406896,
+    intro: "A simple, small park space perfect for short breaks during a busy day.",
   },
   {
     id: 19,
@@ -150,6 +168,7 @@ export const siteLocationList = [
     name: "Elizabeth Park",
     lat: 42.135804083297934,
     lng: -83.17912670290497,
+    intro: "A historic park known for its charming bridges and waterways, popular for weddings and photography.",
   },
   {
     id: 20,
@@ -158,6 +177,7 @@ export const siteLocationList = [
     name: "Sunrise Park",
     lat: 42.12610923066638,
     lng: -83.14082665159209,
+    intro: "Aptly named for its beautiful early morning vistas, this park is a favorite among local photographers.",
   },
   {
     id: 21,
@@ -166,6 +186,7 @@ export const siteLocationList = [
     name: "Hennepin Marsh Gateway",
     lat: 42.17797526002849,
     lng: -83.15112865855106,
+    intro: "A gateway to extensive wetlands, offering trails and educational signs about local wildlife.",
   },
   {
     id: 22,
@@ -174,6 +195,7 @@ export const siteLocationList = [
     name: "Lake Erie Metropark",
     lat: 42.07175789936502,
     lng: -83.19839628459775,
+    intro: "A large park on the shores of Lake Erie, known for its water activities and birdwatching opportunities.",
   },
   {
     id: 23,
@@ -182,6 +204,7 @@ export const siteLocationList = [
     name: "Hull's Trace",
     lat: 42.04353223884651,
     lng: -83.21326020290915,
+    intro: "A historic trail that follows the route of General Hull's army during the War of 1812.",
   },
   {
     id: 24,
@@ -190,6 +213,7 @@ export const siteLocationList = [
     name: "Pointe Mouillee",
     lat: 42.0096316609661,
     lng: -83.21411328595015,
+    intro: "A renowned bird sanctuary offering guided tours and workshops to learn about wetland conservation.",
   },
   {
     id: 25,
@@ -198,6 +222,7 @@ export const siteLocationList = [
     name: "William Sterling State Park",
     lat: 41.90656245601501,
     lng: -83.33764324524365,
+    intro: "The largest state park in the area, known for its beaches, camping sites, and diverse recreational activities.",
   },
 ];
 
@@ -230,6 +255,10 @@ export const tagList = [
     value: "Modern-Day Detroit",
     label: "Modern-Day Detroit",
   },
+  {
+    value: "Ecology and Sustainability",
+    label: "Ecology and Sustainability",
+  }
 ];
 
 export const allowedFileTypes = [
