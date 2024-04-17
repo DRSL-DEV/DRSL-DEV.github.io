@@ -2,14 +2,28 @@ import styles from "./index.module.css";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Checkbox, Upload, Select, message, Modal, Button } from "antd";
+import {
+  Form,
+  Input,
+  Checkbox,
+  Upload,
+  Select,
+  message,
+  Modal,
+  // Button,
+} from "antd";
 import googleIcon from "../../assets/icons/Google icon.svg";
-// import Button from "../../components/Button";
+import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
 import PrimaryButton from "../../components/PrimaryButton";
-import { updateUser, clearUser } from "../../data/features/userInfoSlice";
+import { updateUser, deletUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
-import { getAuth, sendPasswordResetEmail, deleteUser, signOut } from "firebase/auth";
+import {
+  getAuth,
+  sendPasswordResetEmail,
+  deleteUser,
+  signOut,
+} from "firebase/auth";
 import { tagList } from "../../constants/constants";
 import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import defaultProfile from "../../assets/images/profile.png";
@@ -19,7 +33,9 @@ const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [selectedTags, setSelectedTags] = useState(currentUser ? currentUser.tagsOfInterest : []);
+  const [selectedTags, setSelectedTags] = useState(
+    currentUser ? currentUser.tagsOfInterest : []
+  );
   const allowedImgTypes = ["image/jpeg", "image/png"];
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -38,12 +54,12 @@ const EditProfilePage = () => {
     // uploaded:  0 or this field not exist (null): image is not uploaded yet, need to be uploaded
     //            1 image is already uploaded, may need to be removed
     //            2 default image, do not need to upload/remove
-    currentUser.profileImage
+    currentUser?.profileImage
       ? [{ url: currentUser.profileImage, uid: 1, uploaded: 1 }]
       : [{ url: defaultProfile, uid: 1, uploaded: 2 }]
   );
   const [banner, setBanner] = useState(
-    currentUser.profileBanner
+    currentUser?.profileBanner
       ? [{ url: currentUser.profileBanner, uid: 1, uploaded: 1 }]
       : [{ url: defaultBanner, uid: 1, uploaded: 2 }]
   );
@@ -199,10 +215,28 @@ const EditProfilePage = () => {
       });
   };
 
+  const handleDeleteAccount = () => {
+    setDeleteModalVisible(false);
+    dispatch(deletUser())
+      .then(() => {
+        message.success({
+          content: `Accoutn has been successfully deleted!`,
+          duration: 2,
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log("Error deleting user:", error);
+      });
+  };
+
   // const handleDeleteAccount = () => {
   //   const auth = getAuth();
   //   const user = auth.currentUser;
-  
+
   //   if (user) {
   //     deleteUser(user)
   //       .then(() => {
@@ -224,30 +258,20 @@ const EditProfilePage = () => {
   //   }
   // };
 
-  const handleCancelDelete = () => {
-    setDeleteModalVisible(false);
-  };
-
-  const handleConfirmDelete = () => {
-    handleDeleteAccount();
-    setDeleteModalVisible(false);
-  };
-
   return (
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
       <PageHeader title="Account Information" />
       <h3>Profile</h3>
       <Form
         initialValues={{
-          userName: currentUser.username,
-          profileName: currentUser.profileName,
-          email: currentUser.email,
-          userBio: currentUser.biography,
-          phoneNumber: currentUser.phoneNumber,
-          anonySubChk: !!currentUser.anonymousSubmissionCheck,
-          interest: currentUser.tagsOfInterests || selectedTags,
+          userName: currentUser?.username,
+          profileName: currentUser?.profileName,
+          email: currentUser?.email,
+          userBio: currentUser?.biography,
+          phoneNumber: currentUser?.phoneNumber,
+          anonySubChk: !!currentUser?.anonymousSubmissionCheck,
+          interest: currentUser?.tagsOfInterests || selectedTags,
         }}
-        onFinish={handleSave}
         name="nest-messages"
         validateMessages={validateMessages}
         className={styles["edit-profile-form"]}
@@ -355,29 +379,39 @@ const EditProfilePage = () => {
           </p>
         </div>
 
-        <Form.Item>
-          <PrimaryButton text="Save" htmlType="submit" />
-        </Form.Item>
-      </Form>
-      <div className={styles["delete-account-btn"]}>
-          <PrimaryButton text="Delete Account" onClick={() => setDeleteModalVisible(true)} />
-          <Modal
-            open={deleteModalVisible}
-            title="Delete Account"
-            onCancel={handleCancelDelete}
-            footer={[
-              <Button key="cancel" type="default" onClick={handleCancelDelete} className={styles["primary-modal-button"]}>
-                Cancel
-              </Button>,
-              <Button key="confirm" type="default" onClick={handleConfirmDelete} className={styles["primary-modal-button"]}>
-                Confirm
-              </Button>,
-            ]}
-          >
-            <p>Are you sure you want to delete your account?</p>
-            <p>All your stories will be <strong>removed</strong> and this action cannot be undone.</p>
-          </Modal>
+        <div className={styles["action-button-container"]}>
+          <Button
+            text="Save"
+            htmlType="submit"
+            customStyles={{
+              width: "310px",
+              height: "45px",
+              borderRadius: "30px",
+              fontSize: "16px",
+              margin: " auto",
+            }}
+            handleOnClick={() => handleSave()}
+          />
+          <Button
+            text="Delete Account"
+            htmlType="button"
+            customStyles={{
+              width: "310px",
+              height: "45px",
+              borderRadius: "30px",
+              fontSize: "16px",
+              backgroundColor: "var( --secondary-color-red-accent)",
+              margin: " auto",
+            }}
+            handleOnClick={() => {
+              setDeleteModalVisible(true);
+              console.log("click");
+            }}
+          />
         </div>
+      </Form>
+
+      <div className={styles["delete-account-btn"]}></div>
 
       <div className={styles["link-account-section"]}>
         <h3>Linked Accounts</h3>
@@ -388,13 +422,42 @@ const EditProfilePage = () => {
             alt="google log in"
           />
           <h4>Google</h4>
-          <Button
-            className={styles["primary-modal-button"]}
-          >
-            Unlink
-          </Button>
+          <Button text="Unlink" />
         </div>
       </div>
+
+      <Modal
+        open={deleteModalVisible}
+        title="Delete Account"
+        onCancel={() => setDeleteModalVisible(false)}
+        footer={
+          <div
+            style={{
+              display: "flex",
+              marginTop: "32px",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              text="CANCEL"
+              handleOnClick={() => setDeleteModalVisible(false)}
+            />
+            <Button
+              text="DELETE"
+              customStyles={{
+                backgroundColor: "var( --secondary-color-red-accent)",
+              }}
+              handleOnClick={() => handleDeleteAccount()}
+            />
+          </div>
+        }
+      >
+        <p>Are you sure you want to delete your account?</p>
+        <p>
+          All your stories will be <strong>removed</strong> and this action
+          cannot be undone.
+        </p>
+      </Modal>
     </div>
   );
 };
