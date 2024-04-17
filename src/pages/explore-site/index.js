@@ -22,7 +22,6 @@ const ExploreSite = () => {
                   .toLowerCase()
                   .replace(/ /g, "-")
                   .replace(/[^\w-]+/g, "")}`}
-                state={{ siteLocationId: site.id }}
                 className={styles["site-link"]}
               >
                 {site.name}
