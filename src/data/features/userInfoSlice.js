@@ -108,7 +108,6 @@ export const removeFromBookmarks = createAsyncThunk(
       );
 
       await Promise.all(updatePromises);
-
       return bookmarkToRemove;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -180,7 +179,7 @@ const userInfoSlice = createSlice({
         state.status = "removing from bookmarks";
       })
       .addCase(removeFromBookmarks.fulfilled, (state, action) => {
-        state.user.bookmarks = state.user.bookmarks.filter(
+        state.user.bookmarks = state.user.bookmarks?.filter(
           (bookmark) => bookmark !== action.payload
         );
         state.status = "removed from bookmarks";
