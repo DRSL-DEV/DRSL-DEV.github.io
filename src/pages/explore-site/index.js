@@ -3,9 +3,7 @@ import { siteLocationList } from "../../constants/constants";
 import Title from "../../components/PageHeader";
 import { Link } from "react-router-dom";
 
-
 const ExploreSite = () => {
-
   const titlePage = "Explore Sites";
 
   return (
@@ -13,14 +11,14 @@ const ExploreSite = () => {
       <main>
         <section>
           <div className={styles["page-header"]}>
-            <Title title={titlePage}/>
+            <Title title={titlePage} />
           </div>
         </section>
         <section className={styles["site-list"]}>
           {siteLocationList.map((site) => (
             <div key={site.id} className={styles["site-name"]}>
               <Link
-                to={`/site/${site.name
+                to={`/site/${site.id}/${site.name
                   .toLowerCase()
                   .replace(/ /g, "-")
                   .replace(/[^\w-]+/g, "")}`}

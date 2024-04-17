@@ -6,7 +6,7 @@ import grid_view from "../../assets/icons/grid_view.svg";
 import list_view from "../../assets/icons/list_view.svg";
 import Title from "../../components/PageHeader";
 import Button from "../../components/Button";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchPostsBySite,
@@ -15,47 +15,32 @@ import {
 import { siteLocationList } from "../../constants/constants";
 
 const SitePage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const siteLocationId = location.state?.siteLocationId;
+  const [isGridView, setIsGridView] = useState(true);
+  const { siteId: stringSiteId } = useParams();
+  const siteId = parseInt(stringSiteId, 10);
 
   const posts = useSelector(
-    (state) => state.storyList.postsBySite[siteLocationId] || []
+    (state) => state.storyList.postsBySite[siteId] || []
   );
-  const siteLocation = siteLocationList.find(
-    (site) => site.id === siteLocationId
-  );
+  const siteLocation = siteLocationList.find((site) => site.id === siteId);
   const lastVisibleDocId = useSelector(
-    (state) => state.storyList.lastVisibleDocIdBySite[siteLocationId]
+    (state) => state.storyList.lastVisibleDocIdBySite[siteId]
   );
   const siteTitle = siteLocation ? siteLocation.name : "Default Title";
   const numberOfStories = posts.length;
 
   useEffect(() => {
-    if (siteLocationId) {
-      dispatch(
-        fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId: null })
-      );
+    if (siteId) {
+      dispatch(fetchPostsBySite({ siteId, lastVisibleDocId: null }));
     }
-  }, [dispatch, siteLocationId]);
+  }, [dispatch, siteId]);
 
   const handleViewMore = () => {
     if (lastVisibleDocId) {
-      dispatch(fetchPostsBySite({ siteId: siteLocationId, lastVisibleDocId }));
+      dispatch(fetchPostsBySite({ siteId, lastVisibleDocId }));
     }
   };
-
-  const [isGridView, setIsGridView] = useState(true);
-
-  const handleViewChange = () => {
-    setIsGridView(!isGridView);
-  };
-
-  if (!siteLocation) {
-    navigate("*");
-    return null;
-  }
 
   return (
     <div className="page-container">
@@ -65,7 +50,7 @@ const SitePage = () => {
           <h5>{numberOfStories} Stories</h5>
           <button
             className={styles["view-change-button"]}
-            onClick={handleViewChange}
+            onClick={() => setIsGridView((prev) => !prev)}
           >
             <span>Change View</span>
             <img src={isGridView ? grid_view : list_view} alt="Change View" />
@@ -107,30 +92,7 @@ const SitePage = () => {
                 <Button text="View More" handleOnClick={handleViewMore} />
               </div>
             )}
-          {/* <div className={styles["button-container"]}>
-            <Button
-              text="View More"
-              handleOnClick={() => navigate("/site-page")}
-            />
-          </div> */}
         </section>
-        {/* <hr />
-        <section className={styles["user-content"]}>
-          <h2>Posts</h2>
-          <TextCard
-            title={contentTitle}
-            previewContent="A guide on how I created a growing and supportive community among Detroit’s busy automotive industry."
-            author="Steven Henry"
-            pfpSource={imgSrc}
-            date="1/1/2021"
-          />
-          <div className={styles["button-container"]}>
-            <Button
-              text="View More"
-              handleOnClick={() => navigate("/site-page")}
-            />
-          </div>
-        </section> */}
       </div>
     </div>
   );

@@ -98,7 +98,7 @@ function App() {
             <Route path="/partnerships" element={<PartnershipsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/site/:title" element={<SitePage />} />
+            <Route path="/site/:siteId/:title" element={<SitePage />} />
             <Route path="/create-story" element={<CreateStory />} />
             <Route path="/explore-story" element={<ExploreStory />} />
             <Route path="/explore-site" element={<ExploreSite />} />
