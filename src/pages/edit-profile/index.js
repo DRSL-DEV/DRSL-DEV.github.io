@@ -28,6 +28,7 @@ import { tagList } from "../../constants/constants";
 import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import defaultProfile from "../../assets/images/profile.png";
 import defaultBanner from "../../assets/images/default_banner.png";
+import { deletePostsByAuthorId } from "../../data/features/storyListSlice";
 
 const EditProfilePage = () => {
   const currentUser = useSelector((state) => state.userInfo.user);
@@ -219,6 +220,7 @@ const EditProfilePage = () => {
     setDeleteModalVisible(false);
     dispatch(deletUser())
       .then(() => {
+        dispatch(deletePostsByAuthorId())
         message.success({
           content: `Accoutn has been successfully deleted!`,
           duration: 2,
@@ -232,31 +234,6 @@ const EditProfilePage = () => {
         console.log("Error deleting user:", error);
       });
   };
-
-  // const handleDeleteAccount = () => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (user) {
-  //     deleteUser(user)
-  //       .then(() => {
-  //         dispatch(clearUser());
-  //         signOut(auth)
-  //           .then(() => {
-  //             // User successfully logged out
-  //             navigate("/");
-  //           })
-  //           .catch((error) => {
-  //             console.error("Error signing out:", error.message);
-  //           });
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error deleting user account:", error.message);
-  //       });
-  //   } else {
-  //     console.error("No user is currently authenticated.");
-  //   }
-  // };
 
   return (
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
@@ -390,7 +367,7 @@ const EditProfilePage = () => {
               fontSize: "16px",
               margin: " auto",
             }}
-            handleOnClick={() => handleSave()}
+            handleOnClick={handleSave}
           />
           <Button
             text="Delete Account"

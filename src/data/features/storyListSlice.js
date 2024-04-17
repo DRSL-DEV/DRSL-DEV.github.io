@@ -273,6 +273,27 @@ export const deletePostById = createAsyncThunk(
   }
 );
 
+//Delete stories by uid
+export const deletePostsByAuthorId = createAsyncThunk(
+  "posts/deletePostsByAuthorId",
+  async (uid, { rejectWithValue }) => {
+    try {
+      const postsQuery = query(collection(db, "post"), where("userId", "==", uid));
+      const snapshot = await getDocs(postsQuery);
+
+      const postDeletionPromises = snapshot.docs.map(async (doc) => {
+        await deleteDoc(doc.ref);
+        return doc.id;
+      });
+
+      await Promise.all(postDeletionPromises);
+      return snapshot.docs.map((doc) => doc.id);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const storyListSlice = createSlice({
   name: "storyList",
   initialState,
@@ -385,6 +406,12 @@ export const storyListSlice = createSlice({
         const { siteId, count } = action.payload;
         state.storyCountsBySite[siteId] = count;
       })
+      .addCase(deletePostsByAuthorId.fulfilled, (state, action) => {
+        // Handle successful deletion if needed
+      })
+      .addCase(deletePostsByAuthorId.rejected, (state, action) => {
+        // Handle rejection/error if needed
+      });
   },
 });
 
