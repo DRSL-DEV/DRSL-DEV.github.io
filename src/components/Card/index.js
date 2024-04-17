@@ -30,11 +30,10 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
         </div>
       ) : (
         <Link
-          to={`/story/${title
+          to={`/story/${postId}/${title
             ?.toLowerCase()
             .replace(/ /g, "-")
             .replace(/[^\w-]+/g, "")}`}
-          state={{ postId: postId }}
         >
           <div className={`${styles["customized-card"]} ${styles[type]}`}>
             {imgSrc && (

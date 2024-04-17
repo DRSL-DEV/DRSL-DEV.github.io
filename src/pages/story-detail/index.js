@@ -14,7 +14,7 @@ import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { removeFromBookmarks } from "../../data/features/userInfoSlice";
 import { deleteFile } from "../../data/features/fileUploadSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { convertTimeFormatMDY } from "../../utils/dateFormat";
 import Button from "../../components/Button";
 
@@ -22,8 +22,7 @@ const StoryDetailPage = () => {
   const siteTitle = "Story Page";
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const postId = location.state?.postId;
+  const { postId } = useParams();
   const { selectedPost } = useSelector((state) => state.storyList);
   const { authorInfo } = useSelector((state) => state.storyAuthor);
   const currentUser = useSelector((state) => state.userInfo.user);

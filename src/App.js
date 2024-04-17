@@ -90,7 +90,7 @@ function App() {
                 </AuthListener>
               }
             />
-            <Route path="/story/:title" element={<StoryDetailPage />} />
+            <Route path="/story/:postId/:title" element={<StoryDetailPage />} />
             <Route path="/profile/:username?" element={<ProfilePage />} />
             <Route path="/profile/profile-edit" element={<EditProfilePage />} />
             <Route path="/about" element={<AboutPage />} />

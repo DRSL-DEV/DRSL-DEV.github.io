@@ -6,18 +6,16 @@ import { useState } from "react";
 const GridCard = ({ title, imgSrc, type, postId }) => {
   const [hasError, setHasError] = useState(false);
 
-
   return (
     <Link
-      to={`/story/${title
+      to={`/story/${postId}/${title
         .toLowerCase()
         .replace(/ /g, "-")
         .replace(/[^\w-]+/g, "")}`}
-      state={{ postId: postId }}
     >
       <div className={styles["grid-card"]}>
         <div className={styles["grid-card-image"]}>
-          <img 
+          <img
             src={hasError ? defaultImg : imgSrc}
             alt=""
             onError={() => setHasError(true)}
