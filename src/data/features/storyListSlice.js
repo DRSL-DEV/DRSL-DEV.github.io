@@ -183,17 +183,17 @@ export const fetchPostCountBySite = createAsyncThunk(
       const partnerQuery = query(
         collection(db, "post"),
         where("site", "==", siteId),
-        where("postType", "==", "partner"),
+        where("postType", "==", "partner")
       );
       const [approvedSnapshot, partnerSnapshot] = await Promise.all([
         getDocs(approvedQuery),
         getDocs(partnerQuery),
       ]);
       const uniqueDocIds = new Set();
-      approvedSnapshot.forEach(doc => {
+      approvedSnapshot.forEach((doc) => {
         uniqueDocIds.add(doc.id);
       });
-      partnerSnapshot.forEach(doc => {
+      partnerSnapshot.forEach((doc) => {
         if (!uniqueDocIds.has(doc.id)) {
           uniqueDocIds.add(doc.id);
         }
@@ -273,12 +273,15 @@ export const deletePostById = createAsyncThunk(
   }
 );
 
-//Delete stories by uid
+//Delete stories by author id
 export const deletePostsByAuthorId = createAsyncThunk(
   "posts/deletePostsByAuthorId",
-  async (uid, { rejectWithValue }) => {
+  async (authorId, { rejectWithValue }) => {
     try {
-      const postsQuery = query(collection(db, "post"), where("userId", "==", uid));
+      const postsQuery = query(
+        collection(db, "post"),
+        where("userId", "==", authorId)
+      );
       const snapshot = await getDocs(postsQuery);
 
       const postDeletionPromises = snapshot.docs.map(async (doc) => {

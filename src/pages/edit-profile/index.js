@@ -2,28 +2,13 @@ import styles from "./index.module.css";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  Form,
-  Input,
-  Checkbox,
-  Upload,
-  Select,
-  message,
-  Modal,
-  // Button,
-} from "antd";
+import { Form, Input, Checkbox, Upload, Select, message, Modal } from "antd";
 import googleIcon from "../../assets/icons/Google icon.svg";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
-import PrimaryButton from "../../components/PrimaryButton";
 import { updateUser, deletUser } from "../../data/features/userInfoSlice";
 import ImgCrop from "antd-img-crop";
-import {
-  getAuth,
-  sendPasswordResetEmail,
-  deleteUser,
-  signOut,
-} from "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { tagList } from "../../constants/constants";
 import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import defaultProfile from "../../assets/images/profile.png";
@@ -39,7 +24,6 @@ const EditProfilePage = () => {
   );
   const allowedImgTypes = ["image/jpeg", "image/png"];
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
   const validateMessages = {
     required: "${label} is required!",
     types: {
@@ -161,6 +145,7 @@ const EditProfilePage = () => {
         profileImage: newProfileImg,
         profileBanner: newBanner,
       };
+
       const userWithoutNullValues = Object.fromEntries(
         Object.entries(userDetails).filter(
           ([key, value]) => value !== undefined
@@ -220,15 +205,12 @@ const EditProfilePage = () => {
     setDeleteModalVisible(false);
     dispatch(deletUser())
       .then(() => {
-        dispatch(deletePostsByAuthorId())
+        dispatch(deletePostsByAuthorId(currentUser.uid));
+        navigate("/");
         message.success({
           content: `Accoutn has been successfully deleted!`,
           duration: 2,
         });
-
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
       })
       .catch((error) => {
         console.log("Error deleting user:", error);
@@ -239,154 +221,153 @@ const EditProfilePage = () => {
     <div className={`page-container ${styles["edit-profile-page-container"]}`}>
       <PageHeader title="Account Information" />
       <h3>Profile</h3>
-      <Form
-        initialValues={{
-          userName: currentUser?.username,
-          profileName: currentUser?.profileName,
-          email: currentUser?.email,
-          userBio: currentUser?.biography,
-          phoneNumber: currentUser?.phoneNumber,
-          anonySubChk: !!currentUser?.anonymousSubmissionCheck,
-          interest: currentUser?.tagsOfInterests || selectedTags,
-        }}
-        name="nest-messages"
-        validateMessages={validateMessages}
-        className={styles["edit-profile-form"]}
-      >
-        <div>
-          <div className={styles["short-input-container"]}>
+      {!!currentUser && (
+        <Form
+          initialValues={{
+            userName: currentUser.username,
+            profileName: currentUser.profileName,
+            email: currentUser.email,
+            userBio: currentUser.biography,
+            phoneNumber: currentUser.phoneNumber,
+            anonySubChk: !!currentUser.anonymousSubmissionCheck,
+            interest: currentUser.tagsOfInterests || selectedTags,
+          }}
+          onFinish={handleSave}
+          name="nest-messages"
+          validateMessages={validateMessages}
+          className={styles["edit-profile-form"]}
+        >
+          <div>
+            <div className={styles["short-input-container"]}>
+              <Form.Item
+                name="userName"
+                label="Username"
+                rules={[{ required: true }]}
+              >
+                <Input className={styles["short-input"]} />
+              </Form.Item>
+              <Form.Item
+                name="profileName"
+                label="Profile Name"
+                rules={[{ required: false }]}
+              >
+                <Input className={styles["short-input"]} />
+              </Form.Item>
+            </div>
             <Form.Item
-              name="userName"
-              label="Username"
-              rules={[{ required: true }]}
+              name="anonySubChk"
+              label="Anonymous Submissions"
+              valuePropName="checked"
+              getValueFromEvent={(e) => e.target.checked}
             >
-              <Input className={styles["short-input"]} />
+              <Checkbox className={styles["check-box"]}>
+                <span>Optional: Have account displayed as anonymous.</span>
+                <span>This can be changed at any time.</span>
+              </Checkbox>
             </Form.Item>
-            <Form.Item
-              name="profileName"
-              label="Profile Name"
-              rules={[{ required: false }]}
-            >
-              <Input className={styles["short-input"]} />
+
+            <Form.Item name="userBio" label="Biography">
+              <Input.TextArea
+                showCount
+                maxLength={200}
+                placeholder="Would you like to add a biography?"
+              />
             </Form.Item>
           </div>
-          <Form.Item
-            name="anonySubChk"
-            label="Anonymous Submissions"
-            valuePropName="checked"
-            getValueFromEvent={(e) => e.target.checked}
-          >
-            <Checkbox className={styles["check-box"]}>
-              <span>Optional: Have account displayed as anonymous.</span>
-              <span>This can be changed at any time.</span>
-            </Checkbox>
-          </Form.Item>
-
-          <Form.Item name="userBio" label="Biography">
-            <Input.TextArea
-              showCount
-              maxLength={200}
-              placeholder="Would you like to add a biography?"
-            />
-          </Form.Item>
-        </div>
-        <div className={styles["profile-images-input"]}>
-          <div>
-            <h3>Profile Photo</h3>
-            <div className={styles["profile-upload"]}>
-              <ImgCrop rotationSlider aspectSlider showReset>
-                <Upload
-                  listType="picture-card"
-                  fileList={profileImg}
-                  onChange={(info) => setProfileImg(info.fileList)}
-                  onPreview={onPreview}
-                  // beforeUpload={() => false} // need more function in validating the uploaded file
-                  {...fileUploadProps}
-                >
-                  {!profileImg.length && "Upload"}
-                </Upload>
-              </ImgCrop>
+          <div className={styles["profile-images-input"]}>
+            <div>
+              <h3>Profile Photo</h3>
+              <div className={styles["profile-upload"]}>
+                <ImgCrop rotationSlider aspectSlider showReset>
+                  <Upload
+                    listType="picture-card"
+                    fileList={profileImg}
+                    onChange={(info) => setProfileImg(info.fileList)}
+                    onPreview={onPreview}
+                    // beforeUpload={() => false} // need more function in validating the uploaded file
+                    {...fileUploadProps}
+                  >
+                    {!profileImg.length && "Upload"}
+                  </Upload>
+                </ImgCrop>
+              </div>
+            </div>
+            <div>
+              <h3>Profile Banner</h3>
+              <div className={styles["banner-upload"]}>
+                <ImgCrop rotationSlider aspectSlider showReset aspect={2}>
+                  <Upload
+                    listType="picture-card"
+                    fileList={banner}
+                    onChange={(info) => setBanner(info.fileList)}
+                    onPreview={onPreview}
+                    {...fileUploadProps}
+                  >
+                    {!banner.length && "Upload"}
+                  </Upload>
+                </ImgCrop>
+              </div>
             </div>
           </div>
+
           <div>
-            <h3>Profile Banner</h3>
-            <div className={styles["banner-upload"]}>
-              <ImgCrop rotationSlider aspectSlider showReset aspect={2}>
-                <Upload
-                  listType="picture-card"
-                  fileList={banner}
-                  onChange={(info) => setBanner(info.fileList)}
-                  onPreview={onPreview}
-                  {...fileUploadProps}
-                >
-                  {!banner.length && "Upload"}
-                </Upload>
-              </ImgCrop>
-            </div>
+            <h3>Tags of Interest</h3>
+            <Form.Item name="interest" label="">
+              <Select
+                mode="multiple"
+                placeholder="Please pick your topics"
+                value={selectedTags}
+                onChange={setSelectedTags}
+                options={tagList}
+              />
+            </Form.Item>
           </div>
-        </div>
 
-        <div>
-          <h3>Tags of Interest</h3>
-          <Form.Item name="interest" label="">
-            <Select
-              mode="multiple"
-              placeholder="Please pick your topics"
-              value={selectedTags}
-              onChange={setSelectedTags}
-              options={tagList}
+          <div>
+            <h3>Personal Information</h3>
+            <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
+              <Input disabled={true} />
+            </Form.Item>
+            <Form.Item name="phoneNumber" label="Phone Number">
+              <Input />
+            </Form.Item>
+            <p
+              className={styles["change-password"]}
+              href="#"
+              onClick={() => handlePasswordChange(currentUser.email)}
+            >
+              I want to change my password
+            </p>
+          </div>
+
+          <div className={styles["action-button-container"]}>
+            <Button
+              text="Save"
+              type="submit"
+              customStyles={{
+                width: "310px",
+                height: "45px",
+                borderRadius: "30px",
+                fontSize: "16px",
+                margin: " auto",
+              }}
             />
-          </Form.Item>
-        </div>
-
-        <div>
-          <h3>Personal Information</h3>
-          <Form.Item name="email" label="Email" rules={[{ type: "email" }]}>
-            <Input disabled={true} />
-          </Form.Item>
-          <Form.Item name="phoneNumber" label="Phone Number">
-            <Input />
-          </Form.Item>
-          <p
-            className={styles["change-password"]}
-            href="#"
-            onClick={() => handlePasswordChange(currentUser.email)}
-          >
-            I want to change my password
-          </p>
-        </div>
-
-        <div className={styles["action-button-container"]}>
-          <Button
-            text="Save"
-            htmlType="submit"
-            customStyles={{
-              width: "310px",
-              height: "45px",
-              borderRadius: "30px",
-              fontSize: "16px",
-              margin: " auto",
-            }}
-            handleOnClick={handleSave}
-          />
-          <Button
-            text="Delete Account"
-            htmlType="button"
-            customStyles={{
-              width: "310px",
-              height: "45px",
-              borderRadius: "30px",
-              fontSize: "16px",
-              backgroundColor: "var( --secondary-color-red-accent)",
-              margin: " auto",
-            }}
-            handleOnClick={() => {
-              setDeleteModalVisible(true);
-              console.log("click");
-            }}
-          />
-        </div>
-      </Form>
+            <Button
+              text="Delete Account"
+              type="button"
+              customStyles={{
+                width: "310px",
+                height: "45px",
+                borderRadius: "30px",
+                fontSize: "16px",
+                backgroundColor: "var( --secondary-color-red-accent)",
+                margin: " auto",
+              }}
+              handleOnClick={() => setDeleteModalVisible(true)}
+            />
+          </div>
+        </Form>
+      )}
 
       <div className={styles["delete-account-btn"]}></div>
 
