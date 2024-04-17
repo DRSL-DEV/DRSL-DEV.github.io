@@ -86,23 +86,11 @@ const SearchPage = () => {
         }
       }
 
-      console.log("Story:", story);
-      console.log("Selected Tag:", selectedTag);
-      console.log("Matches Tag:", matchesTag);
-      console.log("Selected site:", selectedLocation);
-      console.log("Matches site:", matchesLocation);
-      console.log("match author", matchesAuthor);
-      console.log("match date", matchesDate);
-
       return matchesLocation && matchesTag && matchesAuthor && matchesDate;
     });
   };
 
   const handleApplyFilter = () => {
-    console.log("Selected Tag:", selectedTag);
-    console.log("Selected site:", selectedLocation);
-    console.log("Selected author", selectedAuthor);
-    console.log("selected date", selectedDate);
     const filteredStories = filterStories(
       storyList,
       selectedTag[0],

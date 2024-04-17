@@ -1,17 +1,22 @@
 import { useSelector, useDispatch } from "react-redux";
-import { subscribeToStoryList } from "../../data/features/storyListSlice";
-import { useEffect } from "react";
+import {
+  fetchPostsByTag,
+  subscribeToStoryList,
+} from "../../data/features/storyListSlice";
+import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import CategoryHeader from "../../components/CategoryHeader";
 // import imgSrc from "../../assets/images/card_img.png";
 import gallery_placeholder from "../../assets/images/home_gallery.png";
-import filter from "../../assets/icons/filter.svg";
+// import filter from "../../assets/icons/filter.svg";
 import location_pin from "../../assets/icons/location_pin.svg";
 import { useNavigate } from "react-router-dom";
 import { RightOutlined } from "@ant-design/icons";
 import { Carousel, Collapse } from "antd";
+import { tagList } from "../../constants/constants";
+import { Link } from "react-router-dom";
 const { Panel } = Collapse;
 
 const CustomCollapse = ({ items }) => (
@@ -36,14 +41,13 @@ const CustomCollapse = ({ items }) => (
 
 const ExploreStory = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const [activeKey, setActiveKey] = useState(null);
+  const taggedPosts = useSelector((state) => state.storyList.taggedPosts);
+  const lastVisibleDocIdByTag = useSelector(
+    (state) => state.storyList.lastVisibleDocIdByTag
+  );
 
-  const categories = [
-    "Communities & Livelihood",
-    "Indigenous History",
-    "Cultural Identities",
-  ];
   const mediaUrls = [
     gallery_placeholder,
     gallery_placeholder,
@@ -57,33 +61,27 @@ const ExploreStory = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = dispatch(subscribeToStoryList());
-
-    return () => {
-      unsubscribe();
-    };
+    tagList.forEach((tag) => {
+      dispatch(fetchPostsByTag({ tag: tag.label, lastVisibleDocId: null }));
+    });
   }, [dispatch]);
 
-  const stories = useSelector((state) => state.storyList.storyList);
-  //add selection of stories based on status and user type
-  const approvedUserStoryList = stories.filter(
-    (story) => story.status === "approved"
-  );
+  const handleViewMore = (tag) => {
+    const lastVisibleDocId = lastVisibleDocIdByTag[tag];
+    dispatch(fetchPostsByTag({ tag, lastVisibleDocId }));
+  };
 
   const items = (panelStyle) =>
-    categories.map((category, index) => ({
-      key: index,
-      label: <CategoryHeader title={category} style={panelStyle} />,
+    tagList.map((tag, index) => ({
+      key: index.toString(),
+      label: <CategoryHeader title={tag.label} style={panelStyle} />,
       children: (
         <div className={styles["cards-container"]}>
-          {approvedUserStoryList
-            .filter(
-              (story) =>
-                Array.isArray(story.tags) && story.tags.includes(category)
-            )
-            .map((story) => (
+          {taggedPosts[tag.label] &&
+            taggedPosts[tag.label].map((story) => (
               <Card
                 key={story.id}
+                postId={story.id}
                 title={story.title}
                 content={story.content.substring(0, 65) + "..."}
                 author={story.userId}
@@ -91,9 +89,21 @@ const ExploreStory = () => {
                 imgSrc={story.media[0]}
               />
             ))}
-          <div className={styles["button-container"]}>
+          {taggedPosts[tag.label] &&
+            taggedPosts[tag.label].length > 0 &&
+            taggedPosts[tag.label].length % 3 === 0 &&
+            lastVisibleDocIdByTag[tag.label] && (
+              <div className={styles["button-container"]}>
+                <Button
+                  text="View More"
+                  handleOnClick={() => handleViewMore(tag.label)}
+                />
+              </div>
+            )}
+
+          {/* <div className={styles["button-container"]}>
             <Button text="View More" handleOnClick={() => {}} />
-          </div>
+          </div> */}
         </div>
       ),
       style: panelStyle,
@@ -135,13 +145,15 @@ const ExploreStory = () => {
         </Carousel>
 
         <section className={styles["filter-section"]}>
-          <div className={styles["filter-container"]}>
+          {/* <div className={styles["filter-container"]}>
             <img src={filter} alt="filter" />
             <p>Filter by Category</p>
-          </div>
+          </div> */}
           <div className={styles["location-container"]}>
             <img src={location_pin} alt="location" />
-            <p>Explore Sites</p>
+            <Link to={"/explore-site"} className={styles["explore-site-link"]}>
+              Explore Sites
+            </Link>
           </div>
         </section>
         <section>

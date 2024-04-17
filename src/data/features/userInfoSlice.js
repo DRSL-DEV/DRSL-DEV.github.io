@@ -1,7 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "../../firebase";
-import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-import { getAuth, signOut } from "firebase/auth";
+import {
+  getDoc,
+  getDocs,
+  doc,
+  setDoc,
+  updateDoc,
+  query,
+  collection,
+  where,
+  arrayRemove,
+  deleteDoc,
+} from "firebase/firestore";
+import { deleteUser, getAuth, signOut } from "firebase/auth";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("userInfo")) || null,
@@ -47,7 +58,7 @@ export const addUser = createAsyncThunk(
     try {
       const { uid, ...detailsWithoutUid } = userDetails;
       await setDoc(doc(db, "user", uid), detailsWithoutUid);
-      return { id: uid, ...detailsWithoutUid };
+      return { uid: uid, ...detailsWithoutUid };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -80,6 +91,50 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const removeFromBookmarks = createAsyncThunk(
+  "users/removeFromBookmarks",
+  async (bookmarkToRemove, { rejectWithValue }) => {
+    try {
+      const q = query(
+        collection(db, "user"),
+        where("bookmarks", "array-contains", bookmarkToRemove)
+      );
+      const querySnapshot = await getDocs(q);
+
+      const updatePromises = querySnapshot.docs.map((doc) =>
+        updateDoc(doc.ref, {
+          bookmarks: arrayRemove(bookmarkToRemove),
+        })
+      );
+
+      await Promise.all(updatePromises);
+      return bookmarkToRemove;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deletUser = createAsyncThunk("userInfo/deleteUser", async () => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user.uid;
+
+    deleteUser(user)
+      .then(async () => {
+        const userRef = doc(db, "user", userId);
+        await deleteDoc(userRef);
+        console.log("User deleted successfully");
+      })
+      .catch((error) => {
+        console.log("Error deleting user:", error);
+      });
+  } catch (error) {
+    console.log("Error deleting user:", error);
+  }
+});
+
 const userInfoSlice = createSlice({
   name: "userInfo",
   initialState,
@@ -98,15 +153,15 @@ const userInfoSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(addUser.rejected, (state, action) => {
-        // Handle the state update when addUserDetails is rejected
-        // ...
+        state.status = "failed in adding user";
+        state.error = action.error.message;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "failed in updating user";
         state.error = action.error.message;
       })
       .addCase(fetchUserById.pending, (state) => {
@@ -118,6 +173,31 @@ const userInfoSlice = createSlice({
       })
       .addCase(fetchUserById.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(removeFromBookmarks.pending, (state) => {
+        state.status = "removing from bookmarks";
+      })
+      .addCase(removeFromBookmarks.fulfilled, (state, action) => {
+        state.user.bookmarks = state.user.bookmarks?.filter(
+          (bookmark) => bookmark !== action.payload
+        );
+        state.status = "removed from bookmarks";
+      })
+      .addCase(removeFromBookmarks.rejected, (state, action) => {
+        state.status = "failed to remove from bookmarks";
+        state.error = action.error.message;
+      })
+      .addCase(deletUser.pending, (state) => {
+        state.status = "deleting user";
+      })
+      .addCase(deletUser.fulfilled, (state) => {
+        state.user = null;
+        localStorage.removeItem("userInfo");
+        state.status = "deleted user";
+      })
+      .addCase(deletUser.rejected, (state, action) => {
+        state.status = "failed to delete user";
         state.error = action.error.message;
       });
   },

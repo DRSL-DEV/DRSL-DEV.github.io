@@ -7,8 +7,11 @@ import userMarker from "../../assets/icons/user_marker.svg";
 import locateUser from "../../assets/icons/locate_user.svg";
 import location_red from "../../assets/icons/location_red.svg";
 import { siteLocationList } from "../../constants/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPostCountBySite } from "../../data/features/storyListSlice";
 
 const MapPage = () => {
+  const dispatch = useDispatch();
   const center = siteLocationList.reduce(
     (acc, site) => {
       acc.lat += site.lat;
@@ -31,6 +34,8 @@ const MapPage = () => {
   useEffect(() => {
     getUserLocation();
   }, []);
+
+  const storycount = useSelector((state) => state.storyList.storyCountsBySite[selectedSite?.id] || 0);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -62,22 +67,33 @@ const MapPage = () => {
   };
 
   const handleSelectSite = (selectedSiteId) => {
-    const selectedSite = siteLocationList.find(
-      (site) => site.id === selectedSiteId
-    );
-    if (selectedSite) {
-      setMapCenter({ lat: selectedSite.lat, lng: selectedSite.lng });
-      setZoom(15); // 或者您希望的其他缩放级别
+    if (selectedSiteId === "all") {
+      setMapCenter(center);
+      setZoom(10);
+    } else {
+      const selectedSite = siteLocationList.find(
+        (site) => site.id === selectedSiteId
+      );
+      if (selectedSite) {
+        setMapCenter({ lat: selectedSite.lat, lng: selectedSite.lng });
+        setZoom(15);
+      }
     }
   };
 
   const handleMarkerClick = (site) => {
     setSelectedSite(site);
+    dispatch(fetchPostCountBySite(site.id));
     setModalOpen(true);
   };
 
   const handleViewStories = () => {
-    navigate("/site-page");
+    if (storycount === 0) {
+      navigate("/create-story", { state: { site: selectedSite } });
+    } else {
+      const formattedSiteName = selectedSite.label.toLowerCase().replace(/\s+/g, '-');
+      navigate(`/site/${formattedSiteName}`, { state: { siteLocationId: selectedSite.id } });
+    }
     setModalOpen(false);
   };
 
@@ -108,10 +124,13 @@ const MapPage = () => {
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
             suffixIcon={<img src={location_red} alt="location" />}
-            options={siteLocationList.map((site) => ({
-              value: site.id,
-              label: site.name,
-            }))}
+            options={[
+              { value: "all", label: "View All Sites" },
+              ...siteLocationList.map((site) => ({
+                value: site.id,
+                label: site.name,
+              }))
+            ]}
             onSelect={handleSelectSite}
           />
         </div>
@@ -148,7 +167,7 @@ const MapPage = () => {
             onClick={handleViewStories}
             className={styles["primary-modal-button"]}
           >
-            View Stories
+            {storycount === 0 ? "Contribute 1st Story" : `View ${storycount} Stories`}
           </Button>,
           <Button
             key="direct"
@@ -160,7 +179,7 @@ const MapPage = () => {
           </Button>,
         ]}
       >
-        <p>Latitude: {selectedSite?.lat}</p>
+        <p>{selectedSite?.intro}</p>
       </Modal>
       <div onClick={handleLocateUser}>
         <img

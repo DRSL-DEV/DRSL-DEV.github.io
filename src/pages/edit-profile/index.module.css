@@ -1,6 +1,10 @@
 .short-input-container {
   display: flex;
-  gap: 35px;
+  gap: 30px;
+}
+
+.profile-images-input h3 {
+  padding-bottom: 5%;
 }
 
 .long-input {
@@ -11,7 +15,7 @@
 .profile-images-input {
   display: flex;
   margin: 3% 0;
-  gap: 20%;
+  gap: 13%;
 }
 
 .profile-image-left {
@@ -63,4 +67,119 @@
 
 .change-password {
   color: #1677ff;
+}
+
+.profile-upload
+  :global(
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper
+      .ant-upload.ant-upload-select
+  ) {
+  border-radius: 50% !important;
+}
+
+.profile-upload
+  :global(
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper
+      .ant-upload-list.ant-upload-list-picture-card
+      .ant-upload-list-item
+  ) {
+  border-radius: 50% !important;
+}
+
+.profile-upload
+  :global(
+    .ant-modal-root
+      .ant-modal
+      .ant-modal
+      .ant-modal-content
+      .ant-modal
+      .ant-modal-body
+      .reactEasyCrop_Container
+      .reactEasyCrop_CropArea
+  ) {
+  border-radius: 50% !important;
+}
+
+.profile-upload
+  :global(
+    .ant-modal
+      .ant-modal-root
+      .ant-modal-wrap
+      .ant-upload-wrapper.ant-upload-picture-card-wrapper
+      .ant-upload-list.ant-upload-list-picture-card
+      .ant-upload-list-item-thumbnail
+  ) {
+  border-radius: 50%;
+}
+
+.banner-upload
+  :global(
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper
+      .ant-upload.ant-upload-select
+  ) {
+  min-width: 160px !important;
+}
+
+.banner-upload
+  :global(
+    .ant-upload-wrapper.ant-upload-picture-card-wrapper
+      .ant-upload-list.ant-upload-list-picture-card
+      .ant-upload-list-item
+  ) {
+  min-width: 160px !important;
+}
+
+.banner-upload
+  :global(
+    .ant-modal-root
+      .ant-modal
+      .ant-modal
+      .ant-modal-content
+      .ant-modal
+      .ant-modal-body
+      .reactEasyCrop_Container
+      .reactEasyCrop_CropArea
+  ) {
+  min-width: 160px !important;
+}
+
+.banner-upload
+  :global(
+    .ant-modal
+      .ant-modal-root
+      .ant-modal-wrap
+      .ant-upload-wrapper.ant-upload-picture-card-wrapper
+      .ant-upload-list.ant-upload-list-picture-card
+      .ant-upload-list-item-thumbnail
+  ) {
+  min-width: 160px !important;
+}
+
+.banner-upload :global(.ant-upload-list-item-container) {
+  width: 100% !important;
+}
+
+.action-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 16px 0;
+  gap: 16px;
+}
+
+.primary-modal-button :global(.ant-btn-link) {
+  background-color: #f6dfa4;
+  font-family: var(--font-family-heading);
+  font-size: 10px;
+  border-radius: 50%;
+}
+
+.primary-modal-button {
+  background-color: #f6dfa4;
+  font-family: var(--font-family-heading);
+  margin: 4px 0;
+}
+
+.delete-account-btn :global(.ant-modal .ant-modal-footer) {
+  text-align: center !important;
 }

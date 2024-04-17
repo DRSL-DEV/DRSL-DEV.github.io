@@ -6,15 +6,21 @@
   left: 5%;
 }
 
-.story-icons{
+.story-icons {
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: flex-start;
+  margin: 16px 16px 0;
+  gap: 16px;
 }
 
 .share-icon {
-  margin: 16px 5% 1% 5%;
   float: right;
+}
+
+.admin-comments-icon {
+  float: right;
+  margin-right: 4%;
 }
 
 .carousel img,
@@ -34,4 +40,30 @@
 
 .story-image-gallery {
   width: 100%;
+}
+
+.rejection-info-container,
+.rejection-action-section {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8%;
+  gap: 16px;
+}
+
+.rejection-action-section {
+  margin: 16px 0;
+  padding: 0;
+  gap: 8px;
+  align-items: center;
+}
+
+.rejection-action-section h5 {
+  color: var(--primary-warning-color-red);
+}
+
+.edit-section,
+.delete-action {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
 }

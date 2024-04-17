@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import { useEffect, useState } from "react";
+import * as React from "react";
 import { Form, Input, Upload, Select, message } from "antd";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
@@ -7,70 +8,17 @@ import upload_icon from "../../assets/icons/upload_icon.svg";
 import location_red from "../../assets/icons/location_red.svg";
 import tag_blue from "../../assets/icons/tag_blue.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewStory } from "../../data/features/storyListSlice";
-import { uploadFile } from "../../data/features/fileUploadSlice";
+import { addOrUpdateStory } from "../../data/features/storyListSlice";
+import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
-import { ReactMic } from "react-mic";
+import AudioReactRecorder, { RecordState } from "../../components/ReactAudio";
 
 const CreateStory = () => {
+  const location = useLocation();
+  const { selectedPost } = location.state || {};
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState([]);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordedBlob, setRecordedBlob] = useState(null);
-  const [audioFile, setAudioFile] = useState(null); // For storing and testing the recorded audio File object
-
-  const startRecording = () => {
-    setIsRecording(true);
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-  };
-
-  // Function to save the recorded audio
-  const onData = (recordedBlob) => {
-    // No action is required; called continuously when audio data is being recorded
-  };
-
-  const removeAudio = () => {
-    setRecordedBlob(null);
-    setAudioFile(null);
-    setFileList((prevFileList) =>
-      prevFileList.filter((file) => file.uid !== "audio-file")
-    );
-  };
-
-  // Finish record and store the audio file
-  const onStop = (recordedBlob) => {
-    setRecordedBlob(recordedBlob);
-    setAudioFile(
-      new File([recordedBlob.blob], "voice-recording.wav", {
-        type: recordedBlob.blob.type,
-      })
-    );
-    // const mimeType = recordedBlob.blob.type || 'audio/wav';
-
-    setFileList((prevFileList) => {
-      // Remove the previous audio if it exists
-      const updatedFileList = prevFileList.filter(
-        (file) => file.uid !== "audio-file"
-      );
-
-      // Create a representation for the fileList
-      const audioFileObject = {
-        uid: "audio-file", // identifier for the recorded file - removed if recording again
-        name: "voice-recording.wav",
-        status: "done",
-        originFileObj: recordedBlob.blob, // The file object itself
-        type: String(recordedBlob.blob.type),
-      };
-
-      return [...updatedFileList, audioFileObject];
-    });
-  };
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userInfo.user);
@@ -79,23 +27,160 @@ const CreateStory = () => {
     if (!user) {
       navigate("/login");
     }
-  }, [navigate, user]);
+    if (location.state?.site) {
+      form.setFieldsValue({
+        site: location.state.site.id,
+      });
+    }
+  }, [navigate, user, form, location.state]);
 
   const filterOption = (input, option) =>
     option?.label.toLowerCase().includes(input.toLowerCase());
 
-  const fileUploadProps = {
-    beforeUpload: (file) => {
-      if (allowedFileTypes.includes(file.type)) {
-      } else {
+  const [fileList, setFileList] = useState(
+    selectedPost?.media.map((media, index) => ({
+      uid: `${selectedPost.title}-media${index}`,
+      name: ``,
+      uploaded: true,
+      url: media,
+    })) || []
+  );
+
+  const [recordState, setrecordState] = useState(null); //second record state
+  const [audioData, setaudioData] = useState(null); //second audio data
+
+  const start = () => {
+    setrecordState(RecordState.START);
+  };
+
+  const stop = () => {
+    setrecordState(RecordState.STOP);
+  };
+
+  const onStopSecond = (data) => {
+    console.log("New audioData", data); //only work with data
+    setaudioData(data);
+    if (!data || !data.blob) {
+      console.error("onStop received an invalid audio:", data);
+      return;
+    }
+
+    //prepare audio element
+    const audioUrl = URL.createObjectURL(data.blob);
+    const audioElement = new Audio(audioUrl);
+
+    //add to filelist
+    audioElement.onloadedmetadata = () => {
+      const duration = (data.stopTime - data.startTime) / 1000;
+      if (duration > 180) {
         message.error({
-          content: "You can only upload image, video, or audio files!",
+          content: "Audio length cannot exceed 3 minutes.",
           duration: 2,
         });
-        return Upload.LIST_IGNORE;
+        setaudioData(null);
+      } else {
+        setaudioData(data);
+
+        setFileList((prevFileList) => {
+          // Remove the previous audio if it exists
+          const updatedFileList = prevFileList.filter(
+            (file) => file.uid !== "audio-file"
+          );
+
+          // Create a representation for the fileList
+          const audioFileObject = {
+            uid: "audio-file", // identifier for the recorded file - removed if recording again
+            name: "voice-recording.wav",
+            status: "done",
+            originFileObj: data.blob, // The file object itself
+            type: String(data.blob.type),
+          };
+          console.log("audioFileObject type:", audioFileObject.type); //audio/webm;codecs=opus
+          console.log("audioFileObject mimetype:", audioFileObject.mimetype); //undefined
+
+          return [...updatedFileList, audioFileObject];
+        });
       }
-      return false;
-    },
+      URL.revokeObjectURL(audioUrl);
+    };
+  };
+
+  const removeAudioSecond = () => {
+    setaudioData(null);
+    setFileList((prevFileList) =>
+      prevFileList.filter((file) => file.uid !== "audio-file")
+    );
+  };
+
+  const beforeUpload = (file) => {
+    if (!allowedFileTypes.includes(file.type)) {
+      message.error({
+        content: "You can only upload image, video, or audio files!",
+        duration: 2,
+      });
+      return Upload.LIST_IGNORE;
+    }
+    const isVideo = file.type.startsWith("video/");
+    const isAudio = file.type.startsWith("audio/");
+    const isImage = file.type.startsWith("image/");
+
+    if (isVideo || isAudio) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const mediaElement = document.createElement(
+          isVideo ? "video" : "audio"
+        );
+        mediaElement.addEventListener("loadedmetadata", () => {
+          const duration = mediaElement.duration;
+
+          if (isVideo && duration > 30) {
+            message.error({
+              content: "Video length cannot exceed 30 seconds.",
+              duration: 2,
+            });
+            reject();
+          } else if (isAudio && duration > 180) {
+            message.error({
+              content: "Audio length cannot exceed 3 minutes.",
+              duration: 2,
+            });
+            reject();
+          } else {
+            resolve();
+          }
+
+          URL.revokeObjectURL(url);
+        });
+
+        mediaElement.addEventListener("error", () => {
+          message.error({
+            content: "Failed to load video/audio metadata.",
+            duration: 2,
+          });
+          reject();
+        });
+
+        mediaElement.src = url;
+      })
+        .then(() => false)
+        .catch(() => Upload.LIST_IGNORE);
+    }
+
+    const imageSizeLimit = 2 * 1024 * 1024;
+
+    if (isImage && file.size > imageSizeLimit) {
+      message.error({
+        content: "Image must be smaller than 2MB!",
+        duration: 2,
+      });
+      return Upload.LIST_IGNORE;
+    }
+
+    return false;
+  };
+
+  const fileUploadProps = {
+    beforeUpload: beforeUpload,
     onChange: (info) => {
       setFileList(info.fileList);
       // Log details if the file is successfully read
@@ -114,21 +199,38 @@ const CreateStory = () => {
   };
 
   const handleSubmission = async (values) => {
-    const uploadPromises = fileList.map((fileInfo) =>
-      dispatch(
-        uploadFile({
-          fileName: fileInfo.name,
-          file: fileInfo.originFileObj,
-          folderPath: `post/${fileInfo.type.split("/")[0]}`,
-        })
-      ).unwrap()
-    );
+    const uploadPromises = fileList
+      .filter((file) => !file.uploaded)
+      .map((fileInfo) =>
+        dispatch(
+          uploadFile({
+            fileName: fileInfo.name,
+            file: fileInfo.originFileObj,
+            folderPath: `post/${fileInfo.type.split("/")[0]}`,
+          })
+        ).unwrap()
+      );
+
+    const fileUrlList = fileList
+      .filter((file) => file.uploaded)
+      .map((file) => file.url);
+
+    const deletePromises =
+      selectedPost?.media
+        .filter((mediaUrl) => !fileUrlList.includes(mediaUrl))
+        .map((mediaUrl) => dispatch(deleteFile(mediaUrl)).unwrap()) || [];
 
     try {
-      const fileURLs = await Promise.all(uploadPromises);
+      const fileURLs = [
+        ...fileList.filter((file) => file.uploaded).map((file) => file.url),
+        ...(await Promise.all(uploadPromises)),
+      ];
+
+      await Promise.all(deletePromises);
 
       dispatch(
-        addNewStory({
+        addOrUpdateStory({
+          id: selectedPost?.id || null,
           userId: user.uid,
           title: values.title,
           content: values.content,
@@ -160,13 +262,21 @@ const CreateStory = () => {
 
   return (
     <div className="page-container">
-      <PageHeader title="Create Story" />
+      <PageHeader title="Contribute Your Story" />
       <Form
         form={form}
         name="create_story"
         onFinish={handleSubmission}
         layout="vertical"
         className={styles["create-story-form"]}
+        initialValues={{
+          title: selectedPost?.title || "",
+          content: selectedPost?.content || "",
+          site: selectedPost?.site || "",
+          tags: selectedPost?.tags || [],
+          media: selectedPost?.media || [],
+          postType: selectedPost?.postType || "",
+        }}
       >
         <div className="form-fields">
           <Form.Item
@@ -252,54 +362,60 @@ const CreateStory = () => {
         </div>
 
         <div className={styles["audio-container"]}>
-          {/* ReactMic component to display for record audio */}
-          <ReactMic
-            record={isRecording}
-            className="sound-wave"
-            onStop={onStop}
-            onData={onData}
-            strokeColor="#000000"
+          {/* //second audio recorder */}
+          <AudioReactRecorder
+            state={recordState}
+            onStop={onStopSecond}
             backgroundColor="#cae8fa"
-            styles={{ width: "100%", height: "20%" }}
+            canvasWidth={500}
+            canvasHeight={50}
           />
 
-          <div className={styles["audio-recording-buttons"]}>
-            <Button
-              text="Start Recording"
-              handleOnClick={startRecording}
-              disabled={isRecording}
-              customStyles={{
-                backgroundColor: isRecording
-                  ? "#ccc"
-                  : "rgba(146, 187, 95, 0.75)",
-              }}
-            />
-
-            <Button
-              text="Stop Recording"
-              handleOnClick={stopRecording}
-              disabled={!isRecording}
-              customStyles={{
-                backgroundColor: isRecording
-                  ? "var(--secondary-color-light-blue)"
-                  : "#ccc",
-              }}
-            />
-          </div>
-
-          {recordedBlob && (
+          {audioData && (
             <>
-              <audio src={recordedBlob.blobURL} controls />
+              <audio
+                id="recorded audio"
+                src={audioData ? audioData.url : null}
+                controls
+              />
               <Button
                 text="Remove Audio"
-                handleOnClick={removeAudio}
+                handleOnClick={removeAudioSecond}
                 customStyles={{
                   backgroundColor: "rgba(255, 156, 150, 0.75)",
                 }}
               />
             </>
           )}
+          <div className={styles["audio-recording-buttons"]}>
+            <Button
+              text={audioData ? "Record Again" : "Record Audio"}
+              handleOnClick={start}
+              disabled={recordState === RecordState.START}
+              customStyles={{
+                backgroundColor:
+                  recordState === RecordState.START
+                    ? "#ccc"
+                    : "rgba(146, 187, 95, 0.75)",
+              }}
+            />
+
+            {recordState === RecordState.START && (
+              <Button
+                text="Stop Recording"
+                handleOnClick={stop}
+                disabled={recordState === RecordState.STOP}
+                customStyles={{
+                  backgroundColor:
+                    recordState === RecordState.START
+                      ? "var(--secondary-color-light-blue)"
+                      : "#ccc",
+                }}
+              />
+            )}
+          </div>
         </div>
+
         <br />
         <Form.Item>
           <Button
