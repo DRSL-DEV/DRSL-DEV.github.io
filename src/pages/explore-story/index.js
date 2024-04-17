@@ -134,7 +134,7 @@ const ExploreStory = () => {
                 </p>
                 <a
                   href="/story"
-                  onClick={() => navigate("/story")}
+                  onClick={() => navigate("/explore-story")}
                   className={styles["carousel-link"]}
                 >
                   Learn More
