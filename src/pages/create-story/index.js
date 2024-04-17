@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
 import { useEffect, useState } from "react";
-import * as React from 'react';
+import * as React from "react";
 import { Form, Input, Upload, Select, message } from "antd";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
@@ -13,8 +13,7 @@ import { uploadFile, deleteFile } from "../../data/features/fileUploadSlice";
 import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
-import AudioReactRecorder, { RecordState } from "../../components/ReactAudio"
-
+import AudioReactRecorder, { RecordState } from "../../components/ReactAudio";
 
 const CreateStory = () => {
   const location = useLocation();
@@ -23,7 +22,7 @@ const CreateStory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userInfo.user);
-  
+
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -37,7 +36,7 @@ const CreateStory = () => {
 
   const filterOption = (input, option) =>
     option?.label.toLowerCase().includes(input.toLowerCase());
-  
+
   const [fileList, setFileList] = useState(
     selectedPost?.media.map((media, index) => ({
       uid: `${selectedPost.title}-media${index}`,
@@ -46,23 +45,23 @@ const CreateStory = () => {
       url: media,
     })) || []
   );
-  
+
   const [recordState, setrecordState] = useState(null); //second record state
   const [audioData, setaudioData] = useState(null); //second audio data
 
-  const start = () => { 
+  const start = () => {
     setrecordState(RecordState.START);
-  }
+  };
 
-  const stop = () => { 
+  const stop = () => {
     setrecordState(RecordState.STOP);
-  }
+  };
 
   const onStopSecond = (data) => {
-    console.log('New audioData', data);//only work with data
+    console.log("New audioData", data); //only work with data
     setaudioData(data);
     if (!data || !data.blob) {
-      console.error('onStop received an invalid audio:', data);
+      console.error("onStop received an invalid audio:", data);
       return;
     }
 
@@ -96,15 +95,15 @@ const CreateStory = () => {
             originFileObj: data.blob, // The file object itself
             type: String(data.blob.type),
           };
-          console.log('audioFileObject type:', audioFileObject.type); //audio/webm;codecs=opus
-          console.log('audioFileObject mimetype:', audioFileObject.mimetype); //undefined  
+          console.log("audioFileObject type:", audioFileObject.type); //audio/webm;codecs=opus
+          console.log("audioFileObject mimetype:", audioFileObject.mimetype); //undefined
 
           return [...updatedFileList, audioFileObject];
         });
       }
       URL.revokeObjectURL(audioUrl);
-    }
-  }
+    };
+  };
 
   const removeAudioSecond = () => {
     setaudioData(null);
@@ -212,15 +211,13 @@ const CreateStory = () => {
         ).unwrap()
       );
 
+    const fileUrlList = fileList
+      .filter((file) => file.uploaded)
+      .map((file) => file.url);
+
     const deletePromises =
       selectedPost?.media
-        .filter(
-          (mediaUrl) =>
-            !fileList
-              .filter((file) => file.uploaded)
-              .map((file) => file.url)
-              .includes(mediaUrl)
-        )
+        .filter((mediaUrl) => !fileUrlList.includes(mediaUrl))
         .map((mediaUrl) => dispatch(deleteFile(mediaUrl)).unwrap()) || [];
 
     try {
@@ -366,19 +363,21 @@ const CreateStory = () => {
 
         <div className={styles["audio-container"]}>
           {/* //second audio recorder */}
-          <AudioReactRecorder 
-            state={recordState} 
-            onStop={onStopSecond} 
+          <AudioReactRecorder
+            state={recordState}
+            onStop={onStopSecond}
             backgroundColor="#cae8fa"
             canvasWidth={500}
             canvasHeight={50}
           />
 
-          {audioData && (<>
-              <audio 
+          {audioData && (
+            <>
+              <audio
                 id="recorded audio"
                 src={audioData ? audioData.url : null}
-                controls />
+                controls
+              />
               <Button
                 text="Remove Audio"
                 handleOnClick={removeAudioSecond}
@@ -386,28 +385,34 @@ const CreateStory = () => {
                   backgroundColor: "rgba(255, 156, 150, 0.75)",
                 }}
               />
-            </>)}
+            </>
+          )}
           <div className={styles["audio-recording-buttons"]}>
-            <Button 
-              text= {audioData ? "Record Again" : "Record Audio"}
+            <Button
+              text={audioData ? "Record Again" : "Record Audio"}
               handleOnClick={start}
               disabled={recordState === RecordState.START}
-                customStyles={{
-                  backgroundColor: recordState === RecordState.START
+              customStyles={{
+                backgroundColor:
+                  recordState === RecordState.START
                     ? "#ccc"
                     : "rgba(146, 187, 95, 0.75)",
-                }} /> 
-            
-            {recordState === RecordState.START && (<Button 
-              text="Stop Recording"
-              handleOnClick={stop} 
-              disabled={recordState === RecordState.STOP}
+              }}
+            />
+
+            {recordState === RecordState.START && (
+              <Button
+                text="Stop Recording"
+                handleOnClick={stop}
+                disabled={recordState === RecordState.STOP}
                 customStyles={{
-                  backgroundColor: recordState === RecordState.START
-                    ? "var(--secondary-color-light-blue)"
-                    : "#ccc",
-                }} />)}
-            
+                  backgroundColor:
+                    recordState === RecordState.START
+                      ? "var(--secondary-color-light-blue)"
+                      : "#ccc",
+                }}
+              />
+            )}
           </div>
         </div>
 
