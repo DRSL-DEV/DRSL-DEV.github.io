@@ -10,8 +10,9 @@ import {
   collection,
   where,
   arrayRemove,
+  deleteDoc,
 } from "firebase/firestore";
-import { getAuth, signOut } from "firebase/auth";
+import { deleteUser, getAuth, signOut } from "firebase/auth";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("userInfo")) || null,
@@ -107,13 +108,32 @@ export const removeFromBookmarks = createAsyncThunk(
       );
 
       await Promise.all(updatePromises);
-
       return bookmarkToRemove;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
+export const deletUser = createAsyncThunk("userInfo/deleteUser", async () => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user.uid;
+
+    deleteUser(user)
+      .then(async () => {
+        const userRef = doc(db, "user", userId);
+        await deleteDoc(userRef);
+        console.log("User deleted successfully");
+      })
+      .catch((error) => {
+        console.log("Error deleting user:", error);
+      });
+  } catch (error) {
+    console.log("Error deleting user:", error);
+  }
+});
 
 const userInfoSlice = createSlice({
   name: "userInfo",
@@ -159,13 +179,25 @@ const userInfoSlice = createSlice({
         state.status = "removing from bookmarks";
       })
       .addCase(removeFromBookmarks.fulfilled, (state, action) => {
-        state.user.bookmarks = state.user.bookmarks.filter(
+        state.user.bookmarks = state.user.bookmarks?.filter(
           (bookmark) => bookmark !== action.payload
         );
         state.status = "removed from bookmarks";
       })
       .addCase(removeFromBookmarks.rejected, (state, action) => {
         state.status = "failed to remove from bookmarks";
+        state.error = action.error.message;
+      })
+      .addCase(deletUser.pending, (state) => {
+        state.status = "deleting user";
+      })
+      .addCase(deletUser.fulfilled, (state) => {
+        state.user = null;
+        localStorage.removeItem("userInfo");
+        state.status = "deleted user";
+      })
+      .addCase(deletUser.rejected, (state, action) => {
+        state.status = "failed to delete user";
         state.error = action.error.message;
       });
   },

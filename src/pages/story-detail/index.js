@@ -54,6 +54,7 @@ const StoryDetailPage = () => {
     try {
       await Promise.all(deleteMediaPromises);
       dispatch(deletePostById(postId));
+
       dispatch(removeFromBookmarks(postId));
 
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -61,9 +62,9 @@ const StoryDetailPage = () => {
         "userInfo",
         JSON.stringify({
           ...userInfo,
-          bookmarks: userInfo.bookmarks.filter(
-            (bookmark) => bookmark !== postId
-          ),
+          bookmarks:
+            userInfo.bookmarks?.filter((bookmark) => bookmark !== postId) ||
+            null,
         })
       );
       message.success({
@@ -132,7 +133,7 @@ const StoryDetailPage = () => {
         {selectedPost && (
           <Carousel className={styles.carousel} autoplay>
             {/* TODO: Modify function to distinguish between video and image */}
-            {selectedPost.media.map((mediaUrl, index) => (
+            {selectedPost.media?.map((mediaUrl, index) => (
               <div key={index}>
                 {mediaUrl.includes("video") ? (
                   <video controls>

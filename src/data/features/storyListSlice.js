@@ -183,17 +183,17 @@ export const fetchPostCountBySite = createAsyncThunk(
       const partnerQuery = query(
         collection(db, "post"),
         where("site", "==", siteId),
-        where("postType", "==", "partner"),
+        where("postType", "==", "partner")
       );
       const [approvedSnapshot, partnerSnapshot] = await Promise.all([
         getDocs(approvedQuery),
         getDocs(partnerQuery),
       ]);
       const uniqueDocIds = new Set();
-      approvedSnapshot.forEach(doc => {
+      approvedSnapshot.forEach((doc) => {
         uniqueDocIds.add(doc.id);
       });
-      partnerSnapshot.forEach(doc => {
+      partnerSnapshot.forEach((doc) => {
         if (!uniqueDocIds.has(doc.id)) {
           uniqueDocIds.add(doc.id);
         }
@@ -267,6 +267,30 @@ export const deletePostById = createAsyncThunk(
       const postRef = doc(db, "post", postId);
       await deleteDoc(postRef);
       return postId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+//Delete stories by author id
+export const deletePostsByAuthorId = createAsyncThunk(
+  "posts/deletePostsByAuthorId",
+  async (authorId, { rejectWithValue }) => {
+    try {
+      const postsQuery = query(
+        collection(db, "post"),
+        where("userId", "==", authorId)
+      );
+      const snapshot = await getDocs(postsQuery);
+
+      const postDeletionPromises = snapshot.docs.map(async (doc) => {
+        await deleteDoc(doc.ref);
+        return doc.id;
+      });
+
+      await Promise.all(postDeletionPromises);
+      return snapshot.docs.map((doc) => doc.id);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -385,6 +409,12 @@ export const storyListSlice = createSlice({
         const { siteId, count } = action.payload;
         state.storyCountsBySite[siteId] = count;
       })
+      .addCase(deletePostsByAuthorId.fulfilled, (state, action) => {
+        // Handle successful deletion if needed
+      })
+      .addCase(deletePostsByAuthorId.rejected, (state, action) => {
+        // Handle rejection/error if needed
+      });
   },
 });
 
