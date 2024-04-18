@@ -105,7 +105,7 @@ const LoginPage = () => {
   return (
     <div className="page-container">
       <section className={styles["login-header-section"]}>
-        <PageHeader title="Login" />
+        <PageHeader title="Login" navDisable />
         <p className={styles["page-description"]}>
           Login or Sign up to continue.
         </p>
