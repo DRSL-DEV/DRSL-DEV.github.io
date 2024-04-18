@@ -43,13 +43,13 @@
 }
 
 .customized-card-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   flex-grow: 1;
   padding-right: 16px;
   padding-bottom: 6px;
-  position: relative;
 }
 
 .customized-card-content h2 {

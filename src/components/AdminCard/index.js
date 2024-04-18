@@ -23,22 +23,21 @@ const AdminCard = ({ storyInfo }) => {
       <div className={styles["customized-card-content"]}>
         <h2>{title}</h2>
         <p>{content}</p>
-        <div className={styles["customized-card-footer"]}>
-          <div>{user}</div>
-          <button
-            onClick={() =>
-              navigate(
-                `/admin-page/admin-story-detail/${title
-                  .toLowerCase()
-                  .replace(/ /g, "-")
-                  .replace(/[^\w-]+/g, "")}`,
-                { state: { storyInfo } }
-              )
-            }
-          >
-            <img src={arrow_right} alt="right arrow" />
-          </button>
-        </div>
+      </div>
+      <div className={styles["customized-card-footer"]}>
+        <button
+          onClick={() =>
+            navigate(
+              `/admin-page/admin-story-detail/${title
+                .toLowerCase()
+                .replace(/ /g, "-")
+                .replace(/[^\w-]+/g, "")}`,
+              { state: { storyInfo } }
+            )
+          }
+        >
+          <img src={arrow_right} alt="right arrow" />
+        </button>
       </div>
     </div>
   );
