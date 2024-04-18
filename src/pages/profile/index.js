@@ -111,25 +111,27 @@ export const ProfilePage = () => {
                 })}
             </div>
           </TabPane>
-          <TabPane
-            tab={<span className={styles["tab-title"]}>Bookmarked</span>}
-            key="2"
-          >
-            <div className={styles["card-container"]}>
-              {!!bookMarkedPostList.length &&
-                bookMarkedPostList.map((post, index) => (
-                  <Card
-                    key={index}
-                    title={post.title}
-                    content={post.content}
-                    postId={post.id}
-                    author={post.userId}
-                    type={post.postType}
-                    imgSrc={post.media}
-                  />
-                ))}
-            </div>
-          </TabPane>
+          {currentUser?.uid === userId && (
+            <TabPane
+              tab={<span className={styles["tab-title"]}>Bookmarked</span>}
+              key="2"
+            >
+              <div className={styles["card-container"]}>
+                {!!bookMarkedPostList.length &&
+                  bookMarkedPostList.map((post, index) => (
+                    <Card
+                      key={index}
+                      title={post.title}
+                      content={post.content}
+                      postId={post.id}
+                      author={post.userId}
+                      type={post.postType}
+                      imgSrc={post.media}
+                    />
+                  ))}
+              </div>
+            </TabPane>
+          )}
         </Tabs>
       </div>
     </div>
