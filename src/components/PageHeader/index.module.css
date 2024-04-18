@@ -11,3 +11,8 @@
   position: absolute;
   left: 0;
 }
+
+.page-header h1 {
+  width: 85%;
+  text-align: center;
+}
