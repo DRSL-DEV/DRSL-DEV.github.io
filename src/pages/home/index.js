@@ -63,7 +63,7 @@ const HomePage = () => {
                   Reflective Perspectives from Detroit Natives
                 </p>
                 <p
-                  onClick={() => navigate("/site-page")}
+                  onClick={() => navigate("/explore-site")}
                   className={styles["carousel-link"]}
                 >
                   Learn More
