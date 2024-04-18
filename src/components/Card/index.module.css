@@ -1,5 +1,6 @@
 .customized-card {
   display: flex;
+  position: relative;
   border-radius: 10px;
   margin-bottom: 5%;
   margin-top: 5%;
@@ -76,6 +77,7 @@
   -webkit-box-orient: vertical;
   width: 100%;
   white-space: normal;
+  line-height: normal;
 }
 
 .customized-card-footer > div {
@@ -89,10 +91,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
   position: absolute;
-  bottom: -4px;
-  right: -12px;
+  bottom: 4px;
+  right: 16px;
+  gap: 8px;
 }
 
 .customized-card-footer > div,
@@ -101,7 +103,6 @@
 }
 
 .customized-card-footer button {
-  margin-right: 20px;
   height: 16px;
   display: flex;
   justify-content: center;

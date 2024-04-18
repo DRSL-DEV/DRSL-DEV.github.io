@@ -15,25 +15,25 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
             .replace(/ /g, "-")
             .replace(/[^\w-]+/g, "")}`}
         >
-        <div className={`${styles["customized-card"]} ${styles[type]}`}>
-          <div className={styles["customized-card-image"]}>
-            <img
-              src={hasError ? defaultImg : imgSrc}
-              alt=""
-              onError={() => setHasError(true)}
-            />
-          </div>
-          <div className={styles["customized-card-content"]}>
-            <h2>{title}</h2>
-            <p>{content}</p>
-            <div className={styles["customized-card-footer"]}>
-              <div>{userId}</div>
-              <button>
-                <img src={arrow_right} alt="right arrow" />
-              </button>
+          <div className={`${styles["customized-card"]} ${styles[type]}`}>
+            <div className={styles["customized-card-image"]}>
+              <img
+                src={hasError ? defaultImg : imgSrc}
+                alt=""
+                onError={() => setHasError(true)}
+              />
+            </div>
+            <div className={styles["customized-card-content"]}>
+              <h2>{title}</h2>
+              <p>{content}</p>
+              <div className={styles["customized-card-footer"]}>
+                <div>{userId}</div>
+                <button>
+                  <img src={arrow_right} alt="right arrow" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </Link>
       ) : (
         <Link
@@ -55,19 +55,16 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
             <div className={styles["customized-card-content"]}>
               <h2>{title}</h2>
               <p>{content}</p>
-              <div className={styles["customized-card-footer"]}>
-                <div>{userId}</div>
-                {status ? (
-                  <span
-                    className={`${styles["story-status"]} ${styles[status]}`}
-                  >
-                    {status.toUpperCase()}
-                  </span>
-                ) : null}
-                <button>
-                  <img src={arrow_right} alt="right arrow" />
-                </button>
-              </div>
+            </div>
+            <div className={styles["customized-card-footer"]}>
+              {status ? (
+                <span className={`${styles["story-status"]} ${styles[status]}`}>
+                  {status.toUpperCase()}
+                </span>
+              ) : null}
+              <button>
+                <img src={arrow_right} alt="right arrow" />
+              </button>
             </div>
           </div>
         </Link>
