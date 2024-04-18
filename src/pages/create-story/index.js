@@ -26,7 +26,7 @@ const CreateStory = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      navigate("/login", { replace: true });
     }
     if (location.state?.site) {
       form.setFieldsValue({
