@@ -8,7 +8,7 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
   const [hasError, setHasError] = useState(false);
   return (
     <>
-      {type === "lab-story" ? (
+      {type === "partner" ? (
         <Link
           to={`/story/${postId}/${title
             ?.toLowerCase()

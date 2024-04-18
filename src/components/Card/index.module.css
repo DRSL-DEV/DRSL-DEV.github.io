@@ -31,8 +31,8 @@
   background: var(--secondary-color-sky-blue-translucent);
 }
 
-.customized-card.lab-story,
-.customized-card.lab {
+.customized-card.partner-story,
+.customized-card.partner {
   background: var(--secondary-color-dark-green-translucent);
 }
 
@@ -119,6 +119,7 @@
   padding: 2px 8px;
   border-radius: 10px;
   height: fit-content;
+  font-weight: 500;
 }
 .story-status.approved {
   background-color: var(--secondary-color-light-green);

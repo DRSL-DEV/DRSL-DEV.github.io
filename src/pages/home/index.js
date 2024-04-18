@@ -78,7 +78,7 @@ const HomePage = () => {
                 title={latestPartnerPost.title}
                 content={latestPartnerPost.content}
                 author={latestPartnerPost.userId}
-                type="lab-story"
+                type={latestPartnerPost.postType}
                 imgSrc={latestPartnerPost.media[0]}
               />
             )}
@@ -95,7 +95,7 @@ const HomePage = () => {
                   title={story.title}
                   content={story.content}
                   author={story.userId}
-                  type="user-story"
+                  type={story.postType}
                   imgSrc={story.media[0]}
                 />
               ))}
