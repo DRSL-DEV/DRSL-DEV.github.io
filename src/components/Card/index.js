@@ -26,12 +26,11 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
             <div className={styles["customized-card-content"]}>
               <h2>{title}</h2>
               <p>{content}</p>
-              <div className={styles["customized-card-footer"]}>
-                <div>{userId}</div>
-                <button>
-                  <img src={arrow_right} alt="right arrow" />
-                </button>
-              </div>
+            </div>
+            <div className={styles["customized-card-footer"]}>
+              <button>
+                <img src={arrow_right} alt="right arrow" />
+              </button>
             </div>
           </div>
         </Link>
