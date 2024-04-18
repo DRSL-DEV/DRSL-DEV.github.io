@@ -61,7 +61,7 @@ export const ProfilePage = () => {
         profileName={profileName}
         bio={userBio}
         topics={interestedTopics}
-        editable={currentUser.uid === userId}
+        editable={currentUser?.uid === userId}
       />
 
       <div className={styles["profile-tab-container"]}>
@@ -81,7 +81,7 @@ export const ProfilePage = () => {
             }
             key="1"
           >
-            {currentUser.uid === userId && (
+            {currentUser?.uid === userId && (
               <Link to="/create-story">
                 <img
                   className={styles["add-post-card"]}

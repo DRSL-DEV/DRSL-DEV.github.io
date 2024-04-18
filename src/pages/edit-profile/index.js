@@ -106,11 +106,11 @@ const EditProfilePage = () => {
           newProfileImg !== prevProfileImg
         ) {
           dispatch(deleteFile(prevProfileImg));
-          newProfileImg = null;
         }
       } else if (prevProfileImg) {
         // if user delete the current image, delete from firestore storage
         dispatch(deleteFile(prevProfileImg));
+        newProfileImg = null;
       }
 
       if (banner.length) {
@@ -128,10 +128,10 @@ const EditProfilePage = () => {
 
         if (prevBanner && newBanner && newBanner !== prevBanner) {
           dispatch(deleteFile(prevBanner));
-          newBanner = null;
         }
       } else if (prevBanner) {
         dispatch(deleteFile(prevBanner));
+        newBanner = null;
       }
 
       const userDetails = {
