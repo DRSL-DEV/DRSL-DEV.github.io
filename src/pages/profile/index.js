@@ -81,13 +81,15 @@ export const ProfilePage = () => {
             }
             key="1"
           >
-            <Link to="/create-story">
-              <img
-                className={styles["add-post-card"]}
-                src={add_post}
-                alt="add post"
-              />
-            </Link>
+            {currentUser.uid === userId && (
+              <Link to="/create-story">
+                <img
+                  className={styles["add-post-card"]}
+                  src={add_post}
+                  alt="add post"
+                />
+              </Link>
+            )}
             <div className={styles["card-container"]}>
               {!!postedStoryList.length &&
                 postedStoryList.map((post, index) => (

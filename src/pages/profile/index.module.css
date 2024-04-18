@@ -1,30 +1,33 @@
 .profile-page-container {
-    padding: 0;
+  padding: 0;
 }
 
 .Card {
   padding: 3% 5%;
 }
 
-.profile-tab-container{
+.profile-tab-container {
   border-top: solid;
   border-width: 0.001px;
   color: lightgray;
   margin-top: 5%;
 }
 
+.profile-tab-container :global(.ant-tabs-tab-btn) {
+  padding: 0 12px;
+}
+
 .profile-tab-container :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
   background-color: rgba(202, 232, 250, 1);
-  padding: 0 5px;
   border-radius: 100px;
   font-weight: 400;
 }
 
-.card-container{
+.card-container {
   margin: 0 5%;
 }
 
-.add-post-card{
+.add-post-card {
   margin: 2% 5% 0 5%;
   width: 90vw;
 }
