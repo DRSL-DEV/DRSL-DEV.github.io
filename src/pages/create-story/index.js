@@ -14,6 +14,7 @@ import { siteLocationList, tagList } from "../../constants/constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import { allowedFileTypes } from "../../constants/constants";
 import AudioReactRecorder, { RecordState } from "../../components/ReactAudio";
+import ImageCompression from "browser-image-compression";
 
 const CreateStory = () => {
   const location = useLocation();
@@ -58,7 +59,6 @@ const CreateStory = () => {
   };
 
   const onStopSecond = (data) => {
-    console.log("New audioData", data); //only work with data
     setaudioData(data);
     if (!data || !data.blob) {
       console.error("onStop received an invalid audio:", data);
@@ -95,8 +95,6 @@ const CreateStory = () => {
             originFileObj: data.blob, // The file object itself
             type: String(data.blob.type),
           };
-          console.log("audioFileObject type:", audioFileObject.type); //audio/webm;codecs=opus
-          console.log("audioFileObject mimetype:", audioFileObject.mimetype); //undefined
 
           return [...updatedFileList, audioFileObject];
         });
@@ -169,11 +167,20 @@ const CreateStory = () => {
     const imageSizeLimit = 2 * 1024 * 1024;
 
     if (isImage && file.size > imageSizeLimit) {
-      message.error({
-        content: "Image must be smaller than 2MB!",
-        duration: 2,
-      });
-      return Upload.LIST_IGNORE;
+      const options = {
+        maxSizeMB: 2,
+        useWebWorker: true,
+      };
+
+      return ImageCompression(file, options)
+        .then((compressedFile) => {
+          return compressedFile;
+        })
+        .catch((error) => {
+          console.error(error);
+          // message.error("Image compression failed.");
+          return Upload.LIST_IGNORE;
+        });
     }
 
     return false;
@@ -190,10 +197,10 @@ const CreateStory = () => {
           duration: 2,
         });
       } else if (info.file.status === "error") {
-        message.error({
-          content: `${info.file.name} file upload failed.`,
-          duration: 2,
-        });
+        // message.error({
+        //   content: `${info.file.name} file upload failed.`,
+        //   duration: 2,
+        // });
       }
     },
   };

@@ -17,6 +17,7 @@
     "antd": "^5.15.1",
     "antd-img-crop": "^4.21.0",
     "audio-react-recorder": "^1.0.5",
+    "browser-image-compression": "^2.0.2",
     "firebase": "^10.8.1",
     "google-auth-library": "^9.6.3",
     "react": "^18.2.0",
