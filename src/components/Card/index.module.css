@@ -64,7 +64,7 @@
 }
 
 .customized-card-content p {
-  padding-top: 4px;
+  padding: 4px 0;
   font-size: 12px;
   flex: 1;
   max-height: 50px;
