@@ -6,10 +6,10 @@ function Footer() {
   return (
     <footer className="footer">
       <div className={styles.links}>
-        <Link to="/about">About Us</Link>
-        <Link to="/partnerships">Partnerships</Link>
-        <Link to="/contact">Contact</Link>
-        <Link to="/privacy">Privacy Statement</Link>
+        <Link to="https://sites.lsa.umich.edu/detroit-river-story-lab/" target="_blank">About Us</Link>
+        <Link to="https://sites.lsa.umich.edu/detroit-river-story-lab/partners-2/organizational-partners/" target="_blank">Partnerships</Link>
+        <Link to="https://sites.lsa.umich.edu/detroit-river-story-lab/about/contact/" target="_blank">Contact</Link>
+        <Link to="https://drive.google.com/file/d/11sUXce2Jp89rdctj53oJdjNJKV7-2maS/view?usp=sharing" target="_blank">Privacy Statement</Link>
       </div>
       <div className={styles["bottom-info"]}>
         <img
