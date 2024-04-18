@@ -92,18 +92,23 @@ export const ProfilePage = () => {
             )}
             <div className={styles["card-container"]}>
               {!!postedStoryList.length &&
-                postedStoryList.map((post, index) => (
-                  <Card
-                    key={index}
-                    title={post.title}
-                    content={post.content}
-                    postId={post.id}
-                    author={post.userId}
-                    type={post.postType}
-                    imgSrc={post.media}
-                    status={post.status}
-                  />
-                ))}
+                postedStoryList.map((post, index) => {
+                  if (currentUser?.uid === userId || post.status === "approved")
+                    return (
+                      <Card
+                        key={index}
+                        title={post.title}
+                        content={post.content}
+                        postId={post.id}
+                        author={post.userId}
+                        type={post.postType}
+                        imgSrc={post.media}
+                        status={
+                          currentUser?.uid === userId ? post.status : null
+                        }
+                      />
+                    );
+                })}
             </div>
           </TabPane>
           <TabPane
