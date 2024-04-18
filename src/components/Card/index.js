@@ -9,6 +9,12 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
   return (
     <>
       {type === "lab-story" ? (
+        <Link
+          to={`/story/${postId}/${title
+            ?.toLowerCase()
+            .replace(/ /g, "-")
+            .replace(/[^\w-]+/g, "")}`}
+        >
         <div className={`${styles["customized-card"]} ${styles[type]}`}>
           <div className={styles["customized-card-image"]}>
             <img
@@ -28,6 +34,7 @@ const Card = ({ title, content, userId, type, imgSrc, postId, status }) => {
             </div>
           </div>
         </div>
+        </Link>
       ) : (
         <Link
           to={`/story/${postId}/${title
