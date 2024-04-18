@@ -113,7 +113,7 @@ const ExploreStory = () => {
             <h1>Explore Regional Stories</h1>
           </div>
         </section>
-        <Carousel className={styles.carousel} autoplay>
+        <Carousel className={styles.carousel} autoplay autoplaySpeed={5000}>
           {mediaUrls.map((mediaUrl, index) => (
             <div key={index} className={styles["carousel-item"]}>
               <img

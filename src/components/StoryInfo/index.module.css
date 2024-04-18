@@ -31,6 +31,8 @@
 .story-text {
   padding: 0% 8%;
   overflow: visible;
+  white-space: pre-wrap;
+  line-height: 1.5;
 }
 .tag-container {
   display: flex;

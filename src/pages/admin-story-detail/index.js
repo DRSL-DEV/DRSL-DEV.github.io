@@ -44,7 +44,7 @@ const AdminStoryDetailPage = () => {
     <div className="page-container">
       <PageHeader title={siteTitle} />
 
-      <Carousel className={styles.carousel} autoplay>
+      <Carousel className={styles.carousel} autoplay autoplaySpeed={5000}>
         {media.map((mediaUrl, index) => (
           <div key={index} className={styles.media}>
             {mediaUrl.includes("video") ? (
@@ -123,7 +123,7 @@ const AdminStoryDetailPage = () => {
                 )
               }
               customStyles={{
-                backgroundColor: 'var(--secondary-color-red-accent)',
+                backgroundColor: "var(--secondary-color-red-accent)",
               }}
             />
             <Button
@@ -145,7 +145,7 @@ const AdminStoryDetailPage = () => {
                 }, 2000);
               }}
               customStyles={{
-                backgroundColor: 'var(--secondary-color-light-green)',
+                backgroundColor: "var(--secondary-color-light-green)",
               }}
             />
           </>
@@ -164,7 +164,7 @@ const AdminStoryDetailPage = () => {
               )
             }
             customStyles={{
-              backgroundColor: 'var(--secondary-color-red-accent)',
+              backgroundColor: "var(--secondary-color-red-accent)",
             }}
           />
         )}
@@ -204,7 +204,7 @@ const AdminStoryDetailPage = () => {
                 }, 2000);
               }}
               customStyles={{
-                backgroundColor: 'var(--secondary-color-light-green)',
+                backgroundColor: "var(--secondary-color-light-green)",
               }}
             />
           </>

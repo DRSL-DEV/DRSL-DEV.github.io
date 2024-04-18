@@ -131,7 +131,7 @@ const StoryDetailPage = () => {
       )}
       <div>
         {selectedPost && (
-          <Carousel className={styles.carousel} autoplay>
+          <Carousel className={styles.carousel} autoplay autoplaySpeed={5000}>
             {/* TODO: Modify function to distinguish between video and image */}
             {selectedPost.media?.map((mediaUrl, index) => (
               <div key={index}>

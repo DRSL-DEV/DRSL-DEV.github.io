@@ -43,7 +43,7 @@ const HomePage = () => {
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>
       <main>
-        <Carousel className={styles.carousel} autoplay>
+        <Carousel className={styles.carousel} autoplay autoplaySpeed={5000}>
           {mediaUrls.map((mediaUrl, index) => (
             <div key={index} className={styles["carousel-item"]}>
               <img
