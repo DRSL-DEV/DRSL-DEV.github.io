@@ -15,7 +15,8 @@
 .profile-images-input {
   display: flex;
   margin: 3% 0;
-  gap: 13%;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .profile-image-left {

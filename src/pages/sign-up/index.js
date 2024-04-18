@@ -178,9 +178,12 @@ const SignUpPage = () => {
               valuePropName="checked"
               rules={[
                 {
-                  required: true,
-                  message:
-                    "You must agree to the privacy policy, terms of service, and community guidelines to sign up.",
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error("You must accept the agreement")
+                        ),
                 },
               ]}
               getValueFromEvent={(e) => e.target.checked}

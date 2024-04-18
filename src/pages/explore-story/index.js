@@ -133,7 +133,8 @@ const ExploreStory = () => {
                   Reflective Perspectives from Detroit Natives
                 </p>
                 <a
-                  onClick={() => navigate("/explore-site")}
+                  href="/story"
+                  onClick={() => navigate("/explore-story")}
                   className={styles["carousel-link"]}
                 >
                   Learn More

@@ -35,7 +35,9 @@ const MapPage = () => {
     getUserLocation();
   }, []);
 
-  const storycount = useSelector((state) => state.storyList.storyCountsBySite[selectedSite?.id] || 0);
+  const storycount = useSelector(
+    (state) => state.storyList.storyCountsBySite[selectedSite?.id] || 0
+  );
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -91,8 +93,10 @@ const MapPage = () => {
     if (storycount === 0) {
       navigate("/create-story", { state: { site: selectedSite } });
     } else {
-      const formattedSiteName = selectedSite.label.toLowerCase().replace(/\s+/g, '-');
-      navigate(`/site/${formattedSiteName}`, { state: { siteLocationId: selectedSite.id } });
+      const formattedSiteName = selectedSite.label
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+      navigate(`/site/${selectedSite.id}/${formattedSiteName}`);
     }
     setModalOpen(false);
   };
@@ -129,7 +133,7 @@ const MapPage = () => {
               ...siteLocationList.map((site) => ({
                 value: site.id,
                 label: site.name,
-              }))
+              })),
             ]}
             onSelect={handleSelectSite}
           />
@@ -167,7 +171,9 @@ const MapPage = () => {
             onClick={handleViewStories}
             className={styles["primary-modal-button"]}
           >
-            {storycount === 0 ? "Contribute 1st Story" : `View ${storycount} Stories`}
+            {storycount === 0
+              ? "Contribute 1st Story"
+              : `View ${storycount} Stories`}
           </Button>,
           <Button
             key="direct"
