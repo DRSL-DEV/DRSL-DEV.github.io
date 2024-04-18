@@ -53,6 +53,14 @@
   font-size: 18px;
   font-weight: 700;
   line-height: normal;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  width: 100%;
+  white-space: normal;
 }
 
 .customized-card-content p {
@@ -60,6 +68,14 @@
   font-size: 12px;
   flex: 1;
   max-height: 50px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  width: 100%;
+  white-space: normal;
 }
 
 .customized-card-footer > div {
@@ -75,7 +91,7 @@
   align-items: center;
   width: 100%;
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   right: -12px;
 }
 
@@ -105,7 +121,7 @@
 }
 .story-status.approved {
   background-color: var(--secondary-color-light-green);
-  color: rgb(20, 59, 20)
+  color: rgb(20, 59, 20);
 }
 .story-status.rejected {
   background-color: var(--secondary-color-red-accent);
