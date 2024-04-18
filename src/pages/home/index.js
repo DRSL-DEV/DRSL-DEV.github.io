@@ -38,11 +38,7 @@ const HomePage = () => {
     dispatch(fetchLatestUserPost());
   }, [dispatch]);
 
-  const mediaUrls = [
-    gallery_placeholder,
-    gallery_placeholder,
-    gallery_placeholder,
-  ];
+  const mediaUrls = [gallery_placeholder];
 
   return (
     <div className={`page-container ${styles["homepage-container"]}`}>

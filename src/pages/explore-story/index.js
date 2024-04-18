@@ -48,11 +48,7 @@ const ExploreStory = () => {
     (state) => state.storyList.lastVisibleDocIdByTag
   );
 
-  const mediaUrls = [
-    gallery_placeholder,
-    gallery_placeholder,
-    gallery_placeholder,
-  ];
+  const mediaUrls = [gallery_placeholder];
 
   const panelStyle = {
     marginBottom: "1%",
@@ -133,7 +129,7 @@ const ExploreStory = () => {
                   Reflective Perspectives from Detroit Natives
                 </p>
                 <a
-                  href="/story"
+                  href="/#/explore-story"
                   onClick={() => navigate("/explore-story")}
                   className={styles["carousel-link"]}
                 >
