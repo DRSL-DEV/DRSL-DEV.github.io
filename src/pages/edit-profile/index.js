@@ -24,6 +24,8 @@ const EditProfilePage = () => {
   );
   const allowedImgTypes = ["image/jpeg", "image/png"];
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} is required!",
     types: {

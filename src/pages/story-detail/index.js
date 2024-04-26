@@ -14,7 +14,7 @@ import { fetchStoryAuthor } from "../../data/features/storyAuthorSlice";
 import { removeFromBookmarks } from "../../data/features/userInfoSlice";
 import { deleteFile } from "../../data/features/fileUploadSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { convertTimeFormatMDY } from "../../utils/dateFormat";
 import Button from "../../components/Button";
 

@@ -8,7 +8,6 @@ import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
-  subscribeToStoryList,
   fetchLatestPartnerPost,
   fetchLatestUserPost,
 } from "../../data/features/storyListSlice";

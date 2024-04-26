@@ -1,7 +1,6 @@
 import styles from "./index.module.css";
 import { useEffect, useState } from "react";
 import ProfileHeader from "../../components/ProfileHeader";
-import profile_bg from "../../assets/images/profile_bg.png";
 import add_post from "../../assets/icons/add_post_card.svg";
 import { Tabs } from "antd";
 import Card from "../../components/Card";
@@ -50,6 +49,7 @@ export const ProfilePage = () => {
   useEffect(() => {
     dispatch(fetchBookmarkedStorysByIds(bookmarks));
     dispatch(fetchStorysByAuthorId(userId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
   return (
@@ -108,6 +108,7 @@ export const ProfilePage = () => {
                         }
                       />
                     );
+                  return <></>;
                 })}
             </div>
           </TabPane>

@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Input } from "antd";
 
 const PasswordInput = ({ placeholder, value, onChange }) => {
   const inputStyle = {
@@ -7,11 +7,6 @@ const PasswordInput = ({ placeholder, value, onChange }) => {
     marginTop: "12px",
     borderRadius: "30px",
   };
-
-  const defaultRules = [
-    { required: true, message: "Password cannot be empty" },
-    { min: 6, message: "Password must be at least 6 characters" }
-  ];
 
   return (
     <Input.Password

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const AdminCard = ({ storyInfo }) => {
   const [hasError, setHasError] = useState(false);
-  const { user, title, content, media, postType } = storyInfo;
+  const { title, content, media, postType } = storyInfo;
   const navigate = useNavigate();
 
   return (

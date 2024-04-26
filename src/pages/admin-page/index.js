@@ -1,17 +1,14 @@
 import styles from "./index.module.css";
 import { useState } from "react";
 import AdminCard from "../../components/AdminCard";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Tabs } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { subscribeToStoryList } from "../../data/features/storyListSlice";
 
 const AdminPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const storyList = useSelector((state) => state.storyList.storyList);
-  const status = useSelector((state) => state.storyList.status);
   const [activeTab, setActiveTab] = useState(
     sessionStorage.getItem("adminActiveTab") || "1"
   );

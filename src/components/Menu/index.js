@@ -35,6 +35,7 @@ const Menu = ({ isMenuOpen, setIsMenuOpen }) => {
       items.push({ name: "Admin Console", link: "/admin-page" });
     }
     setMenuItems(items);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleLogOut = () => {

@@ -1,9 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchPostsByTag,
-  subscribeToStoryList,
-} from "../../data/features/storyListSlice";
-import { useEffect, useState } from "react";
+import { fetchPostsByTag } from "../../data/features/storyListSlice";
+import { useEffect } from "react";
 import styles from "./index.module.css";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
@@ -42,7 +39,6 @@ const CustomCollapse = ({ items }) => (
 const ExploreStory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [activeKey, setActiveKey] = useState(null);
   const taggedPosts = useSelector((state) => state.storyList.taggedPosts);
   const lastVisibleDocIdByTag = useSelector(
     (state) => state.storyList.lastVisibleDocIdByTag

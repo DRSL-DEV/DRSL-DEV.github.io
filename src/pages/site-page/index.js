@@ -8,10 +8,7 @@ import Title from "../../components/PageHeader";
 import Button from "../../components/Button";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchPostsBySite,
-  subscribeToStoryList,
-} from "../../data/features/storyListSlice";
+import { fetchPostsBySite } from "../../data/features/storyListSlice";
 import { siteLocationList } from "../../constants/constants";
 
 const SitePage = () => {
